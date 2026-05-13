@@ -7,6 +7,8 @@ pub mod experimental;
 pub mod common;
 pub use common::{PrefetchCacheLineLevel, StartPoints, VectorGuard};
 
+pub(crate) mod postprocess;
+
 pub mod distances;
 
 pub mod memory_vector_provider;
@@ -26,8 +28,6 @@ pub use fast_memory_vector_provider::FastMemoryVectorProviderAsync;
 
 pub mod fast_memory_quant_vector_provider;
 pub use fast_memory_quant_vector_provider::FastMemoryQuantVectorProviderAsync;
-
-pub(crate) mod postprocess;
 
 // The default `inmem` data provider for the async index.
 pub mod inmem;

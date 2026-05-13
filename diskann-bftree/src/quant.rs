@@ -16,7 +16,7 @@ use diskann_quantization::{
         DistanceComputer, Opaque, OpaqueMut, Quantizer, QueryComputer, QueryLayout,
     },
 };
-use diskann_vector::{distance::Metric, PreprocessedDistanceFunction};
+use diskann_vector::PreprocessedDistanceFunction;
 
 use super::ConfigError;
 use diskann_providers::model::graph::provider::async_::common::TestCallCount;
@@ -41,7 +41,6 @@ pub struct QuantVectorProvider {
 
 impl QuantVectorProvider {
     pub fn new_with_config(
-        _dist_metric: Metric,
         max_vectors: usize,
         num_start_points: usize,
         quantizer: Poly<dyn Quantizer>,
@@ -71,7 +70,6 @@ impl QuantVectorProvider {
     /// Create a new instance from an existing BfTree (for loading from snapshot)
     ///
     pub(crate) fn new_from_bftree(
-        _dist_metric: Metric,
         max_vectors: usize,
         num_start_points: usize,
         quantizer: Poly<dyn Quantizer>,
@@ -272,7 +270,7 @@ mod tests {
         },
     };
     use diskann_utils::views::Matrix;
-    use diskann_vector::{distance::Metric, DistanceFunction, PreprocessedDistanceFunction};
+    use diskann_vector::{DistanceFunction, PreprocessedDistanceFunction};
     use rand::rngs::StdRng;
     use rand::SeedableRng;
     use tokio::task::JoinSet;
@@ -307,8 +305,7 @@ mod tests {
         .unwrap();
 
         let imp = iface::Impl::<1>::new(quantizer).unwrap();
-        let poly = Poly::new(imp, GlobalAllocator).unwrap();
-        poly!(iface::Quantizer, poly)
+        poly!(iface::Quantizer, imp, GlobalAllocator).unwrap()
     }
 
     /// Test edge cases of the Bf-Tree quant vector provider
@@ -320,8 +317,7 @@ mod tests {
 
         let bf_tree_config = Config::default();
         let provider =
-            QuantVectorProvider::new_with_config(Metric::L2, 10, 1, quantizer, bf_tree_config)
-                .unwrap();
+            QuantVectorProvider::new_with_config(10, 1, quantizer, bf_tree_config).unwrap();
 
         // try to set an out of bounds vector
         let result = provider.set_quant_vector(20, &[]).unwrap_err();
@@ -348,7 +344,6 @@ mod tests {
 
         let bf_tree_config = Config::default();
         let provider = QuantVectorProvider::new_with_config(
-            Metric::L2,
             num_points,
             frozen_points,
             quantizer,
@@ -420,8 +415,7 @@ mod tests {
 
         let bf_tree_config = Config::default();
         let provider = Arc::new(
-            QuantVectorProvider::new_with_config(Metric::L2, 10, 1, quantizer, bf_tree_config)
-                .unwrap(),
+            QuantVectorProvider::new_with_config(10, 1, quantizer, bf_tree_config).unwrap(),
         );
         let mut set = JoinSet::new();
         for i in 0..11 {

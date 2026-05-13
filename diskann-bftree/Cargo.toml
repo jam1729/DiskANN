@@ -19,7 +19,6 @@ diskann-utils.workspace = true
 diskann-vector.workspace = true
 half = { workspace = true, features = ["bytemuck", "num-traits"] }
 futures-util.workspace = true
-polonius-the-crab = "0.5.0"
 rand.workspace = true
 serde = { workspace = true, features = ["derive"] }
 serde_json.workspace = true

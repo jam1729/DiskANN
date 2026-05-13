@@ -9,7 +9,6 @@ use std::{
     io::{Read, Write},
     num::NonZeroUsize,
     str::FromStr,
-    sync::Arc,
 };
 
 use diskann_quantization::{
@@ -27,7 +26,7 @@ use diskann::{
             InsertStrategy, MultiInsertStrategy, PruneStrategy, SearchExt, SearchStrategy,
         },
         workingset::{self, map},
-        AdjacencyList, DiskANNIndex, SearchOutputBuffer,
+        AdjacencyList, SearchOutputBuffer,
     },
     neighbor::Neighbor,
     provider::{
@@ -41,12 +40,9 @@ use diskann::{
 use diskann_utils::{future::AsyncFriendly, views::MatrixView};
 use diskann_vector::{distance::Metric, DistanceFunction};
 
-use super::{
-    neighbor_provider::NeighborProvider, quant_vector_provider::QuantVectorProvider,
-    vector_provider::VectorProvider,
-};
+use super::{neighbors::NeighborProvider, quant::QuantVectorProvider, vectors::VectorProvider};
 use diskann_providers::model::graph::provider::async_::{
-    common::{FullPrecision, Hybrid, NoStore, Panics, Quantized},
+    common::{FullPrecision, NoStore, Panics, Quantized},
     distances::UnwrapErr,
     inmem::PassThrough,
 };
@@ -253,9 +249,6 @@ pub struct BfTreeProviderParameters {
     pub graph_params: Option<GraphParams>,
 }
 
-pub type Index<T> = Arc<DiskANNIndex<BfTreeProvider<T, NoStore>>>;
-pub type QuantIndex<T, Q> = Arc<DiskANNIndex<BfTreeProvider<T, Q>>>;
-
 impl<T, Q> BfTreeProvider<T, Q>
 where
     T: VectorRepr,
@@ -279,7 +272,6 @@ where
             quant_vectors: quant_precursor.create(
                 params.max_points,
                 num_start_points,
-                params.metric,
                 params.quant_vector_provider_config,
             )?,
             full_vectors: VectorProvider::new_with_config(
@@ -503,7 +495,6 @@ pub trait CreateQuantProvider {
         self,
         max_points: usize,
         frozen_points: usize,
-        metric: Metric,
         bf_tree_config: Config,
     ) -> ANNResult<Self::Target>;
 }
@@ -514,7 +505,6 @@ impl CreateQuantProvider for NoStore {
         self,
         _max_points: usize,
         _frozen_points: usize,
-        _metric: Metric,
         _bf_tree_config: Config,
     ) -> ANNResult<Self::Target> {
         Ok(self)
@@ -529,16 +519,9 @@ impl CreateQuantProvider for Poly<dyn Quantizer> {
         self,
         max_points: usize,
         frozen_points: usize,
-        metric: Metric,
         bf_tree_config: Config,
     ) -> ANNResult<Self::Target> {
-        QuantVectorProvider::new_with_config(
-            metric,
-            max_points,
-            frozen_points,
-            self,
-            bf_tree_config,
-        )
+        QuantVectorProvider::new_with_config(max_points, frozen_points, self, bf_tree_config)
     }
 }
 
@@ -1488,10 +1471,6 @@ where
     }
 }
 
-//////////////////////////
-// Hybrid Strategies    //
-//////////////////////////
-
 /// Post-processor that reranks quantized search results using full-precision distances.
 #[derive(Debug, Default, Clone, Copy)]
 pub struct Rerank;
@@ -1533,138 +1512,6 @@ where
         reranked
             .sort_unstable_by(|a, b| (a.1).partial_cmp(&b.1).unwrap_or(std::cmp::Ordering::Equal));
         std::future::ready(Ok(output.extend(reranked)))
-    }
-}
-
-/// Hybrid strategy: search in quantized space, rerank with full-precision distances,
-/// prune in quantized space.
-impl<T> SearchStrategy<BfTreeProvider<T, QuantVectorProvider>, &[T]> for Hybrid
-where
-    T: VectorRepr,
-{
-    type QueryComputer = UnwrapErr<
-        spherical_iface::QueryComputer<GlobalAllocator>,
-        spherical_iface::QueryDistanceError,
-    >;
-    type SearchAccessor<'a> = QuantAccessor<'a, T>;
-    type SearchAccessorError = ANNError;
-
-    fn search_accessor<'a>(
-        &'a self,
-        provider: &'a BfTreeProvider<T, QuantVectorProvider>,
-        _context: &'a DefaultContext,
-    ) -> Result<Self::SearchAccessor<'a>, Self::SearchAccessorError> {
-        Ok(QuantAccessor::new(provider))
-    }
-}
-
-impl<T> DefaultPostProcessor<BfTreeProvider<T, QuantVectorProvider>, &[T]> for Hybrid
-where
-    T: VectorRepr,
-{
-    default_post_processor!(glue::Pipeline<glue::FilterStartPoints, Rerank>);
-}
-
-impl<T> PruneStrategy<BfTreeProvider<T, QuantVectorProvider>> for Hybrid
-where
-    T: VectorRepr,
-{
-    type WorkingSet = PassThrough;
-    type DistanceComputer<'a> =
-        UnwrapErr<spherical_iface::DistanceComputer, spherical_iface::DistanceError>;
-    type PruneAccessor<'a> = QuantAccessor<'a, T>;
-    type PruneAccessorError = diskann::error::Infallible;
-
-    fn prune_accessor<'a>(
-        &'a self,
-        provider: &'a BfTreeProvider<T, QuantVectorProvider>,
-        _context: &'a DefaultContext,
-    ) -> Result<Self::PruneAccessor<'a>, Self::PruneAccessorError> {
-        Ok(QuantAccessor::new(provider))
-    }
-
-    fn create_working_set(&self, _capacity: usize) -> Self::WorkingSet {
-        PassThrough
-    }
-}
-
-impl<T> InsertStrategy<BfTreeProvider<T, QuantVectorProvider>, &[T]> for Hybrid
-where
-    T: VectorRepr,
-{
-    type PruneStrategy = Self;
-    fn prune_strategy(&self) -> Self::PruneStrategy {
-        *self
-    }
-}
-
-impl<T, B> MultiInsertStrategy<BfTreeProvider<T, QuantVectorProvider>, B> for Hybrid
-where
-    T: VectorRepr,
-    B: glue::Batch,
-    Self: for<'a> InsertStrategy<
-        BfTreeProvider<T, QuantVectorProvider>,
-        B::Element<'a>,
-        PruneStrategy = Self,
-    >,
-{
-    type Seed = PassThrough;
-    type WorkingSet = PassThrough;
-    type FinishError = diskann::error::Infallible;
-    type InsertStrategy = Self;
-
-    fn insert_strategy(&self) -> Self::InsertStrategy {
-        *self
-    }
-
-    fn finish<Itr>(
-        &self,
-        _provider: &BfTreeProvider<T, QuantVectorProvider>,
-        _ctx: &DefaultContext,
-        _batch: &std::sync::Arc<B>,
-        _ids: Itr,
-    ) -> impl std::future::Future<Output = Result<Self::Seed, Self::FinishError>> + Send
-    where
-        Itr: ExactSizeIterator<Item = u32> + Send,
-    {
-        std::future::ready(Ok(PassThrough))
-    }
-}
-
-impl<T> InplaceDeleteStrategy<BfTreeProvider<T, QuantVectorProvider>> for Hybrid
-where
-    T: VectorRepr,
-{
-    type DeleteElementError = ANNError;
-    type DeleteElement<'a> = &'a [T];
-    type DeleteElementGuard = Box<[T]>;
-    type PruneStrategy = Self;
-    type DeleteSearchAccessor<'a> = QuantAccessor<'a, T>;
-    type SearchPostProcessor = Rerank;
-    type SearchStrategy = Self;
-
-    fn search_strategy(&self) -> Self::SearchStrategy {
-        *self
-    }
-
-    fn prune_strategy(&self) -> Self::PruneStrategy {
-        *self
-    }
-
-    fn search_post_processor(&self) -> Self::SearchPostProcessor {
-        Rerank
-    }
-
-    async fn get_delete_element<'a>(
-        &'a self,
-        provider: &'a BfTreeProvider<T, QuantVectorProvider>,
-        _context: &'a DefaultContext,
-        id: u32,
-    ) -> Result<Self::DeleteElementGuard, Self::DeleteElementError> {
-        provider
-            .full_vectors
-            .get_vector_sync(id.into_usize())
-            .map(Into::into)
     }
 }
 
@@ -2126,7 +1973,6 @@ where
             saved_params.is_memory,
         )?;
         let quant_vectors = QuantVectorProvider::new_from_bftree(
-            metric,
             saved_params.max_points,
             saved_params.frozen_points.get(),
             quantizer,
@@ -2158,8 +2004,11 @@ where
 ///
 #[cfg(test)]
 mod tests {
+    use std::sync::Arc;
+
     use super::*;
     use diskann::{
+        graph::DiskANNIndex,
         graph::{self, search::Knn},
         neighbor::BackInserter,
     };
@@ -2346,91 +2195,6 @@ mod tests {
             .search(
                 params,
                 &Quantized,
-                &DefaultContext,
-                query.as_slice(),
-                &mut BackInserter::new(neighbors.as_mut_slice()),
-            )
-            .await
-            .unwrap();
-
-        assert_eq!(res.result_count, 5);
-        let neighbor_ids: Vec<u32> = neighbors.iter().map(|n| n.id).collect();
-        assert!(!neighbor_ids.contains(&2u32));
-        assert!(!neighbor_ids.contains(&4u32));
-    }
-
-    #[tokio::test]
-    async fn test_hybrid_index_search() {
-        let index = create_quant_index();
-        let ctx = &DefaultContext;
-
-        let strategy = Hybrid {
-            max_fp_vecs_per_prune: None,
-        };
-        for i in 0..15 {
-            let point = vec![i as f32; 5];
-            index
-                .insert(strategy, ctx, &i, point.as_slice())
-                .await
-                .unwrap();
-        }
-
-        let query = vec![3.0; 5];
-        let params = Knn::new(5, 10, None).unwrap();
-
-        let mut neighbors = vec![Neighbor::<u32>::default(); 5];
-
-        let res = index
-            .search(
-                params,
-                &strategy,
-                &DefaultContext,
-                query.as_slice(),
-                &mut BackInserter::new(neighbors.as_mut_slice()),
-            )
-            .await
-            .unwrap();
-
-        assert_eq!(
-            res.result_count, 5,
-            "there are 15 points and we're asking for 5, we expect 5"
-        );
-        assert_eq!(neighbors[0].id, 3);
-    }
-
-    #[tokio::test]
-    async fn test_hybrid_delete_and_search() {
-        let index = create_quant_index();
-        let ctx = &DefaultContext;
-        let strategy = Hybrid {
-            max_fp_vecs_per_prune: None,
-        };
-
-        for i in 0..15 {
-            let point = vec![i as f32; 5];
-            index
-                .insert(strategy, ctx, &i, point.as_slice())
-                .await
-                .unwrap();
-        }
-
-        index
-            .inplace_delete(strategy, ctx, &2u32, 2, graph::InplaceDeleteMethod::OneHop)
-            .await
-            .unwrap();
-        index
-            .inplace_delete(strategy, ctx, &4u32, 2, graph::InplaceDeleteMethod::OneHop)
-            .await
-            .unwrap();
-
-        let query = vec![3.0; 5];
-        let params = Knn::new(5, 10, None).unwrap();
-
-        let mut neighbors = vec![Neighbor::<u32>::default(); 5];
-        let res = index
-            .search(
-                params,
-                &strategy,
                 &DefaultContext,
                 query.as_slice(),
                 &mut BackInserter::new(neighbors.as_mut_slice()),
