@@ -1126,11 +1126,7 @@ where
         Self: 'a;
 
     fn get(&self, id: u32) -> Option<Self::Element<'_>> {
-        match self
-            .provider
-            .quant_vectors
-            .get_vector_sync(id.into_usize())
-        {
+        match self.provider.quant_vectors.get_vector_sync(id.into_usize()) {
             Ok(v) => Some(OwnedOpaque(v)),
             Err(RankedError::Transient(_)) => None,
             Err(RankedError::Error(_)) => {
