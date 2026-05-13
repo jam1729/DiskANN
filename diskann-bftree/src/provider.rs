@@ -20,12 +20,13 @@ use serde::{Deserialize, Serialize};
 use bf_tree::{BfTree, Config};
 use diskann::{
     default_post_processor,
+    error::Infallible,
     graph::{
         glue::{
             self, Batch, CopyIds, DefaultPostProcessor, ExpandBeam, InplaceDeleteStrategy,
             InsertStrategy, MultiInsertStrategy, PruneStrategy, SearchExt, SearchStrategy,
         },
-        workingset::{self, map},
+        workingset::{self, map, Map},
         AdjacencyList, SearchOutputBuffer,
     },
     neighbor::Neighbor,
@@ -44,7 +45,6 @@ use super::{neighbors::NeighborProvider, quant::QuantVectorProvider, vectors::Ve
 use diskann_providers::model::graph::provider::async_::{
     common::{FullPrecision, NoStore, Panics, Quantized},
     distances::UnwrapErr,
-    inmem::PassThrough,
 };
 use diskann_providers::storage::{LoadWith, SaveWith, StorageReadProvider, StorageWriteProvider};
 
@@ -64,21 +64,9 @@ use diskann_providers::storage::{LoadWith, SaveWith, StorageReadProvider, Storag
 /// * `Q`: The full type of the quant vector store. This is not constrained by a trait and
 ///   rather relies on implementation for several concrete types, including:
 ///
-///   - [`BfTreeQuantVectorProviderAsync`]: A Bf-Tree based spherical quantized vector store.
+///   - [`QuantVectorProvider`]: A Bf-Tree based spherical quantized vector store.
 ///   - [`NoStore`]: Disable quantization altogether. Note that this disables all
 ///     methods reached through quantization based [`Accessor`]s at compile-time.
-///
-/// * `D`: The type of the deleted vector store. Like the quantized store, this is also
-///   not constrained by a trait and rather relies on implementation for concrete types.
-///   These are:
-///
-///   - [`NoDeletes`]: Do not support deletion at all (this disables implementation of
-///     the [`Delete`] trait.
-///   - [`TableDeleteProviderAsync`]: A bitmap storing deletion information.
-///
-/// * `Ctx`: A parameter controlling the [`ExecutionContext`] to be associated with this
-///   provider. For the majority of cases, this is [`DefaultContext`], but is left as
-///   a parameter to allow extension.
 ///
 /// # Indexing Strategies
 ///
@@ -106,6 +94,7 @@ use diskann_providers::storage::{LoadWith, SaveWith, StorageReadProvider, Storag
 /// };
 /// use diskann_providers::model::graph::provider::async_::common::NoStore;
 /// use diskann_vector::distance::Metric;
+/// use diskann_utils::views::{Init, Matrix};
 /// use bf_tree::Config;
 /// use std::num::NonZeroUsize;
 ///
@@ -122,8 +111,10 @@ use diskann_providers::storage::{LoadWith, SaveWith, StorageReadProvider, Storag
 /// };
 ///
 /// // Create a table that supports 5 points and 1 start point.
-/// let provider = BfTreeProvider::<f32, _>::new_empty(
+/// let start_points = Matrix::new(Init(|| 0.0f32), 1, 4);
+/// let provider = BfTreeProvider::<f32, _>::new(
 ///     parameters,
+///     start_points.as_view(),
 ///     NoStore,
 /// );
 /// ```
@@ -174,8 +165,10 @@ use diskann_providers::storage::{LoadWith, SaveWith, StorageReadProvider, Storag
 /// };
 ///
 /// // Create a table that supports 5 points and 1 start point.
-/// let provider = BfTreeProvider::<f32, _>::new_empty(
+/// let start_points = Matrix::new(Init(|| 0.0f32), 1, 4);
+/// let provider = BfTreeProvider::<f32, _>::new(
 ///     parameters,
+///     start_points.as_view(),
 ///     quantizer,
 /// );
 /// ```
@@ -238,38 +231,6 @@ impl<T, Q> BfTreeProvider<T, Q>
 where
     T: VectorRepr,
 {
-    /// Construct a new, unpopulated data provider.
-    ///
-    /// # Arguments
-    /// * `params`: An instance of [`BfTreeProviderParameters`] collecting shared
-    ///   configuration information.
-    /// * `quant_precursor`: A precursor type for the quantizer layer.
-    /// * `delete_precursor`: A precursor type for the delete layer.
-    /// * `neighbor_precursor`: A precursor type for the neighbor layer.
-    ///   or the neighbor layer
-    pub fn new_empty<TQ>(params: BfTreeProviderParameters, quant_precursor: TQ) -> ANNResult<Self>
-    where
-        TQ: CreateQuantProvider<Target = Q>,
-    {
-        let num_start_points = params.num_start_points.get();
-
-        Ok(Self {
-            quant_vectors: quant_precursor.create(params.quant_vector_provider_config)?,
-            full_vectors: VectorProvider::new_with_config(
-                params.max_points,
-                params.dim,
-                num_start_points,
-                params.vector_provider_config,
-            )?,
-            neighbor_provider: NeighborProvider::new_with_config(
-                params.max_degree,
-                params.neighbor_list_provider_config,
-            )?,
-            metric: params.metric,
-            graph_params: params.graph_params,
-        })
-    }
-
     /// Construct a new data provider with start points initialized.
     ///
     /// This is the primary constructor for `BfTreeProvider`. It creates the provider
@@ -303,7 +264,21 @@ where
             )));
         }
 
-        let provider = Self::new_empty(params.clone(), quant_precursor)?;
+        let provider = Self {
+            quant_vectors: quant_precursor.create(params.quant_vector_provider_config)?,
+            full_vectors: VectorProvider::new_with_config(
+                params.max_points,
+                params.dim,
+                params.num_start_points.get(),
+                params.vector_provider_config,
+            )?,
+            neighbor_provider: NeighborProvider::new_with_config(
+                params.max_degree,
+                params.neighbor_list_provider_config,
+            )?,
+            metric: params.metric,
+            graph_params: params.graph_params,
+        };
         provider.set_start_points(Hidden(()), start_points)?;
         {
             // Initialize all neighborhoods to be empty lists.
@@ -779,7 +754,6 @@ where
 /// This type implements the following traits:
 ///
 /// * [`Accessor`] for the [`BfTreeProvider`].
-/// * [`ComputerAccessor`] for comparing full-precision distances.
 /// * [`BuildQueryComputer`].
 ///
 pub struct FullAccessor<'a, T, Q>
@@ -1102,30 +1076,6 @@ where
     }
 }
 
-// Pass-through fill — returns `&Self` which directly accesses the underlying provider.
-impl<T> workingset::Fill<PassThrough> for QuantAccessor<'_, T>
-where
-    T: VectorRepr,
-{
-    type Error = std::convert::Infallible;
-    type View<'a>
-        = &'a Self
-    where
-        Self: 'a;
-
-    async fn fill<'a, Itr>(
-        &'a mut self,
-        _state: &'a mut PassThrough,
-        _itr: Itr,
-    ) -> Result<Self::View<'a>, Self::Error>
-    where
-        Itr: ExactSizeIterator<Item = Self::Id> + Clone + Send + Sync,
-        Self: 'a,
-    {
-        Ok(self)
-    }
-}
-
 /// An owned quantized vector that reborrows to [`Opaque`].
 ///
 /// Unlike inmem providers (which hand back zero-copy references into a contiguous backing
@@ -1139,6 +1089,12 @@ impl<'short> diskann_utils::Reborrow<'short> for OwnedOpaque {
     type Target = Opaque<'short>;
     fn reborrow(&'short self) -> Self::Target {
         Opaque::new(&self.0)
+    }
+}
+
+impl<'a> From<Opaque<'a>> for OwnedOpaque {
+    fn from(value: Opaque<'a>) -> Self {
+        OwnedOpaque(value.to_vec())
     }
 }
 
@@ -1176,7 +1132,7 @@ where
 {
     type QueryComputer = T::QueryDistance;
     type SearchAccessor<'a> = FullAccessor<'a, T, Q>;
-    type SearchAccessorError = Panics;
+    type SearchAccessorError = Infallible;
 
     fn search_accessor<'a>(
         &'a self,
@@ -1351,8 +1307,8 @@ where
         PruneStrategy = Self,
     >,
 {
-    type Seed = PassThrough;
-    type WorkingSet = PassThrough;
+    type Seed = map::Builder<u32, map::Reborrowed<OwnedOpaque>>;
+    type WorkingSet = Map<u32, OwnedOpaque>;
     type FinishError = diskann::error::Infallible;
     type InsertStrategy = Self;
 
@@ -1370,7 +1326,8 @@ where
     where
         Itr: ExactSizeIterator<Item = u32> + Send,
     {
-        std::future::ready(Ok(PassThrough))
+        let builder = map::Builder::new(map::Capacity::Default);
+        std::future::ready(Ok(builder))
     }
 }
 
@@ -1417,7 +1374,7 @@ impl<T> PruneStrategy<BfTreeProvider<T, QuantVectorProvider>> for Quantized
 where
     T: VectorRepr,
 {
-    type WorkingSet = PassThrough;
+    type WorkingSet = Map<u32, OwnedOpaque>;
     type DistanceComputer<'a> =
         UnwrapErr<spherical_iface::DistanceComputer, spherical_iface::DistanceError>;
     type PruneAccessor<'a> = QuantAccessor<'a, T>;
@@ -1431,8 +1388,8 @@ where
         Ok(QuantAccessor::new(provider))
     }
 
-    fn create_working_set(&self, _capacity: usize) -> Self::WorkingSet {
-        PassThrough
+    fn create_working_set(&self, capacity: usize) -> Self::WorkingSet {
+        map::Builder::new(map::Capacity::Default).build(capacity)
     }
 }
 
@@ -2291,11 +2248,15 @@ mod tests {
     #[tokio::test]
     async fn test_data_provider_and_delete_interface() {
         let ctx = &DefaultContext;
-        let provider = BfTreeProvider::new_empty(
+        let num_start_points = 2;
+        let dim = 5;
+        let start_points = Matrix::new(Init(|| 0.0f32), num_start_points, dim);
+
+        let provider = BfTreeProvider::new(
             BfTreeProviderParameters {
                 max_points: 10,
-                num_start_points: NonZeroUsize::new(2).unwrap(),
-                dim: 5,
+                num_start_points: NonZeroUsize::new(num_start_points).unwrap(),
+                dim,
                 metric: Metric::L2,
                 max_degree: 64,
                 vector_provider_config: Config::default(),
@@ -2303,6 +2264,7 @@ mod tests {
                 neighbor_list_provider_config: Config::default(),
                 graph_params: None,
             },
+            start_points.as_view(),
             NoStore,
         )
         .unwrap();
@@ -2371,11 +2333,16 @@ mod tests {
     async fn test_empty_neighbor_list() {
         let num_points = 100u32;
         let ctx = &DefaultContext;
-        let provider = BfTreeProvider::<f32, _>::new_empty(
+
+        let num_start_points = 2;
+        let dim = 3;
+        let start_points = Matrix::new(Init(|| 0.0f32), num_start_points, dim);
+
+        let provider = BfTreeProvider::<f32, _>::new(
             BfTreeProviderParameters {
                 max_points: num_points as usize,
-                num_start_points: NonZeroUsize::new(2).unwrap(),
-                dim: 3,
+                num_start_points: NonZeroUsize::new(num_start_points).unwrap(),
+                dim,
                 metric: Metric::L2,
                 max_degree: 64,
                 vector_provider_config: Config::default(),
@@ -2383,6 +2350,7 @@ mod tests {
                 neighbor_list_provider_config: Config::default(),
                 graph_params: None,
             },
+            start_points.as_view(),
             NoStore,
         )
         .unwrap();
@@ -2396,9 +2364,10 @@ mod tests {
             let vector = vec![i as f32, (i + 1) as f32, (i + 2) as f32];
             provider.set_element(ctx, &i, &vector).await.unwrap();
 
-            // First attempt should fail as NotFound
+            // First attempt should return empty
             let mut out = AdjacencyList::new();
-            assert!(neighbor_accessor.get_neighbors(i, &mut out).await.is_err());
+            neighbor_accessor.get_neighbors(i, &mut out).await.unwrap();
+            assert!(out.is_empty());
 
             // After we set the empty neighbor list, our attempt should succeed
             neighbor_accessor.set_neighbors(i, &[]).await.unwrap();
@@ -2490,8 +2459,12 @@ mod tests {
             graph_params: None,
         };
 
+        let start_points = Matrix::new(Init(|| 0.0f32), num_start_points.into(), dim);
+
         // Create provider
-        let provider = BfTreeProvider::<f32, NoStore>::new_empty(params.clone(), NoStore).unwrap();
+        let provider =
+            BfTreeProvider::<f32, NoStore>::new(params.clone(), start_points.as_view(), NoStore)
+                .unwrap();
 
         // Populate provider with vectors
         for i in 0..num_points {
@@ -2617,10 +2590,14 @@ mod tests {
             graph_params: None,
         };
 
+        let start_points = Matrix::new(Init(|| 0.0f32), num_start_points.into(), dim);
         // Create provider with quantization
-        let provider =
-            BfTreeProvider::<f32, QuantVectorProvider>::new_empty(params.clone(), quantizer)
-                .unwrap();
+        let provider = BfTreeProvider::<f32, QuantVectorProvider>::new(
+            params.clone(),
+            start_points.as_view(),
+            quantizer,
+        )
+        .unwrap();
 
         // Populate provider with vectors
         for i in 0..num_points {
@@ -2730,8 +2707,9 @@ mod tests {
         let num_start_points = NonZeroUsize::new(1).unwrap();
         let ctx = &DefaultContext;
 
+        let start_points = Matrix::new(Init(|| 0.0f32), num_start_points.into(), dim);
         // In-memory config (no file path needed)
-        let provider = BfTreeProvider::<f32, NoStore>::new_empty(
+        let provider = BfTreeProvider::<f32, NoStore>::new(
             BfTreeProviderParameters {
                 max_points: num_points,
                 num_start_points,
@@ -2743,6 +2721,7 @@ mod tests {
                 neighbor_list_provider_config: Config::default(),
                 graph_params: None,
             },
+            start_points.as_view(),
             NoStore,
         )
         .unwrap();
@@ -2839,7 +2818,8 @@ mod tests {
 
         let quantizer = create_test_quantizer(dim);
 
-        let provider = BfTreeProvider::<f32, QuantVectorProvider>::new_empty(
+        let start_points = Matrix::new(Init(|| 0.0f32), num_start_points.into(), dim);
+        let provider = BfTreeProvider::<f32, QuantVectorProvider>::new(
             BfTreeProviderParameters {
                 max_points: num_points,
                 num_start_points,
@@ -2851,6 +2831,7 @@ mod tests {
                 neighbor_list_provider_config: Config::default(),
                 graph_params: None,
             },
+            start_points.as_view(),
             quantizer,
         )
         .unwrap();
