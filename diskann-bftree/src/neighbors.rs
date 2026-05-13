@@ -18,12 +18,13 @@ use diskann::{
 };
 
 use super::ConfigError;
-use diskann_providers::model::graph::provider::async_::common::TestCallCount;
+use crate::TestCallCount;
 
 pub struct NeighborProvider<I: VectorId> {
     adjacency_list_index: BfTree,
     dim: usize, // Max number of neighbors in a neighbor list + 1 for the neighbor count
-    pub num_get_calls: TestCallCount,
+    #[allow(dead_code)]
+    pub(crate) num_get_calls: TestCallCount,
     _phantom: PhantomData<I>,
 }
 

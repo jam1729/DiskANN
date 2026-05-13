@@ -20,7 +20,7 @@ use serde::{Deserialize, Serialize};
 use bf_tree::{BfTree, Config};
 use diskann::{
     default_post_processor,
-    error::Infallible,
+    error::{Infallible, RankedError},
     graph::{
         glue::{
             self, Batch, CopyIds, DefaultPostProcessor, ExpandBeam, InplaceDeleteStrategy,
@@ -43,7 +43,8 @@ use diskann_utils::{future::AsyncFriendly, views::MatrixView};
 use diskann_vector::{distance::Metric, DistanceFunction};
 
 use super::{
-    neighbors::NeighborProvider, quant::QuantVectorProvider, vectors::VectorProvider, NoStore,
+    neighbors::NeighborProvider, quant::QuantVectorProvider, vectors::VectorProvider, AccessError,
+    NoStore,
 };
 use diskann_providers::model::graph::provider::async_::distances::UnwrapErr;
 use diskann_providers::storage::{LoadWith, SaveWith, StorageReadProvider, StorageWriteProvider};
@@ -413,10 +414,11 @@ where
     ) -> impl std::future::Future<Output = Result<diskann::provider::ElementStatus, Self::Error>> + Send
     {
         let status = match self.full_vectors.get_vector_sync(id.into_usize()) {
-            Ok(_) => ElementStatus::Valid,
-            Err(_) => ElementStatus::Deleted,
+            Ok(_) => Ok(ElementStatus::Valid),
+            Err(RankedError::Transient(_)) => Ok(ElementStatus::Deleted),
+            Err(RankedError::Error(e)) => Err(e),
         };
-        std::future::ready(Ok(status))
+        std::future::ready(status)
     }
 }
 
@@ -828,7 +830,7 @@ where
 
     // Hard-deleted entries may be encountered via stale graph edges.
     //
-    type GetError = ANNError;
+    type GetError = AccessError;
 
     /// Return the full-precision vector stored at index `i`.
     ///
@@ -862,13 +864,20 @@ where
         F: Send + FnMut(Self::ElementRef<'_>, Self::Id),
     {
         for i in itr {
-            if self
+            match self
                 .provider
                 .full_vectors
                 .get_vector_into(i.into_usize(), &mut self.element)
-                .is_ok()
             {
-                f(&self.element, i);
+                Ok(()) => {
+                    f(&self.element, i);
+                }
+                Err(RankedError::Transient(_)) => {
+                    // Deleted or missing vector — expected during graph traversal, skip.
+                }
+                Err(e @ RankedError::Error(_)) => {
+                    return std::future::ready(Err(e));
+                }
             }
         }
         std::future::ready(Ok(()))
@@ -989,7 +998,7 @@ where
 
     // ANNError on access failures in bf-tree
     //
-    type GetError = ANNError;
+    type GetError = AccessError;
 
     /// Return the quantized vector stored at index `i`.
     ///
@@ -1022,13 +1031,20 @@ where
         F: Send + FnMut(Self::ElementRef<'_>, Self::Id),
     {
         for i in itr {
-            if self
+            match self
                 .provider
                 .quant_vectors
                 .get_vector_into(i.into_usize(), &mut self.element)
-                .is_ok()
             {
-                f(Opaque::new(&self.element), i);
+                Ok(()) => {
+                    f(Opaque::new(&self.element), i);
+                }
+                Err(RankedError::Transient(_)) => {
+                    // Deleted or missing vector — expected during graph traversal, skip.
+                }
+                Err(e @ RankedError::Error(_)) => {
+                    return std::future::ready(Err(e));
+                }
             }
         }
         std::future::ready(Ok(()))
@@ -1110,11 +1126,18 @@ where
         Self: 'a;
 
     fn get(&self, id: u32) -> Option<Self::Element<'_>> {
-        self.provider
+        match self
+            .provider
             .quant_vectors
             .get_vector_sync(id.into_usize())
-            .ok()
-            .map(OwnedOpaque)
+        {
+            Ok(v) => Some(OwnedOpaque(v)),
+            Err(RankedError::Transient(_)) => None,
+            Err(RankedError::Error(_)) => {
+                // View::get returns Option — can't propagate; treat as missing.
+                None
+            }
+        }
     }
 }
 
@@ -1249,9 +1272,11 @@ where
         _context: &'a DefaultContext,
         id: u32,
     ) -> Result<Self::DeleteElementGuard, Self::DeleteElementError> {
+        use diskann::error::ErrorExt;
         let elt = provider
             .full_vectors
-            .get_vector_sync(id.into_usize())?
+            .get_vector_sync(id.into_usize())
+            .escalate("delete target must exist")?
             .into();
         Ok(elt)
     }
@@ -1362,9 +1387,11 @@ where
         _context: &'a DefaultContext,
         id: u32,
     ) -> Result<Self::DeleteElementGuard, Self::DeleteElementError> {
+        use diskann::error::ErrorExt;
         provider
             .full_vectors
             .get_vector_sync(id.into_usize())
+            .escalate("delete target must exist")
             .map(Into::into)
     }
 }
@@ -1401,7 +1428,7 @@ impl<'a, T> glue::SearchPostProcess<QuantAccessor<'a, T>, &[T]> for Rerank
 where
     T: VectorRepr,
 {
-    type Error = Infallible;
+    type Error = ANNError;
 
     fn post_process<I, B>(
         &self,
@@ -1418,18 +1445,26 @@ where
         I: Iterator<Item = Neighbor<u32>> + Send,
         B: SearchOutputBuffer<u32> + Send + ?Sized,
     {
+        use diskann::error::ErrorExt;
         let provider = accessor.provider;
         let f = T::distance(provider.metric, Some(provider.full_vectors.dim()));
 
-        let mut reranked: Vec<(u32, f32)> = candidates
-            .filter_map(|n| {
-                provider
-                    .full_vectors
-                    .get_vector_sync(n.id.into_usize())
-                    .ok()
-                    .map(|vec| (n.id, f.evaluate_similarity(query, &vec)))
-            })
-            .collect();
+        let mut reranked: Vec<(u32, f32)> = Vec::new();
+        for n in candidates {
+            match provider
+                .full_vectors
+                .get_vector_sync(n.id.into_usize())
+                .allow_transient("stale candidate during rerank")
+            {
+                Ok(Some(vec)) => {
+                    reranked.push((n.id, f.evaluate_similarity(query, &vec)));
+                }
+                Ok(None) => {
+                    // Transient (deleted/missing) — skip this candidate.
+                }
+                Err(e) => return std::future::ready(Err(e)),
+            }
+        }
 
         reranked
             .sort_unstable_by(|a, b| (a.1).partial_cmp(&b.1).unwrap_or(std::cmp::Ordering::Equal));

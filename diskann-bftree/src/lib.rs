@@ -22,7 +22,10 @@ pub use provider::{
 
 pub use bf_tree::Config;
 
-use diskann::ANNError;
+use diskann::{
+    error::{RankedError, TransientError},
+    ANNError,
+};
 
 #[derive(Debug, Clone, Copy)]
 pub struct NoStore;
@@ -54,5 +57,116 @@ trait AsKey {
 impl AsKey for usize {
     fn as_key(&self) -> &[u8] {
         bytemuck::bytes_of(self)
+    }
+}
+
+////////////
+// Errors //
+////////////
+#[derive(Debug)]
+pub enum VectorError {
+    /// the vector has been explicitly deleted
+    Deleted,
+    /// the key was not found
+    NotFound,
+}
+
+#[derive(Debug)]
+pub struct VectorUnavailable {
+    pub id: usize,
+    pub err: VectorError,
+}
+
+impl std::fmt::Display for VectorUnavailable {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self.err {
+            VectorError::Deleted => write!(f, "vector {} was deleted", self.id),
+            VectorError::NotFound => write!(f, "vector {} not found", self.id),
+        }
+    }
+}
+
+impl TransientError<ANNError> for VectorUnavailable {
+    fn acknowledge<D>(self, _why: D)
+    where
+        D: std::fmt::Display,
+    {
+        // no-op: we are expecting transient deletion errors during traversal
+    }
+
+    fn escalate<D>(self, why: D) -> ANNError
+    where
+        D: std::fmt::Display,
+    {
+        ANNError::log_index_error(format!("{self}, escalated: {why}"))
+    }
+}
+
+pub type AccessError = RankedError<VectorUnavailable, ANNError>;
+
+/// Metrics recorded by [`Context`].
+#[derive(Debug, Clone)]
+#[cfg_attr(test, derive(serde::Serialize, serde::Deserialize))]
+pub struct ContextMetrics {
+    pub spawns: usize,
+    pub clones: usize,
+}
+
+/// An atomic call counter used for test instrumentation.
+///
+/// Under `#[cfg(test)]`, this is a real atomic counter. In production builds,
+/// all methods are no-ops that the compiler can eliminate entirely.
+#[cfg(test)]
+pub(crate) struct TestCallCount {
+    count: std::sync::atomic::AtomicUsize,
+}
+
+#[cfg(test)]
+impl TestCallCount {
+    pub fn new() -> Self {
+        Self {
+            count: std::sync::atomic::AtomicUsize::new(0),
+        }
+    }
+
+    pub fn enabled() -> bool {
+        true
+    }
+
+    pub fn increment(&self) {
+        self.count
+            .fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+    }
+
+    pub fn get(&self) -> usize {
+        self.count.load(std::sync::atomic::Ordering::Relaxed)
+    }
+}
+
+#[cfg(not(test))]
+#[allow(dead_code)]
+pub(crate) struct TestCallCount {}
+
+#[cfg(not(test))]
+#[allow(dead_code)]
+impl TestCallCount {
+    pub fn new() -> Self {
+        Self {}
+    }
+
+    pub fn enabled() -> bool {
+        false
+    }
+
+    pub fn increment(&self) {}
+
+    pub fn get(&self) -> usize {
+        0
+    }
+}
+
+impl Default for TestCallCount {
+    fn default() -> Self {
+        Self::new()
     }
 }

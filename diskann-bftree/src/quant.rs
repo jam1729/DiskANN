@@ -5,7 +5,7 @@
 
 //! Bf-Tree quant vector provider.
 
-use crate::AsKey;
+use crate::{AccessError, AsKey, VectorError, VectorUnavailable};
 use bf_tree::{BfTree, Config};
 use diskann::{error::IntoANNResult, utils::VectorRepr, ANNError, ANNResult};
 use diskann_quantization::{
@@ -17,7 +17,7 @@ use diskann_quantization::{
 use diskann_vector::PreprocessedDistanceFunction;
 
 use super::ConfigError;
-use diskann_providers::model::graph::provider::async_::common::TestCallCount;
+use crate::TestCallCount;
 
 pub struct QuantQueryComputer(pub(crate) QueryComputer<GlobalAllocator>);
 
@@ -100,49 +100,49 @@ impl QuantVectorProvider {
             .map_err(|e| ANNError::log_sq_error(e))
     }
 
-    pub(crate) fn get_vector_into(&self, i: usize, buffer: &mut [u8]) -> ANNResult<()> {
+    pub(crate) fn get_vector_into(&self, i: usize, buffer: &mut [u8]) -> Result<(), AccessError> {
         use diskann::ANNErrorKind;
         use thiserror::Error;
 
-        let expected = buffer.len();
+        let expected = self.quantizer.bytes();
         if buffer.len() != expected {
             #[derive(Debug, Error)]
             #[error("expected a buffer with dim {0}, instead got {1}")]
             struct WrongDim(usize, usize);
 
-            return Err(ANNError::new(
+            return Err(AccessError::Error(ANNError::new(
                 ANNErrorKind::IndexError,
                 WrongDim(expected, buffer.len()),
-            ));
+            )));
         }
 
         self.num_get_calls.increment();
         match self.quant_vector_index.read(i.as_key(), buffer) {
             bf_tree::LeafReadResult::Found(read_size) => {
                 if read_size as usize != expected {
-                    return ANNResult::Err(ANNError::log_index_error(format!(
+                    return Err(AccessError::Error(ANNError::log_index_error(format!(
                         "The bf-tree entry for vector id {} is marked as found but has size {} instead of the expected size {}",
                         i, read_size, expected,
-                    )));
+                    ))));
                 }
             }
             bf_tree::LeafReadResult::Deleted => {
-                return ANNResult::Err(ANNError::log_index_error(format!(
-                    "The bf-tree entry for vector id {} is marked as deleted",
-                    i,
-                )));
+                return Err(AccessError::Transient(VectorUnavailable {
+                    id: i,
+                    err: VectorError::Deleted,
+                }));
             }
             bf_tree::LeafReadResult::InvalidKey => {
-                return ANNResult::Err(ANNError::log_index_error(format!(
+                return Err(AccessError::Error(ANNError::log_index_error(format!(
                     "The bf-tree entry for vector id {} is marked as invalid",
                     i,
-                )));
+                ))));
             }
             bf_tree::LeafReadResult::NotFound => {
-                return ANNResult::Err(ANNError::log_index_error(format!(
-                    "The bf-tree entry for vector id {} is marked as not found",
-                    i,
-                )));
+                return Err(AccessError::Transient(VectorUnavailable {
+                    id: i,
+                    err: VectorError::NotFound,
+                }));
             }
         };
 
@@ -150,7 +150,7 @@ impl QuantVectorProvider {
     }
 
     /// Return the quant vector at index `i`.
-    pub(crate) fn get_vector_sync(&self, i: usize) -> ANNResult<Vec<u8>> {
+    pub(crate) fn get_vector_sync(&self, i: usize) -> Result<Vec<u8>, AccessError> {
         let mut value = vec![0u8; self.quantizer.bytes()];
         self.get_vector_into(i, &mut value)?;
         Ok(value)
