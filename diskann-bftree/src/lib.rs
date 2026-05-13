@@ -24,6 +24,9 @@ pub use bf_tree::Config;
 
 use diskann::ANNError;
 
+#[derive(Debug, Clone, Copy)]
+pub struct NoStore;
+
 /// Wrapper around [`bf_tree::ConfigError`] that implements [`std::error::Error`].
 #[derive(Debug, Clone)]
 pub struct ConfigError(pub bf_tree::ConfigError);

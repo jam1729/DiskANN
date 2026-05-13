@@ -26,6 +26,7 @@ use diskann::{
             self, Batch, CopyIds, DefaultPostProcessor, ExpandBeam, InplaceDeleteStrategy,
             InsertStrategy, MultiInsertStrategy, PruneStrategy, SearchExt, SearchStrategy,
         },
+        strategy::{FullPrecision, Quantized},
         workingset::{self, map, Map},
         AdjacencyList, SearchOutputBuffer,
     },
@@ -41,11 +42,10 @@ use diskann::{
 use diskann_utils::{future::AsyncFriendly, views::MatrixView};
 use diskann_vector::{distance::Metric, DistanceFunction};
 
-use super::{neighbors::NeighborProvider, quant::QuantVectorProvider, vectors::VectorProvider};
-use diskann_providers::model::graph::provider::async_::{
-    common::{FullPrecision, NoStore, Panics, Quantized},
-    distances::UnwrapErr,
+use super::{
+    neighbors::NeighborProvider, quant::QuantVectorProvider, vectors::VectorProvider, NoStore,
 };
+use diskann_providers::model::graph::provider::async_::distances::UnwrapErr;
 use diskann_providers::storage::{LoadWith, SaveWith, StorageReadProvider, StorageWriteProvider};
 
 /////////////////////
@@ -92,7 +92,7 @@ use diskann_providers::storage::{LoadWith, SaveWith, StorageReadProvider, Storag
 /// use diskann_bftree::provider::{
 ///     BfTreeProvider, BfTreeProviderParameters
 /// };
-/// use diskann_providers::model::graph::provider::async_::common::NoStore;
+/// use diskann_bftree::NoStore;
 /// use diskann_vector::distance::Metric;
 /// use diskann_utils::views::{Init, Matrix};
 /// use bf_tree::Config;
@@ -880,7 +880,7 @@ where
     T: VectorRepr,
     Q: AsyncFriendly,
 {
-    type DistanceComputerError = Panics;
+    type DistanceComputerError = Infallible;
     type DistanceComputer = T::Distance;
 
     fn build_distance_computer(
@@ -898,7 +898,7 @@ where
     T: VectorRepr,
     Q: AsyncFriendly,
 {
-    type QueryComputerError = Panics;
+    type QueryComputerError = Infallible;
     type QueryComputer = T::QueryDistance;
 
     fn build_query_computer(
@@ -1401,7 +1401,7 @@ impl<'a, T> glue::SearchPostProcess<QuantAccessor<'a, T>, &[T]> for Rerank
 where
     T: VectorRepr,
 {
-    type Error = Panics;
+    type Error = Infallible;
 
     fn post_process<I, B>(
         &self,
