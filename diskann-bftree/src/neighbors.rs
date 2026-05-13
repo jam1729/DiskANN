@@ -7,6 +7,7 @@
 
 use std::marker::PhantomData;
 
+use crate::AsKey;
 use bf_tree::{BfTree, Config};
 use bytemuck::{bytes_of, cast_slice, cast_slice_mut};
 use diskann::{
@@ -81,7 +82,7 @@ impl<I: VectorId> NeighborProvider<I> {
 
         // Serialize the key, vector_id, into a byte string, &[u8]
         let i = vector_id.into_usize();
-        let key = bytes_of::<usize>(&i);
+        let key = i.as_key();
 
         // Search and retrieve the corresponding neighbor list data as a byte string, &[u8], in the format of
         // |VectorId|VectorId|...|Invalid|Invalid|VectorId (list length)|
@@ -166,7 +167,7 @@ impl<I: VectorId> NeighborProvider<I> {
 
         // Serialize the key, vector_id, into a byte string, &[u8]
         let i = vector_id.into_usize();
-        let key = bytes_of::<usize>(&i);
+        let key = i.as_key();
 
         // Serialize the value, neighbor list, into a byte string, &u[8]
         let neighbor_list_edges_in_byte = cast_slice::<I, u8>(neighbors);
@@ -218,7 +219,7 @@ impl<I: VectorId> NeighborProvider<I> {
             // We avoid one data copy by directly writing to bf-tree instead of invoking set_neighbor()
             // Also avoid a bunch of unnecssary checks
             let i = vector_id.into_usize();
-            let key = bytes_of::<usize>(&i);
+            let key = i.as_key();
             let value = cast_slice::<I, u8>(&neighbor_list);
             self.adjacency_list_index.insert(key, value);
         }
@@ -229,7 +230,7 @@ impl<I: VectorId> NeighborProvider<I> {
     pub fn delete_vector(&self, vector_id: I) -> ANNResult<()> {
         // Serialize the key, vector_id, into a byte string, &[u8]
         let i = vector_id.into_usize();
-        let key = bytes_of::<usize>(&i);
+        let key = i.as_key();
 
         self.adjacency_list_index.delete(key);
         Ok(())

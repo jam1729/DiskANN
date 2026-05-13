@@ -1920,49 +1920,14 @@ mod tests {
     use std::sync::Arc;
 
     use super::*;
+    use crate::quant::create_test_quantizer;
     use diskann::{
         graph::DiskANNIndex,
         graph::{self, search::Knn},
         neighbor::BackInserter,
     };
     use diskann_providers::storage::FileStorageProvider;
-    use diskann_quantization::{
-        algorithms::TransformKind,
-        alloc::{poly, Poly},
-        spherical::{iface, PreScale, SphericalQuantizer, SupportedMetric},
-    };
     use diskann_utils::views::{Init, Matrix};
-    use rand::rngs::StdRng;
-    use rand::SeedableRng;
-
-    /// Train a spherical quantizer for tests.
-    fn create_test_quantizer(dim: usize) -> Poly<dyn iface::Quantizer> {
-        let nrows = 8;
-        let mut counter = 0.0f32;
-        let data = Matrix::new(
-            Init(move || {
-                counter += 0.5;
-                counter
-            }),
-            nrows,
-            dim,
-        );
-
-        let mut rng = StdRng::seed_from_u64(42);
-        let quantizer = SphericalQuantizer::train(
-            data.as_view(),
-            TransformKind::Null,
-            SupportedMetric::SquaredL2,
-            PreScale::None,
-            &mut rng,
-            GlobalAllocator,
-        )
-        .unwrap();
-
-        let imp = iface::Impl::<1>::new(quantizer).unwrap();
-        let poly = Poly::new(imp, GlobalAllocator).unwrap();
-        poly!(iface::Quantizer, poly)
-    }
 
     fn create_quant_index() -> Arc<DiskANNIndex<BfTreeProvider<f32, QuantVectorProvider>>> {
         let start_point = Matrix::new(Init(|| 0.0f32), 1, 5);

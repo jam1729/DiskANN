@@ -7,8 +7,9 @@
 
 use std::marker::PhantomData;
 
+use crate::AsKey;
 use bf_tree::{BfTree, Config};
-use bytemuck::{bytes_of, cast_slice};
+use bytemuck::cast_slice;
 use diskann::{
     utils::{ErrorToVectorId, TryIntoVectorId, VectorId, VectorRepr},
     ANNError, ANNErrorKind, ANNResult,
@@ -126,7 +127,7 @@ impl<T: VectorRepr, I: VectorId> VectorProvider<T, I> {
         }
 
         // Serialize the key, vector_id, into a byte string, &[u8]
-        let key = bytes_of::<usize>(&i);
+        let key = i.as_key();
         let value = cast_slice::<T, u8>(v);
 
         self.vector_index.insert(key, value);
@@ -149,7 +150,7 @@ impl<T: VectorRepr, I: VectorId> VectorProvider<T, I> {
         self.num_get_calls.increment();
         match self
             .vector_index
-            .read(bytes_of(&i), bytemuck::must_cast_slice_mut::<_, u8>(buffer))
+            .read(i.as_key(), bytemuck::must_cast_slice_mut::<_, u8>(buffer))
         {
             bf_tree::LeafReadResult::Found(read_size) => {
                 let vector_size = std::mem::size_of::<T>() * self.dim;
@@ -193,7 +194,7 @@ impl<T: VectorRepr, I: VectorId> VectorProvider<T, I> {
     }
 
     pub(crate) fn delete_vector(&self, i: usize) {
-        let key = bytes_of::<usize>(&i);
+        let key = i.as_key();
         self.vector_index.delete(key);
     }
 }

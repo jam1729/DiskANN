@@ -5,8 +5,8 @@
 
 //! Bf-Tree quant vector provider.
 
+use crate::AsKey;
 use bf_tree::{BfTree, Config};
-use bytemuck::bytes_of;
 use diskann::{error::IntoANNResult, utils::VectorRepr, ANNError, ANNResult};
 use diskann_quantization::{
     alloc::{GlobalAllocator, Poly, ScopedAllocator},
@@ -117,7 +117,7 @@ impl QuantVectorProvider {
         }
 
         self.num_get_calls.increment();
-        match self.quant_vector_index.read(bytes_of(&i), buffer) {
+        match self.quant_vector_index.read(i.as_key(), buffer) {
             bf_tree::LeafReadResult::Found(read_size) => {
                 if read_size as usize != expected {
                     return ANNResult::Err(ANNError::log_index_error(format!(
@@ -175,7 +175,7 @@ impl QuantVectorProvider {
         }
 
         // Serialize the key into a byte string, &[u8]
-        let key = bytes_of::<usize>(&i);
+        let key = i.as_key();
 
         let dim = self.quantizer.bytes();
         let quant_vector = &mut vec![0u8; dim];
@@ -206,7 +206,7 @@ impl QuantVectorProvider {
         }
 
         // Update pq vector with id = i to v
-        let key = bytes_of::<usize>(&i);
+        let key = i.as_key();
 
         self.quant_vector_index.insert(key, v);
 
@@ -214,67 +214,64 @@ impl QuantVectorProvider {
     }
 
     pub(crate) fn delete_vector(&self, i: usize) {
-        let key = bytes_of::<usize>(&i);
+        let key = i.as_key();
         self.quant_vector_index.delete(key);
     }
+}
+
+/// Train a spherical quantizer on simple data and return it as a `Poly<dyn Quantizer>`.
+#[cfg(test)]
+pub(crate) fn create_test_quantizer(dim: usize) -> Poly<dyn Quantizer> {
+    use diskann_quantization::{
+        algorithms::TransformKind,
+        alloc::poly,
+        spherical::{iface, PreScale, SphericalQuantizer, SupportedMetric},
+    };
+    use diskann_utils::views::Init;
+    use diskann_utils::views::Matrix;
+    use rand::{rngs::StdRng, SeedableRng};
+
+    // Create training data with spread-out values.
+    let nrows = 8;
+    let mut counter = 0.0f32;
+    let data = Matrix::new(
+        Init(move || {
+            counter += 0.5;
+            counter
+        }),
+        nrows,
+        dim,
+    );
+
+    let mut rng = StdRng::seed_from_u64(42);
+    let quantizer = SphericalQuantizer::train(
+        data.as_view(),
+        TransformKind::Null,
+        SupportedMetric::SquaredL2,
+        PreScale::None,
+        &mut rng,
+        GlobalAllocator,
+    )
+    .unwrap();
+
+    let imp = iface::Impl::<1>::new(quantizer).unwrap();
+    poly!(Quantizer, imp, GlobalAllocator).unwrap()
 }
 
 ///////////
 // Tests //
 ///////////
-
 /// These unit tests target the functionality of Bf-Tree quant vector provider alone
 #[cfg(test)]
 mod tests {
     use std::sync::Arc;
 
     use diskann::ANNErrorKind;
-    use diskann_quantization::{
-        algorithms::TransformKind,
-        alloc::{poly, Poly},
-        spherical::{
-            iface::{self, Opaque},
-            PreScale, SphericalQuantizer, SupportedMetric,
-        },
-    };
-    use diskann_utils::views::Matrix;
+    use diskann_quantization::spherical::iface::Opaque;
     use diskann_vector::{DistanceFunction, PreprocessedDistanceFunction};
-    use rand::rngs::StdRng;
-    use rand::SeedableRng;
     use tokio::task::JoinSet;
 
     use super::*;
-
-    /// Train a spherical quantizer on simple data and return it as a `Poly<dyn Quantizer>`.
-    fn create_test_quantizer(dim: usize) -> Poly<dyn iface::Quantizer> {
-        use diskann_utils::views::Init;
-
-        // Create training data with spread-out values.
-        let nrows = 8;
-        let mut counter = 0.0f32;
-        let data = Matrix::new(
-            Init(move || {
-                counter += 0.5;
-                counter
-            }),
-            nrows,
-            dim,
-        );
-
-        let mut rng = StdRng::seed_from_u64(42);
-        let quantizer = SphericalQuantizer::train(
-            data.as_view(),
-            TransformKind::Null,
-            SupportedMetric::SquaredL2,
-            PreScale::None,
-            &mut rng,
-            GlobalAllocator,
-        )
-        .unwrap();
-
-        let imp = iface::Impl::<1>::new(quantizer).unwrap();
-        poly!(iface::Quantizer, imp, GlobalAllocator).unwrap()
-    }
 
     /// Test edge cases of the Bf-Tree quant vector provider
     #[tokio::test]
