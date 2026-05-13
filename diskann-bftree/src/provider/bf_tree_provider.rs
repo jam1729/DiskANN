@@ -109,7 +109,7 @@ use diskann_providers::storage::{LoadWith, SaveWith, StorageReadProvider, Storag
 /// This example demonstrates how to create a `BfTreeProvider` that only supports
 /// full-precision vectors.
 /// ```
-/// use diskann_bf_tree::provider::{
+/// use diskann_bftree::provider::{
 ///     BfTreeProvider, BfTreeProviderParameters
 /// };
 /// use diskann_providers::model::graph::provider::async_::common::NoStore;
@@ -149,7 +149,7 @@ use diskann_providers::storage::{LoadWith, SaveWith, StorageReadProvider, Storag
 ///     spherical::{iface, SphericalQuantizer, SupportedMetric, PreScale},
 /// };
 /// use diskann_utils::views::{Init, Matrix};
-/// use diskann_bf_tree::provider::{
+/// use diskann_bftree::provider::{
 ///     BfTreeProvider, BfTreeProviderParameters
 /// };
 /// use diskann_vector::distance::Metric;

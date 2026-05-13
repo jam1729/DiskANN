@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license.
 [package]
-name = "diskann-bf_tree"
+name = "diskann-bftree"
 version.workspace = true
 description.workspace = true
 authors.workspace = true

@@ -729,7 +729,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "diskann-bf_tree"
+name = "diskann-bftree"
 version = "0.52.0"
 dependencies = [
  "bf-tree",
