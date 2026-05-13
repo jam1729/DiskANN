@@ -104,7 +104,7 @@ impl TransientError<ANNError> for VectorUnavailable {
 
 pub type AccessError = RankedError<VectorUnavailable, ANNError>;
 
-/// Metrics recorded by [`Context`].
+/// Metrics recorded by [`DefaultContext`](diskann::provider::DefaultContext).
 #[derive(Debug, Clone)]
 #[cfg_attr(test, derive(serde::Serialize, serde::Deserialize))]
 pub struct ContextMetrics {
