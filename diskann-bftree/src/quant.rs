@@ -5,8 +5,6 @@
 
 //! Bf-Tree quant vector provider.
 
-use std::sync::Arc;
-
 use bf_tree::{BfTree, Config};
 use bytemuck::bytes_of;
 use diskann::{error::IntoANNResult, utils::VectorRepr, ANNError, ANNResult};
@@ -21,7 +19,7 @@ use diskann_vector::PreprocessedDistanceFunction;
 use super::ConfigError;
 use diskann_providers::model::graph::provider::async_::common::TestCallCount;
 
-pub struct QuantQueryComputer(pub QueryComputer<GlobalAllocator>);
+pub struct QuantQueryComputer(pub(crate) QueryComputer<GlobalAllocator>);
 
 impl PreprocessedDistanceFunction<&[u8], f32> for QuantQueryComputer {
     fn evaluate_similarity(&self, x: &[u8]) -> f32 {
@@ -33,26 +31,17 @@ impl PreprocessedDistanceFunction<&[u8], f32> for QuantQueryComputer {
 
 pub struct QuantVectorProvider {
     quant_vector_index: BfTree,
-    max_vectors: usize,
-    num_start_points: usize,
-    pub quantizer: Arc<Poly<dyn Quantizer>>,
+    pub(crate) quantizer: Poly<dyn Quantizer>,
     pub(super) num_get_calls: TestCallCount,
 }
 
 impl QuantVectorProvider {
-    pub fn new_with_config(
-        max_vectors: usize,
-        num_start_points: usize,
-        quantizer: Poly<dyn Quantizer>,
-        config: Config,
-    ) -> ANNResult<Self> {
+    pub fn new_with_config(quantizer: Poly<dyn Quantizer>, config: Config) -> ANNResult<Self> {
         let quant_vector_index = BfTree::with_config(config, None).map_err(ConfigError)?;
 
         Ok(Self {
-            max_vectors,
-            num_start_points,
             quant_vector_index,
-            quantizer: Arc::new(quantizer),
+            quantizer,
             num_get_calls: TestCallCount::default(),
         })
     }
@@ -70,24 +59,14 @@ impl QuantVectorProvider {
     /// Create a new instance from an existing BfTree (for loading from snapshot)
     ///
     pub(crate) fn new_from_bftree(
-        max_vectors: usize,
-        num_start_points: usize,
         quantizer: Poly<dyn Quantizer>,
         quant_vector_index: BfTree,
     ) -> Self {
         Self {
-            max_vectors,
-            num_start_points,
             quant_vector_index,
-            quantizer: Arc::new(quantizer),
+            quantizer,
             num_get_calls: TestCallCount::default(),
         }
-    }
-
-    /// Return the total number of points including starting points
-    #[inline(always)]
-    pub fn total(&self) -> usize {
-        self.max_vectors + self.num_start_points
     }
 
     /// Return the dimension of the full-precision data associated with this provider
@@ -105,7 +84,7 @@ impl QuantVectorProvider {
             .quantizer
             .fused_query_computer(
                 &query_f32,
-                QueryLayout::SameAsData,
+                QueryLayout::FullPrecision,
                 true,
                 GlobalAllocator,
                 ScopedAllocator::global(),
@@ -181,19 +160,12 @@ impl QuantVectorProvider {
     ///
     /// Errors if:
     ///
-    /// * `i > self.total()`: `i` must be in bounds.
     /// * `v.dim() != self.full_dim()`: The slice must have the proper length.
     /// * PQ compression encounters an error (such as the presence of `NaN`s).
     pub(crate) fn set_vector_sync<T>(&self, i: usize, v: &[T]) -> ANNResult<()>
     where
         T: Copy + VectorRepr,
     {
-        if i >= self.total() {
-            return Err(ANNError::log_index_error(
-                "Vector id is out of boundary in the dataset.",
-            ));
-        }
-
         let vf32: &[f32] = &T::as_f32(v).into_ann_result()?;
 
         if vf32.len() != self.full_dim() {
@@ -220,19 +192,13 @@ impl QuantVectorProvider {
         Ok(())
     }
 
-    /// Set the quant vecotr with Id, `i``, to `v`
+    /// Set the quant vector with Id, `i`, to `v`
     ///
     /// Errors if:
     ///
-    /// * `i >= self.total()`: `i` must be in bounds.
     /// * `v.len() != self.pq_chunks()`: `v` must have the right length.
     #[cfg(test)]
     pub(crate) fn set_quant_vector(&self, i: usize, v: &[u8]) -> ANNResult<()> {
-        if i >= self.total() {
-            return Err(ANNError::log_index_error(
-                "Vector id is out of boundary in the dataset.",
-            ));
-        }
         if v.len() != self.quantizer.bytes() {
             return Err(ANNError::log_index_error(
                 "Vector dimension is not equal to the expected dimension.",
@@ -260,6 +226,8 @@ impl QuantVectorProvider {
 /// These unit tests target the functionality of Bf-Tree quant vector provider alone
 #[cfg(test)]
 mod tests {
+    use std::sync::Arc;
+
     use diskann::ANNErrorKind;
     use diskann_quantization::{
         algorithms::TransformKind,
@@ -316,8 +284,7 @@ mod tests {
         let quant_bytes = quantizer.bytes();
 
         let bf_tree_config = Config::default();
-        let provider =
-            QuantVectorProvider::new_with_config(10, 1, quantizer, bf_tree_config).unwrap();
+        let provider = QuantVectorProvider::new_with_config(quantizer, bf_tree_config).unwrap();
 
         // try to set an out of bounds vector
         let result = provider.set_quant_vector(20, &[]).unwrap_err();
@@ -325,7 +292,7 @@ mod tests {
 
         // try to set an out of bounds vector via set_vector_sync
         let result = provider.set_vector_sync::<f32>(20, &[]).unwrap_err();
-        assert_eq!(result.kind(), ANNErrorKind::IndexError);
+        assert_eq!(result.kind(), ANNErrorKind::DimensionMismatchError);
 
         // try to set a quant vector with the wrong dimension
         let result = provider.set_quant_vector(0, &[]).unwrap_err();
@@ -336,22 +303,13 @@ mod tests {
     }
 
     fn create_test_provider() -> QuantVectorProvider {
-        let num_points = 3;
-        let frozen_points = 2;
         let dim = 2;
 
         let quantizer = create_test_quantizer(dim);
 
         let bf_tree_config = Config::default();
-        let provider = QuantVectorProvider::new_with_config(
-            num_points,
-            frozen_points,
-            quantizer,
-            bf_tree_config,
-        )
-        .unwrap();
+        let provider = QuantVectorProvider::new_with_config(quantizer, bf_tree_config).unwrap();
 
-        assert_eq!(provider.total(), num_points + frozen_points);
         assert_eq!(provider.full_dim(), dim);
 
         // Set vectors.
@@ -376,7 +334,6 @@ mod tests {
         }
 
         // Error checking.
-        assert!(provider.set_vector_sync(5, &[0.0, 0.0]).is_err());
         assert!(provider.set_vector_sync(2, &[0.0]).is_err());
 
         // Query Computer — verify it returns finite distances.
@@ -414,9 +371,8 @@ mod tests {
         let quantizer = create_test_quantizer(dim);
 
         let bf_tree_config = Config::default();
-        let provider = Arc::new(
-            QuantVectorProvider::new_with_config(10, 1, quantizer, bf_tree_config).unwrap(),
-        );
+        let provider =
+            Arc::new(QuantVectorProvider::new_with_config(quantizer, bf_tree_config).unwrap());
         let mut set = JoinSet::new();
         for i in 0..11 {
             let vector = vec![i as f32, (i + 1) as f32];

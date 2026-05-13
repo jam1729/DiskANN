@@ -91,10 +91,6 @@ use diskann_providers::storage::{LoadWith, SaveWith, StorageReadProvider, Storag
 ///   IDs forward without reranking. Fastest option — full-precision vectors are not
 ///   touched at query time.
 ///
-/// * [`Hybrid`]: Searches and prunes in the quantized space (same as [`Quantized`]), but
-///   reranks the final search candidates using full-precision distances. This improves
-///   recall at the cost of fetching full-precision vectors for the result set.
-///
 /// # Examples
 ///
 /// The following code demonstrates how to instantiate and use the `BfTreeProvider` in
@@ -118,7 +114,6 @@ use diskann_providers::storage::{LoadWith, SaveWith, StorageReadProvider, Storag
 ///     num_start_points: NonZeroUsize::new(1).unwrap(),
 ///     dim: 4,
 ///     metric: Metric::L2,
-///     max_fp_vecs_per_fill: None,
 ///     max_degree: 32,
 ///     vector_provider_config: Config::default(),
 ///     quant_vector_provider_config: Config::default(),
@@ -171,7 +166,6 @@ use diskann_providers::storage::{LoadWith, SaveWith, StorageReadProvider, Storag
 ///     num_start_points: NonZeroUsize::new(1).unwrap(),
 ///     dim: 4,
 ///     metric: Metric::L2,
-///     max_fp_vecs_per_fill: None,
 ///     max_degree: 32,
 ///     vector_provider_config: Config::default(),
 ///     quant_vector_provider_config: Config::default(),
@@ -201,11 +195,6 @@ where
     //
     pub(crate) neighbor_provider: NeighborProvider<u32>,
 
-    // A parameter controlling hybrid pruning, where some set of full-precision vectors are
-    // fetched and the rest are quantized vectors
-    //
-    pub(super) max_fp_vecs_per_fill: usize,
-
     // The metric to use for distances
     //
     pub(super) metric: Metric,
@@ -228,10 +217,6 @@ pub struct BfTreeProviderParameters {
 
     // The metric to use for distance computations
     pub metric: Metric,
-
-    // If quantization is used, this parameter controls how many full-precision
-    // vectors are retrieved for each fill operation
-    pub max_fp_vecs_per_fill: Option<usize>,
 
     // The maximum number of neighbors to store for each vector
     pub max_degree: u32,
@@ -269,11 +254,7 @@ where
         let num_start_points = params.num_start_points.get();
 
         Ok(Self {
-            quant_vectors: quant_precursor.create(
-                params.max_points,
-                num_start_points,
-                params.quant_vector_provider_config,
-            )?,
+            quant_vectors: quant_precursor.create(params.quant_vector_provider_config)?,
             full_vectors: VectorProvider::new_with_config(
                 params.max_points,
                 params.dim,
@@ -284,7 +265,6 @@ where
                 params.max_degree,
                 params.neighbor_list_provider_config,
             )?,
-            max_fp_vecs_per_fill: params.max_fp_vecs_per_fill.unwrap_or(usize::MAX),
             metric: params.metric,
             graph_params: params.graph_params,
         })
@@ -491,22 +471,12 @@ pub trait CreateQuantProvider {
     // Create a quant provider capable of tracking `max_points` with and additional
     // `frozen_points` at the end.
     //
-    fn create(
-        self,
-        max_points: usize,
-        frozen_points: usize,
-        bf_tree_config: Config,
-    ) -> ANNResult<Self::Target>;
+    fn create(self, bf_tree_config: Config) -> ANNResult<Self::Target>;
 }
 
 impl CreateQuantProvider for NoStore {
     type Target = NoStore;
-    fn create(
-        self,
-        _max_points: usize,
-        _frozen_points: usize,
-        _bf_tree_config: Config,
-    ) -> ANNResult<Self::Target> {
+    fn create(self, _bf_tree_config: Config) -> ANNResult<Self::Target> {
         Ok(self)
     }
 }
@@ -515,13 +485,8 @@ impl CreateQuantProvider for NoStore {
 ///
 impl CreateQuantProvider for Poly<dyn Quantizer> {
     type Target = QuantVectorProvider;
-    fn create(
-        self,
-        max_points: usize,
-        frozen_points: usize,
-        bf_tree_config: Config,
-    ) -> ANNResult<Self::Target> {
-        QuantVectorProvider::new_with_config(max_points, frozen_points, self, bf_tree_config)
+    fn create(self, bf_tree_config: Config) -> ANNResult<Self::Target> {
+        QuantVectorProvider::new_with_config(self, bf_tree_config)
     }
 }
 
@@ -1363,7 +1328,7 @@ impl<T> DefaultPostProcessor<BfTreeProvider<T, QuantVectorProvider>, &[T]> for Q
 where
     T: VectorRepr,
 {
-    default_post_processor!(glue::Pipeline<glue::FilterStartPoints, CopyIds>);
+    default_post_processor!(glue::Pipeline<glue::FilterStartPoints, Rerank>);
 }
 
 impl<T> InsertStrategy<BfTreeProvider<T, QuantVectorProvider>, &[T]> for Quantized
@@ -1420,7 +1385,7 @@ where
     type DeleteElementGuard = Box<[T]>;
     type PruneStrategy = Self;
     type DeleteSearchAccessor<'a> = QuantAccessor<'a, T>;
-    type SearchPostProcessor = CopyIds;
+    type SearchPostProcessor = Rerank;
     type SearchStrategy = Self;
     fn search_strategy(&self) -> Self::SearchStrategy {
         *self
@@ -1431,7 +1396,7 @@ where
     }
 
     fn search_post_processor(&self) -> Self::SearchPostProcessor {
-        CopyIds
+        Rerank
     }
 
     async fn get_delete_element<'a>(
@@ -1541,7 +1506,6 @@ impl BfTreeParams {
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct QuantParams {
-    pub max_fp_vecs_per_fill: usize,
     pub params_quant: BfTreeParams,
 }
 
@@ -1816,7 +1780,6 @@ where
             quant_vectors: NoStore,
             full_vectors,
             neighbor_provider,
-            max_fp_vecs_per_fill: 0,
             metric,
             graph_params: saved_params.graph_params,
         })
@@ -1853,7 +1816,6 @@ where
                 leaf_page_size: self.neighbor_provider.config().get_leaf_page_size(),
             },
             quant_params: Some(QuantParams {
-                max_fp_vecs_per_fill: self.max_fp_vecs_per_fill,
                 params_quant: BfTreeParams {
                     bytes: self.quant_vectors.config().get_cb_size_byte(),
                     max_record_size: self.quant_vectors.config().get_cb_max_record_size(),
@@ -1972,18 +1934,12 @@ where
             BfTreePaths::quant_bftree(&saved_params.prefix),
             saved_params.is_memory,
         )?;
-        let quant_vectors = QuantVectorProvider::new_from_bftree(
-            saved_params.max_points,
-            saved_params.frozen_points.get(),
-            quantizer,
-            quant_vector_index,
-        );
+        let quant_vectors = QuantVectorProvider::new_from_bftree(quantizer, quant_vector_index);
 
         Ok(Self {
             quant_vectors,
             full_vectors,
             neighbor_provider,
-            max_fp_vecs_per_fill: quant_params.max_fp_vecs_per_fill,
             metric,
             graph_params: saved_params.graph_params,
         })
@@ -2063,7 +2019,6 @@ mod tests {
                 num_start_points: NonZeroUsize::new(1).unwrap(),
                 dim,
                 metric,
-                max_fp_vecs_per_fill: None,
                 max_degree,
                 vector_provider_config: Config::default(),
                 quant_vector_provider_config: Config::default(),
@@ -2219,7 +2174,6 @@ mod tests {
                 num_start_points: NonZeroUsize::new(1).unwrap(),
                 dim: 5,
                 metric,
-                max_fp_vecs_per_fill: None,
                 max_degree,
                 vector_provider_config: Config::default(),
                 quant_vector_provider_config: Config::default(),
@@ -2343,7 +2297,6 @@ mod tests {
                 num_start_points: NonZeroUsize::new(2).unwrap(),
                 dim: 5,
                 metric: Metric::L2,
-                max_fp_vecs_per_fill: None,
                 max_degree: 64,
                 vector_provider_config: Config::default(),
                 quant_vector_provider_config: Config::default(),
@@ -2424,7 +2377,6 @@ mod tests {
                 num_start_points: NonZeroUsize::new(2).unwrap(),
                 dim: 3,
                 metric: Metric::L2,
-                max_fp_vecs_per_fill: None,
                 max_degree: 64,
                 vector_provider_config: Config::default(),
                 quant_vector_provider_config: Config::default(),
@@ -2531,7 +2483,6 @@ mod tests {
             num_start_points,
             dim,
             metric: Metric::L2,
-            max_fp_vecs_per_fill: None,
             max_degree,
             vector_provider_config: vector_config.clone(),
             quant_vector_provider_config: Config::default(),
@@ -2659,7 +2610,6 @@ mod tests {
             num_start_points,
             dim,
             metric: Metric::L2,
-            max_fp_vecs_per_fill: Some(10),
             max_degree,
             vector_provider_config: vector_config.clone(),
             quant_vector_provider_config: quant_config.clone(),
@@ -2787,7 +2737,6 @@ mod tests {
                 num_start_points,
                 dim,
                 metric: Metric::L2,
-                max_fp_vecs_per_fill: None,
                 max_degree,
                 vector_provider_config: Config::default(),
                 quant_vector_provider_config: Config::default(),
@@ -2896,7 +2845,6 @@ mod tests {
                 num_start_points,
                 dim,
                 metric: Metric::L2,
-                max_fp_vecs_per_fill: Some(5),
                 max_degree,
                 vector_provider_config: Config::default(),
                 quant_vector_provider_config: Config::default(),
