@@ -1065,7 +1065,7 @@ where
         self.provider
             .quant_vectors
             .query_computer(from)
-            .map(|qc| UnwrapErr::new(qc.0))
+            .map(|qc| UnwrapErr::new(qc.into_inner()))
     }
 }
 
