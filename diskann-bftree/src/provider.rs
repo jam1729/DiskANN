@@ -386,9 +386,6 @@ where
     ) -> impl std::future::Future<Output = Result<(), Self::Error>> + Send {
         let id = *gid;
 
-        if let Err(e) = self.neighbor_provider.delete_vector(id) {
-            return std::future::ready(Err(e));
-        }
         if let Err(e) = self.neighbor_provider.set_neighbors(id, &[]) {
             return std::future::ready(Err(e));
         }
