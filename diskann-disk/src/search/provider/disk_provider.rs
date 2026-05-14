@@ -428,19 +428,6 @@ where
                 .to_vec(),
         })
     }
-
-    // async fn distances_unordered<Itr, F>(
-    //     &mut self,
-    //     vec_id_itr: Itr,
-    //     _computer: &Self::QueryComputer,
-    //     f: F,
-    // ) -> Result<(), Self::GetError>
-    // where
-    //     F: Send + FnMut(f32, Self::Id),
-    //     Itr: Iterator<Item = Self::Id>,
-    // {
-    //     self.pq_distances(&vec_id_itr.collect::<Box<[_]>>(), f)
-    // }
 }
 
 impl<Data, VP> ExpandBeam<&[Data::VectorDataType]> for DiskAccessor<'_, Data, VP>
@@ -604,10 +591,13 @@ where
         mut f: F,
     ) -> ANNResult<()>
     where
-        F: FnMut(Self::Id, f32) + Send
+        F: FnMut(Self::Id, f32) + Send,
     {
         let start_vertex_id = self.provider.graph_header.metadata().medoid as u32;
-        let vector = self.provider.pq_data.get_compressed_vector(start_vertex_id.into_usize())?;
+        let vector = self
+            .provider
+            .pq_data
+            .get_compressed_vector(start_vertex_id.into_usize())?;
         let distance = computer.evaluate_similarity(vector);
         f(start_vertex_id, distance);
         Ok(())
@@ -709,25 +699,7 @@ where
     Data: GraphDataType<VectorIdType = u32>,
     VP: VertexProvider<Data>,
 {
-    // /// This accessor returns raw slices. There *is* a chance of racing when the fast
-    // /// providers are used. We just have to live with it.
-    // type Element<'a>
-    //     = &'a [u8]
-    // where
-    //     Self: 'a;
-
-    /// `ElementRef` can have arbitrary lifetimes.
     type ElementRef<'a> = &'a [u8];
-
-    // /// Choose to panic on an out-of-bounds access rather than propagate an error.
-    // type GetError = ANNError;
-
-    // fn get_element(
-    //     &mut self,
-    //     id: Self::Id,
-    // ) -> impl Future<Output = Result<Self::Element<'_>, Self::GetError>> + Send {
-    //     std::future::ready(self.provider.pq_data.get_compressed_vector(id as usize))
-    // }
 }
 
 impl<Data, VP> IdIterator<Range<u32>> for DiskAccessor<'_, Data, VP>

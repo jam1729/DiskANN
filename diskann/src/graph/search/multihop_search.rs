@@ -11,7 +11,7 @@ use hashbrown::HashSet;
 use super::{Knn, Search, record::SearchRecord, scratch::SearchScratch};
 use crate::{
     ANNResult,
-    error::{IntoANNResult},
+    error::IntoANNResult,
     graph::{
         glue::{
             self, ExpandBeam, HybridPredicate, Predicate, PredicateMut, SearchExt,

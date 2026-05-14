@@ -352,9 +352,8 @@ where
             for i in self.provider.starting_points()? {
                 // SAFETY: We're accepting the consequences of potential unsynchronized,
                 // concurrent mutation.
-                let distance = computer.evaluate_similarity(
-                    self.provider.aux_vectors.get_vector(i.into_usize())?
-                );
+                let distance = computer
+                    .evaluate_similarity(self.provider.aux_vectors.get_vector(i.into_usize())?);
 
                 f(i, distance);
             }

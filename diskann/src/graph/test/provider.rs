@@ -1058,29 +1058,7 @@ impl provider::HasId for Accessor<'_> {
 }
 
 impl provider::Accessor for Accessor<'_> {
-    // type Element<'a>
-    //     = &'a [f32]
-    // where
-    //     Self: 'a;
     type ElementRef<'a> = &'a [f32];
-    // type GetError = AccessError;
-
-    // async fn get_element(&mut self, id: u32) -> Result<&[f32], AccessError> {
-    //     match self.provider.terms.get(&id) {
-    //         Some(term) => {
-    //             if let Some(transient) = &self.transient_ids
-    //                 && transient.contains(&id)
-    //             {
-    //                 return Err(AccessError::Transient(TransientAccessError::new(id)));
-    //             }
-
-    //             self.get_vector.increment();
-    //             self.buffer.copy_from_slice(&term.data);
-    //             Ok(&*self.buffer)
-    //         }
-    //         None => Err(AccessError::InvalidId(AccessedInvalidId(id))),
-    //     }
-    // }
 }
 
 impl<'a> provider::DelegateNeighbor<'a> for Accessor<'_> {
@@ -1742,7 +1720,7 @@ mod tests {
 
     #[test]
     fn test_set_element() {
-        use provider::{Accessor, Guard, SetElement};
+        use provider::{Guard, SetElement};
 
         let provider = create_test_provider();
         let rt = current_thread_runtime();

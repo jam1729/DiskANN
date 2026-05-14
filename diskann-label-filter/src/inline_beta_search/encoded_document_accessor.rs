@@ -72,71 +72,71 @@ impl<IA> Accessor for EncodedDocumentAccessor<IA>
 where
     IA: Accessor,
 {
-    // type Element<'a>
-    //     = EncodedDocument<IA::Element<'a>, RoaringTreemap>
-    // where
-    //     Self: 'a;
+    type Element<'a>
+        = EncodedDocument<IA::Element<'a>, RoaringTreemap>
+    where
+        Self: 'a;
     type ElementRef<'a> = EncodedDocument<IA::ElementRef<'a>, &'a RoaringTreemap>;
-    // type GetError = ANNError;
+    type GetError = ANNError;
 
-    // async fn get_element(&mut self, id: Self::Id) -> Result<Self::Element<'_>, Self::GetError> {
-    //     let future = self.inner_accessor.get_element(id);
-    //     let elem = future.await.escalate("Did not find the vector element")?;
+    async fn get_element(&mut self, id: Self::Id) -> Result<Self::Element<'_>, Self::GetError> {
+        let future = self.inner_accessor.get_element(id);
+        let elem = future.await.escalate("Did not find the vector element")?;
 
-    //     let attrs = self
-    //         .attribute_accessor
-    //         .visit_labels_of_point(id, |_, opt_set| {
-    //             match opt_set {
-    //                 //TODO: Currently, there is no way but to copy. So we copy the set from the Cow into a
-    //                 //hydrated object.
-    //                 //IMP NOTE: Removing the copy will also change the signature of "Element" and may cause other
-    //                 //downstream issues, so should be done with care!
-    //                 Some(set) => Ok(set.into_owned()),
-    //                 None => Err(ANNError::message(
-    //                     ANNErrorKind::IndexError,
-    //                     "No labels were found for vector",
-    //                 )),
-    //             }
-    //         })?;
+        let attrs = self
+            .attribute_accessor
+            .visit_labels_of_point(id, |_, opt_set| {
+                match opt_set {
+                    //TODO: Currently, there is no way but to copy. So we copy the set from the Cow into a
+                    //hydrated object.
+                    //IMP NOTE: Removing the copy will also change the signature of "Element" and may cause other
+                    //downstream issues, so should be done with care!
+                    Some(set) => Ok(set.into_owned()),
+                    None => Err(ANNError::message(
+                        ANNErrorKind::IndexError,
+                        "No labels were found for vector",
+                    )),
+                }
+            })?;
 
-    //     Ok(EncodedDocument::new(elem, attrs?))
-    // }
+        Ok(EncodedDocument::new(elem, attrs?))
+    }
 
-    // async fn on_elements_unordered<Itr, F>(
-    //     &mut self,
-    //     itr: Itr,
-    //     mut f: F,
-    // ) -> Result<(), Self::GetError>
-    // where
-    //     Self: Sync,
-    //     Itr: Iterator<Item = Self::Id> + Send,
-    //     F: Send + for<'a> FnMut(Self::ElementRef<'a>, Self::Id),
-    // {
-    //     for i in itr {
-    //         let vec = self
-    //             .inner_accessor
-    //             .get_element(i)
-    //             .await
-    //             .escalate("Failed to get vector from inner accessor")?;
-    //         let _ = self
-    //             .attribute_accessor
-    //             .visit_labels_of_point(i, |_, opt_set| {
-    //                 let set = match opt_set {
-    //                     Some(set) => set,
-    //                     None => {
-    //                         return Err(ANNError::message(
-    //                             ANNErrorKind::IndexError,
-    //                             format!("No attributes found for point.{}", i),
-    //                         ));
-    //                     }
-    //                 };
-    //                 let elem = EncodedDocument::new(vec.reborrow(), &*set);
-    //                 f(elem, i);
-    //                 Ok(())
-    //             });
-    //     }
-    //     Ok(())
-    // }
+    async fn on_elements_unordered<Itr, F>(
+        &mut self,
+        itr: Itr,
+        mut f: F,
+    ) -> Result<(), Self::GetError>
+    where
+        Self: Sync,
+        Itr: Iterator<Item = Self::Id> + Send,
+        F: Send + for<'a> FnMut(Self::ElementRef<'a>, Self::Id),
+    {
+        for i in itr {
+            let vec = self
+                .inner_accessor
+                .get_element(i)
+                .await
+                .escalate("Failed to get vector from inner accessor")?;
+            let _ = self
+                .attribute_accessor
+                .visit_labels_of_point(i, |_, opt_set| {
+                    let set = match opt_set {
+                        Some(set) => set,
+                        None => {
+                            return Err(ANNError::message(
+                                ANNErrorKind::IndexError,
+                                format!("No attributes found for point.{}", i),
+                            ));
+                        }
+                    };
+                    let elem = EncodedDocument::new(vec.reborrow(), &*set);
+                    f(elem, i);
+                    Ok(())
+                });
+        }
+        Ok(())
+    }
 }
 
 impl<IA> SearchExt for EncodedDocumentAccessor<IA>

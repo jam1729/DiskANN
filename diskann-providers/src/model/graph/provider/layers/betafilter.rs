@@ -187,13 +187,12 @@ where
         mut f: F,
     ) -> impl std::future::Future<Output = ANNResult<()>> + Send
     where
-        F: FnMut(Self::Id, f32) + Send {
-        self.inner.start_point_distances(
-            computer.inner(),
-            move |id, distance| {
+        F: FnMut(Self::Id, f32) + Send,
+    {
+        self.inner
+            .start_point_distances(computer.inner(), move |id, distance| {
                 f(id, computer.apply(id, distance));
-            }
-        )
+            })
     }
 }
 

@@ -16,7 +16,7 @@ use diskann_utils::{
     Reborrow,
     future::{AssertSend, SendFuture, boxit},
 };
-use diskann_vector::{DistanceFunction};
+use diskann_vector::DistanceFunction;
 use futures_util::FutureExt;
 use hashbrown::HashSet;
 use thiserror::Error;
@@ -25,8 +25,8 @@ use tokio::task::JoinSet;
 use super::{
     AdjacencyList, Config, ConsolidateKind, InplaceDeleteMethod, Search,
     glue::{
-        self, Batch, ExpandBeam, InplaceDeleteStrategy, InsertStrategy,
-        MultiInsertStrategy, PruneStrategy, SearchExt, SearchPostProcess, SearchStrategy,
+        self, Batch, ExpandBeam, InplaceDeleteStrategy, InsertStrategy, MultiInsertStrategy,
+        PruneStrategy, SearchExt, SearchPostProcess, SearchStrategy,
     },
     internal::{BackedgeBuffer, SortedNeighbors, prune},
     search::{
@@ -2027,6 +2027,8 @@ where
         async move {
             let beam_width = beam_width.unwrap_or(1);
 
+            // paged search can call search_internal multiple times, we only need to initialize
+            // state if not already initialized.
             if scratch.visited.is_empty() {
                 accessor
                     .start_point_distances(computer, |id, dist| {
@@ -2036,21 +2038,6 @@ where
                     })
                     .await?;
             }
-
-            // // paged search can call search_internal multiple times, we only need to initialize
-            // // state if not already initialized.
-            // if scratch.visited.is_empty() {
-            //     for id in start_ids {
-            //         scratch.visited.insert(*id);
-            //         let element = accessor
-            //             .get_element(*id)
-            //             .await
-            //             .escalate("start point retrieval must succeed")?;
-            //         let dist = computer.evaluate_similarity(element.reborrow());
-            //         scratch.best.insert(Neighbor::new(*id, dist));
-            //         scratch.cmps += 1;
-            //     }
-            // }
 
             let mut neighbors = Vec::with_capacity(self.max_degree_with_slack());
             while scratch.best.has_notvisited_node() && !accessor.terminate_early() {

@@ -83,7 +83,7 @@ use diskann_vector::{DistanceFunction, PreprocessedDistanceFunction};
 
 use crate::{
     ANNError, ANNResult,
-    error::{StandardError},
+    error::StandardError,
     graph::{SearchOutputBuffer, workingset},
     neighbor::Neighbor,
     provider::{
