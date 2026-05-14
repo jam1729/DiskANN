@@ -305,6 +305,14 @@ where
     type Id = T::Id;
 }
 
+///////////////////
+// HasElementRef //
+///////////////////
+
+pub trait HasElementRef {
+    type ElementRef<'a>;
+}
+
 ////////////////
 // SetElement //
 ////////////////
@@ -380,55 +388,8 @@ where
     }
 }
 
-//////////////
-// Accessor //
-//////////////
-
-/// A lens through which [`DataProvider`]s contextually viewed.
-///
-/// Accessors are **not** required to be `'static` and almost always contain a scoped
-/// reference to their parent provider.
-///
-/// # Element Relationship
-///
-/// Accessors are expected to define two associated element types:
-///
-/// * `Element<'_>`: The type returned by `get_element`. This is scoped to the borrow
-///   of the accessor at the `get_element` call site. As a consequence, there may only
-///   be one such `Element` active at a time.
-///
-/// * `ElementRef<'_>`: A generalized borrowed form of `Element` obtainable via
-///   `Reborrow`. This is the type on which distance computations are defined and is the
-///   element type provided to the `on_element_unordered` bulk operation.
-///
-/// The below diagram summarizes the relationship.
-///
-/// ```text
-/// Element<'_> ------ Reborrow ----> ElementRef<'_>
-///        ~~~~                                 ~~~~
-///         ^                                    ^
-///         |                                    |
-///   Lifetime tied                       Arbitrarily short
-///  to the Accessor                     lifetime decoupled
-///                                       from the Accessor
-/// ```
-///
-/// ## Technical Details
-///
-/// The need for `ElementRef` arises to allow HRTB bounds to distance computers without
-/// inducing a `'static` bound on `Self`. In traits like [`BuildQueryComputer`], attempting
-/// to use `Element` directly will result in such a requirement on the implementing Accessor.
-pub trait Accessor: HasId + Send + Sync {
-    /// A generalized reference type used for distance computations.
-    ///
-    /// Note that the lifetime of `ElementRef` is unconstrained and thus using it in a
-    /// [HRTB](https://doc.rust-lang.org/nomicon/hrtb.html) will not induce a `'static`
-    /// requirement on `Self`.
-    type ElementRef<'a>;
-}
-
 /// A specialized [`Accessor`] that provides random-access distance computations.
-pub trait BuildDistanceComputer: Accessor {
+pub trait BuildDistanceComputer: HasElementRef {
     /// The error type (if any) associated with distance computer construction.
     ///
     /// Implementations are encouraged to make distance computer construction infallible.
@@ -453,7 +414,7 @@ pub trait BuildDistanceComputer: Accessor {
 ///
 /// Query computers are allowed to preprocess the query to enable more efficient distance
 /// computations.
-pub trait BuildQueryComputer<T>: Accessor {
+pub trait BuildQueryComputer<T> {
     /// The error type (if any) associated with distance computer construction.
     type QueryComputerError: std::error::Error + Into<ANNError> + Send + Sync + 'static;
 

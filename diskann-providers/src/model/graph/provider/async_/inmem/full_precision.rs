@@ -19,8 +19,8 @@ use diskann::{
     },
     neighbor::Neighbor,
     provider::{
-        Accessor, BuildDistanceComputer, BuildQueryComputer, DefaultContext, DelegateNeighbor,
-        ExecutionContext, HasId,
+        BuildDistanceComputer, BuildQueryComputer, DefaultContext, DelegateNeighbor,
+        ExecutionContext, HasElementRef, HasId,
     },
     utils::{IntoUsize, VectorRepr},
 };
@@ -258,7 +258,7 @@ where
     }
 }
 
-impl<T, Q, D, Ctx> Accessor for FullAccessor<'_, T, Q, D, Ctx>
+impl<T, Q, D, Ctx> HasElementRef for FullAccessor<'_, T, Q, D, Ctx>
 where
     T: VectorRepr,
     Q: AsyncFriendly,
@@ -343,7 +343,7 @@ pub struct Rerank;
 impl<'a, A, T> glue::SearchPostProcess<A, &'a [T]> for Rerank
 where
     T: VectorRepr,
-    A: BuildQueryComputer<&'a [T], Id = u32> + GetFullPrecision<Repr = T> + AsDeletionCheck,
+    A: BuildQueryComputer<&'a [T]> + HasId<Id = u32> + GetFullPrecision<Repr = T> + AsDeletionCheck,
 {
     type Error = Panics;
 

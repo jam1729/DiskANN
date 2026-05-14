@@ -219,10 +219,10 @@ mod tests {
     use crate::storage::VirtualStorageProvider;
     use diskann::{
         graph::{AdjacencyList, config, glue::InsertStrategy},
-        provider::{Accessor, SetElement},
+        provider::SetElement,
         utils::{IntoUsize, ONE},
     };
-    use diskann_utils::{Reborrow, test_data_root, views::MatrixView};
+    use diskann_utils::{test_data_root, views::MatrixView};
     use diskann_vector::distance::Metric;
 
     use super::*;
@@ -231,7 +231,6 @@ mod tests {
         model::graph::provider::async_::{
             SimpleNeighborProviderAsync,
             common::{FullPrecision, NoDeletes, NoStore, TableBasedDeletes},
-            inmem::{self},
         },
         utils::create_rnd_from_seed_in_tests,
     };

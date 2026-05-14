@@ -24,10 +24,9 @@ use diskann::{
         index::QueryLabelProvider,
     },
     neighbor::Neighbor,
-    provider::{Accessor, BuildQueryComputer, DataProvider, DelegateNeighbor, HasId},
+    provider::{BuildQueryComputer, DataProvider, HasId},
     utils::VectorId,
 };
-use diskann_vector::PreprocessedDistanceFunction;
 
 /// A [`SearchStrategy`] type that composes the inner distance computer with beta filtering.
 ///
@@ -68,7 +67,7 @@ pub struct Unwrap;
 /// Delegate post-processing to the inner strategy's post-processing routine.
 impl<A, T, O> SearchPostProcessStep<BetaAccessor<A>, T, O> for Unwrap
 where
-    A: BuildQueryComputer<T>,
+    A: BuildQueryComputer<T> + HasId,
 {
     type Error<NextError>
         = NextError
@@ -82,7 +81,7 @@ where
         next: &Next,
         accessor: &mut BetaAccessor<A>,
         query: T,
-        computer: &BetaComputer<A::QueryComputer, A::Id>,
+        computer: &A::QueryComputer,
         candidates: I,
         output: &mut B,
     ) -> impl Future<Output = Result<usize, Next::Error>> + Send
@@ -91,13 +90,7 @@ where
         B: SearchOutputBuffer<O> + Send + ?Sized,
         Next: glue::SearchPostProcess<Self::NextAccessor, T, O>,
     {
-        next.post_process(
-            &mut accessor.inner,
-            query,
-            computer.inner(),
-            candidates,
-            output,
-        )
+        next.post_process(&mut accessor.inner, query, computer, candidates, output)
     }
 }
 
@@ -117,12 +110,11 @@ where
 {
     /// An accessor that returns the ID in addition to the element yielded by the inner
     /// accessor.
-    type SearchAccessor<'a>
-        = BetaAccessor<Strategy::SearchAccessor<'a>>;
+    type SearchAccessor<'a> = BetaAccessor<Strategy::SearchAccessor<'a>>;
 
     /// A [`PreprocessedDistanceFunction`] that combines applies the beta filtering factor
     /// if the vector ID portion of `Element` satisfies the filter predicate.
-    type QueryComputer = BetaComputer<Strategy::QueryComputer, I>;
+    type QueryComputer = Strategy::QueryComputer;
 
     type SearchAccessorError = Strategy::SearchAccessorError;
 
@@ -134,8 +126,10 @@ where
     ) -> Result<Self::SearchAccessor<'a>, Self::SearchAccessorError> {
         Ok(BetaAccessor {
             inner: self.strategy.search_accessor(provider, context)?,
-            labels: self.labels.clone(),
-            beta: self.beta,
+            filter: Filter {
+                labels: self.labels.clone(),
+                beta: self.beta,
+            },
         })
     }
 }
@@ -148,7 +142,7 @@ where
     I: VectorId,
     O: Send,
     Provider: DataProvider<InternalId = I>,
-    Strategy: glue::DefaultPostProcessor<Provider, T, O> ,
+    Strategy: glue::DefaultPostProcessor<Provider, T, O>,
 {
     type Processor = glue::Pipeline<Unwrap, Strategy::Processor>;
 
@@ -163,15 +157,25 @@ where
     Inner: HasId,
 {
     inner: Inner,
-    labels: Arc<dyn QueryLabelProvider<Inner::Id>>,
+    filter: Filter<Inner::Id>,
+}
+
+struct Filter<I> {
+    labels: Arc<dyn QueryLabelProvider<I>>,
     beta: f32,
 }
 
-/// The `Element` and `ElementRef` types used by the [`BetaAccessor`].
-#[derive(Debug, Clone, PartialEq)]
-pub struct Pair<I, E> {
-    id: I,
-    element: E,
+impl<I> Filter<I>
+where
+    I: VectorId,
+{
+    fn apply(&self, id: I, distance: f32) -> f32 {
+        if self.labels.is_match(id) {
+            distance * self.beta
+        } else {
+            distance
+        }
+    }
 }
 
 impl<Inner, T> SearchExt<T> for BetaAccessor<Inner>
@@ -190,9 +194,10 @@ where
     where
         F: FnMut(Self::Id, f32) + Send,
     {
+        let filter = &self.filter;
         self.inner
-            .start_point_distances(computer.inner(), move |id, distance| {
-                f(id, computer.apply(id, distance));
+            .start_point_distances(computer, move |id, distance| {
+                f(id, filter.apply(id, distance));
             })
     }
 
@@ -208,20 +213,11 @@ where
         P: glue::HybridPredicate<Self::Id> + Send + Sync,
         F: FnMut(f32, Self::Id) + Send,
     {
+        let filter = &self.filter;
         self.inner
-            .expand_beam(ids, computer.inner(), pred, move |distance, id| {
-                on_neighbors(computer.apply(id, distance), id)
+            .expand_beam(ids, computer, pred, move |distance, id| {
+                on_neighbors(filter.apply(id, distance), id)
             })
-    }
-}
-
-impl<'a, Inner> DelegateNeighbor<'a> for BetaAccessor<Inner>
-where
-    Inner: DelegateNeighbor<'a>,
-{
-    type Delegate = Inner::Delegate;
-    fn delegate_neighbor(&'a mut self) -> Self::Delegate {
-        self.inner.delegate_neighbor()
     }
 }
 
@@ -232,19 +228,14 @@ where
     type Id = Inner::Id;
 }
 
-impl<Inner> Accessor for BetaAccessor<Inner>
-where
-    Inner: Accessor,
-{
-    type ElementRef<'a> = Pair<Self::Id, Inner::ElementRef<'a>>;
-}
-
 impl<Inner, T> BuildQueryComputer<T> for BetaAccessor<Inner>
 where
-    Inner: BuildQueryComputer<T>,
+    Inner: BuildQueryComputer<T> + HasId,
 {
-    /// Use a [`BetaComputer`] to apply filtering.
-    type QueryComputer = BetaComputer<Inner::QueryComputer, Self::Id>;
+    /// Use the inner `QueryComputer`. Application of the beta filter happens in the
+    /// closure for [`SearchExt::expand_beam`].
+    type QueryComputer = Inner::QueryComputer;
+
     /// Use the same error as `Inner`.
     type QueryComputerError = Inner::QueryComputerError;
 
@@ -252,60 +243,9 @@ where
         &self,
         from: T,
     ) -> Result<Self::QueryComputer, Self::QueryComputerError> {
-        self.inner
-            .build_query_computer(from)
-            .map(|computer| BetaComputer::new(computer, self.labels.clone(), self.beta))
+        self.inner.build_query_computer(from)
     }
 }
-
-/// A [`PreprocessedDistanceFunction`] that applied `beta` filtering to the inner computer.
-pub struct BetaComputer<Inner, I: VectorId> {
-    inner: Inner,
-    labels: Arc<dyn QueryLabelProvider<I>>,
-    beta: f32,
-}
-
-impl<Inner, I> BetaComputer<Inner, I>
-where
-    I: VectorId,
-{
-    /// Construct a new `BetaComputer` around `Inner`.
-    pub fn new(inner: Inner, labels: Arc<dyn QueryLabelProvider<I>>, beta: f32) -> Self {
-        Self {
-            inner,
-            labels,
-            beta,
-        }
-    }
-
-    /// Return a reference to the inner computer.
-    pub fn inner(&self) -> &Inner {
-        &self.inner
-    }
-
-    /// Apply the beta-filtering heuristic.
-    pub fn apply(&self, id: I, distance: f32) -> f32 {
-        if self.labels.is_match(id) {
-            distance * self.beta
-        } else {
-            distance
-        }
-    }
-}
-
-// impl<T, Inner, I> PreprocessedDistanceFunction<Pair<I, T>, f32> for BetaComputer<Inner, I>
-// where
-//     I: VectorId,
-//     Inner: PreprocessedDistanceFunction<T, f32>,
-// {
-//     /// Check whether the ID satisfied the predicate computed by the label provider.
-//     ///
-//     /// If so, multiply the distance computed by `Inner` by `beta`.
-//     #[inline(always)]
-//     fn evaluate_similarity(&self, x: Pair<I, T>) -> f32 {
-//         self.apply(x.id, self.inner.evaluate_similarity(x.element))
-//     }
-// }
 
 // ///////////
 // // Tests //

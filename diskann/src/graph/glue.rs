@@ -79,7 +79,7 @@
 use std::{future::Future, sync::Arc};
 
 use diskann_utils::Reborrow;
-use diskann_vector::{DistanceFunction, PreprocessedDistanceFunction};
+use diskann_vector::DistanceFunction;
 
 use crate::{
     ANNError, ANNResult,
@@ -87,14 +87,15 @@ use crate::{
     graph::{SearchOutputBuffer, workingset},
     neighbor::Neighbor,
     provider::{
-        Accessor, AsNeighborMut, BuildDistanceComputer, BuildQueryComputer, DataProvider, HasId,
+        AsNeighborMut, BuildDistanceComputer, BuildQueryComputer, DataProvider, HasElementRef,
+        HasId,
     },
     utils::VectorId,
 };
 
 /// A trait to override search constraints such as early termination based on constraints
 /// by implementer.
-pub trait SearchExt<T>: BuildQueryComputer<T> {
+pub trait SearchExt<T>: BuildQueryComputer<T> + HasId + Send + Sync {
     /// Return a `Vec` containing the starting points.
     fn starting_points(&self)
     -> impl std::future::Future<Output = ANNResult<Vec<Self::Id>>> + Send;
@@ -381,7 +382,7 @@ macro_rules! default_post_processor {
 /// directly into the output buffer.
 pub trait SearchPostProcess<A, T, O = <A as HasId>::Id>
 where
-    A: BuildQueryComputer<T>,
+    A: BuildQueryComputer<T> + HasId,
 {
     type Error: StandardError;
 
@@ -407,7 +408,7 @@ pub struct CopyIds;
 
 impl<A, T> SearchPostProcess<A, T> for CopyIds
 where
-    A: BuildQueryComputer<T>,
+    A: BuildQueryComputer<T> + HasId,
 {
     type Error = std::convert::Infallible;
     fn post_process<I, B>(
@@ -432,7 +433,7 @@ where
 /// using a [`Pipeline`].
 pub trait SearchPostProcessStep<A, T, O = <A as HasId>::Id>
 where
-    A: BuildQueryComputer<T>,
+    A: BuildQueryComputer<T> + HasId,
 {
     /// A potentially modified version of the error yielded by the next state in the
     /// processing pipeline.
@@ -441,7 +442,7 @@ where
         NextError: StandardError;
 
     /// The accessor that will be passed to the next processing stage.
-    type NextAccessor: BuildQueryComputer<T, Id = A::Id>;
+    type NextAccessor: BuildQueryComputer<T> + HasId<Id = A::Id>;
 
     /// Perform any modification the `input`, `output`, `accessor`, or `computer` objects
     /// and invoke the [`SearchPostProcess`] routine `next` on stage.
@@ -535,7 +536,7 @@ impl<Head, Tail> Pipeline<Head, Tail> {
 
 impl<A, T, O, Head, Tail> SearchPostProcess<A, T, O> for Pipeline<Head, Tail>
 where
-    A: BuildQueryComputer<T>,
+    A: BuildQueryComputer<T> + HasId,
     Head: SearchPostProcessStep<A, T, O>,
     Tail: SearchPostProcess<Head::NextAccessor, T, O> + Sync,
 {
@@ -609,9 +610,8 @@ where
     /// We could grab this type from the `PruneAccessor` associated type, but it's
     /// useful enough that we move it up here.
     type DistanceComputer<'computer>: for<'a, 'b, 'c, 'd> DistanceFunction<
-            <Self::PruneAccessor<'a> as Accessor>::ElementRef<'b>,
-            <Self::PruneAccessor<'c> as Accessor>::ElementRef<'d>,
-            f32,
+            <Self::PruneAccessor<'a> as HasElementRef>::ElementRef<'b>,
+            <Self::PruneAccessor<'c> as HasElementRef>::ElementRef<'d>,
         > + Send
         + Sync;
 
@@ -623,10 +623,11 @@ where
     ///
     /// Implementations are encouraged to have [`Accessor::get_element`] return the
     /// highest-precision applicable value for a given element type.
-    type PruneAccessor<'a>: Accessor<Id = Provider::InternalId>
-        + BuildDistanceComputer<DistanceComputer = Self::DistanceComputer<'a>>
+    type PruneAccessor<'a>: BuildDistanceComputer<DistanceComputer = Self::DistanceComputer<'a>>
         + AsNeighborMut
-        + workingset::Fill<Self::WorkingSet>;
+        + workingset::Fill<Self::WorkingSet, Id = Provider::InternalId>
+        + Send
+        + Sync;
 
     /// An error that can occur when getting the prune accessor.
     type PruneAccessorError: StandardError;

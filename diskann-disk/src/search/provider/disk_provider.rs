@@ -5,7 +5,6 @@
 
 use std::{
     collections::HashMap,
-    future::Future,
     num::NonZeroUsize,
     ops::Range,
     sync::{
@@ -24,13 +23,10 @@ use diskann::{
             self, DefaultPostProcessor, IdIterator, SearchExt, SearchPostProcess, SearchStrategy,
         },
         search::Knn,
-        search_output_buffer, AdjacencyList, DiskANNIndex,
+        search_output_buffer, DiskANNIndex,
     },
     neighbor::Neighbor,
-    provider::{
-        Accessor, BuildQueryComputer, DataProvider, DefaultContext, DelegateNeighbor, HasId,
-        NeighborAccessor, NoopGuard,
-    },
+    provider::{BuildQueryComputer, DataProvider, DefaultContext, HasId, NoopGuard},
     utils::{IntoUsize, VectorRepr},
     ANNError, ANNResult,
 };
@@ -43,7 +39,6 @@ use diskann_utils::object_pool::{ObjectPool, PoolOption, TryAsPooled};
 
 use crate::search::pq::{quantizer_preprocess, PQData, PQScratch};
 use diskann_vector::{distance::Metric, DistanceFunction, PreprocessedDistanceFunction};
-use futures_util::future;
 use tokio::runtime::Runtime;
 use tracing::debug;
 
@@ -347,8 +342,7 @@ where
     ProviderFactory: VertexProviderFactory<Data>,
 {
     type QueryComputer = DiskQueryComputer;
-    type SearchAccessor<'a>
-        = DiskAccessor<'a, Data, ProviderFactory::VertexProviderType>;
+    type SearchAccessor<'a> = DiskAccessor<'a, Data, ProviderFactory::VertexProviderType>;
     type SearchAccessorError = ANNError;
 
     fn search_accessor<'a>(
@@ -688,14 +682,6 @@ where
     type Id = u32;
 }
 
-impl<Data, VP> Accessor for DiskAccessor<'_, Data, VP>
-where
-    Data: GraphDataType<VectorIdType = u32>,
-    VP: VertexProvider<Data>,
-{
-    type ElementRef<'a> = &'a [u8];
-}
-
 impl<Data, VP> IdIterator<Range<u32>> for DiskAccessor<'_, Data, VP>
 where
     Data: GraphDataType<VectorIdType = u32>,
@@ -703,61 +689,6 @@ where
 {
     async fn id_iterator(&mut self) -> Result<Range<u32>, ANNError> {
         Ok(0..self.provider.num_points as u32)
-    }
-}
-
-impl<'a, 'b, Data, VP> DelegateNeighbor<'a> for DiskAccessor<'b, Data, VP>
-where
-    Data: GraphDataType<VectorIdType = u32>,
-    VP: VertexProvider<Data>,
-{
-    type Delegate = AsNeighborAccessor<'a, 'b, Data, VP>;
-    fn delegate_neighbor(&'a mut self) -> Self::Delegate {
-        AsNeighborAccessor(self)
-    }
-}
-
-/// A light-weight wrapper around `&mut DiskAccessor` used to tailor the semantics of
-/// [`NeighborAccessor`].
-///
-/// This implementation ensures that the vector data for adjacency lists is also retrieved
-/// and cached to enhance reranking.
-pub struct AsNeighborAccessor<'a, 'b, Data, VP>(&'a mut DiskAccessor<'b, Data, VP>)
-where
-    Data: GraphDataType<VectorIdType = u32>,
-    VP: VertexProvider<Data>;
-
-impl<Data, VP> HasId for AsNeighborAccessor<'_, '_, Data, VP>
-where
-    Data: GraphDataType<VectorIdType = u32>,
-    VP: VertexProvider<Data>,
-{
-    type Id = u32;
-}
-
-impl<Data, VP> NeighborAccessor for AsNeighborAccessor<'_, '_, Data, VP>
-where
-    Data: GraphDataType<VectorIdType = u32>,
-    VP: VertexProvider<Data>,
-{
-    fn get_neighbors(
-        self,
-        id: Self::Id,
-        neighbors: &mut AdjacencyList<Self::Id>,
-    ) -> impl Future<Output = ANNResult<Self>> + Send {
-        if self.0.io_tracker.io_count() > self.0.provider.search_io_limit {
-            return future::ok(self); // Returning empty results in `neighbors` out param if IO limit is reached.
-        }
-
-        if let Err(e) = ensure_vertex_loaded(&mut self.0.scratch.vertex_provider, &[id]) {
-            return future::err(e);
-        }
-        let list = match self.0.scratch.vertex_provider.get_adjacency_list(&id) {
-            Ok(list) => list,
-            Err(e) => return future::err(e),
-        };
-        neighbors.overwrite_trusted(list);
-        future::ok(self)
     }
 }
 

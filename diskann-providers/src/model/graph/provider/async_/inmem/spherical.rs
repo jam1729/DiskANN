@@ -18,8 +18,8 @@ use diskann::{
         workingset,
     },
     provider::{
-        Accessor, BuildDistanceComputer, BuildQueryComputer, DelegateNeighbor, ExecutionContext,
-        HasId,
+        BuildDistanceComputer, BuildQueryComputer, DelegateNeighbor, ExecutionContext,
+        HasElementRef, HasId,
     },
     utils::{IntoUsize, VectorRepr},
 };
@@ -409,13 +409,12 @@ where
     }
 }
 
-impl<V, D, Ctx> Accessor for QuantAccessor<'_, V, D, Ctx>
+impl<V, D, Ctx> HasElementRef for QuantAccessor<'_, V, D, Ctx>
 where
     V: AsyncFriendly,
     D: AsyncFriendly,
     Ctx: ExecutionContext,
 {
-    /// `ElementRef` has an arbitrarily short lifetime.
     type ElementRef<'a> = spherical::iface::Opaque<'a>;
 }
 

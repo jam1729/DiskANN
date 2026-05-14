@@ -43,9 +43,8 @@ use crate::{
     internal,
     neighbor::{self, Neighbor, NeighborPriorityQueue, NeighborQueue},
     provider::{
-        Accessor, AsNeighbor, AsNeighborMut, BuildDistanceComputer, BuildQueryComputer,
-        DataProvider, Delete, ElementStatus, ExecutionContext, Guard, NeighborAccessor,
-        NeighborAccessorMut, SetElement,
+        AsNeighbor, AsNeighborMut, BuildDistanceComputer, BuildQueryComputer, DataProvider, Delete,
+        ElementStatus, ExecutionContext, Guard, NeighborAccessor, NeighborAccessorMut, SetElement,
     },
     tracked_debug, tracked_error, tracked_trace,
     utils::{
@@ -2663,7 +2662,7 @@ where
         options: prune::Options,
     ) -> impl SendFuture<ANNResult<()>>
     where
-        A: Accessor<Id = DP::InternalId> + BuildDistanceComputer + Fill<Set>,
+        A: BuildDistanceComputer + Fill<Set, Id = DP::InternalId> + Send,
         Set: Send + Sync,
     {
         async move {
@@ -2721,7 +2720,7 @@ where
         options: prune::Options,
     ) -> impl SendFuture<Result<(), prune::ListError<DP::InternalId>>>
     where
-        A: Accessor<Id = DP::InternalId> + BuildDistanceComputer + Fill<Set>,
+        A: BuildDistanceComputer + Fill<Set, Id = DP::InternalId> + Send,
         Set: Send + Sync,
     {
         async move {
@@ -2812,7 +2811,7 @@ where
         options: prune::Options,
     ) -> impl SendFuture<Result<(), prune::ListError<DP::InternalId>>>
     where
-        A: Accessor<Id = DP::InternalId> + BuildDistanceComputer + Fill<Set>,
+        A: BuildDistanceComputer + Fill<Set, Id = DP::InternalId> + Send,
         Set: Send + Sync,
         Itr: ExactSizeIterator<Item = DP::InternalId> + Clone + Send + Sync,
     {
