@@ -25,8 +25,8 @@ use tokio::task::JoinSet;
 use super::{
     AdjacencyList, Config, ConsolidateKind, InplaceDeleteMethod, Search,
     glue::{
-        self, Batch, ExpandBeam, InplaceDeleteStrategy, InsertStrategy, MultiInsertStrategy,
-        PruneStrategy, SearchExt, SearchPostProcess, SearchStrategy,
+        self, Batch, InplaceDeleteStrategy, InsertStrategy, MultiInsertStrategy, PruneStrategy,
+        SearchExt, SearchPostProcess, SearchStrategy,
     },
     internal::{BackedgeBuffer, SortedNeighbors, prune},
     search::{
@@ -1318,8 +1318,13 @@ where
                 .collect();
 
             // Collect IDs whose adjacency lists need to be updated.
+            let prune_strategy = strategy.prune_strategy();
+            let mut prune_accessor = prune_strategy
+                .prune_accessor(self.provider(), context)
+                .into_ann_result()?;
+
             let ids_to_modify = self
-                .return_refs_to_deleted_vertex(&mut search_accessor, id, &undeleted_ids)
+                .return_refs_to_deleted_vertex(&mut prune_accessor, id, &undeleted_ids)
                 .await?;
 
             undeleted_ids.truncate(k_value);
@@ -1698,9 +1703,9 @@ where
                 .await
                 .escalate("`inplace_delete` requires a successful delete")?;
 
-            let search_strategy = strategy.search_strategy();
-            let accessor = &mut search_strategy
-                .search_accessor(&self.data_provider, context)
+            let prune_strategy = strategy.prune_strategy();
+            let mut accessor = prune_strategy
+                .prune_accessor(&self.data_provider, context)
                 .into_ann_result()?;
 
             let InplaceDeleteWorkList {
@@ -1715,21 +1720,16 @@ where
                         .await?
                 }
                 InplaceDeleteMethod::TwoHopAndOneHop => {
-                    self.get_candidates_using_twohop_and_onehop(context, accessor, vector_id)
+                    self.get_candidates_using_twohop_and_onehop(context, &mut accessor, vector_id)
                         .await?
                 }
                 InplaceDeleteMethod::OneHop => {
-                    self.get_candidates_using_onehop(context, accessor, vector_id)
+                    self.get_candidates_using_onehop(context, &mut accessor, vector_id)
                         .await?
                 }
             };
 
-            let prune_strategy = strategy.prune_strategy();
             let mut working_set = prune_strategy.create_working_set(self.max_occlusion_size());
-            let mut accessor = prune_strategy
-                .prune_accessor(&self.data_provider, context)
-                .into_ann_result()?;
-
             let mut edges_to_add = HashMap::<DP::InternalId, Vec<DP::InternalId>>::new();
 
             // fetch the filtered adjacency list of `p`.
@@ -2020,7 +2020,7 @@ where
         search_record: &mut SR,
     ) -> impl SendFuture<ANNResult<InternalSearchStats>>
     where
-        A: ExpandBeam<T, Id = DP::InternalId> + SearchExt<T>,
+        A: SearchExt<T, Id = DP::InternalId>,
         SR: SearchRecord<DP::InternalId> + ?Sized,
         Q: NeighborQueue<DP::InternalId>,
     {

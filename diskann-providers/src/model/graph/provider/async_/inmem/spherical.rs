@@ -12,8 +12,8 @@ use diskann::{
     graph::{
         AdjacencyList,
         glue::{
-            self, DefaultPostProcessor, ExpandBeam, FilterStartPoints, InsertStrategy, Pipeline,
-            PruneStrategy, SearchExt, SearchStrategy,
+            self, DefaultPostProcessor, FilterStartPoints, InsertStrategy, Pipeline, PruneStrategy,
+            SearchExt, SearchStrategy,
         },
         workingset,
     },
@@ -290,7 +290,7 @@ where
 
 pub struct QuantAccessor<'a, V, D, Ctx> {
     provider: &'a DefaultProvider<V, SphericalStore, D, Ctx>,
-    id_buffer: Vec<u32>,
+    id_buffer: AdjacencyList<u32>,
     layout: spherical::iface::QueryLayout,
     is_search: bool,
 }
@@ -308,7 +308,7 @@ where
     ) -> Self {
         Self {
             provider,
-            id_buffer: Vec::with_capacity(32),
+            id_buffer: AdjacencyList::with_capacity(32),
             layout,
             is_search,
         }
@@ -360,6 +360,53 @@ where
             Ok(())
         }
     }
+
+    fn expand_beam<Itr, P, F>(
+        &mut self,
+        ids: Itr,
+        computer: &Self::QueryComputer,
+        mut pred: P,
+        mut on_neighbors: F,
+    ) -> impl std::future::Future<Output = ANNResult<()>> + Send
+    where
+        Itr: Iterator<Item = Self::Id> + Send,
+        P: glue::HybridPredicate<Self::Id> + Send + Sync,
+        F: FnMut(f32, Self::Id) + Send,
+    {
+        let f = move || -> ANNResult<()> {
+            let mut id_buffer = &mut self.id_buffer;
+            for n in ids {
+                self.provider
+                    .neighbor_provider
+                    .get_neighbors_sync(n.into_usize(), &mut id_buffer)?;
+
+                id_buffer.retain(|i| pred.eval_mut(i));
+                let len = id_buffer.len();
+                let lookahead = self.provider.aux_vectors.prefetch_lookahead();
+
+                // Prefetch the first few vectors.
+                for id in id_buffer.iter().take(lookahead) {
+                    self.provider.aux_vectors.prefetch_hint(id.into_usize());
+                }
+
+                for (i, id) in id_buffer.iter().enumerate() {
+                    // Prefetch `lookahead` iterations ahead as long as it is safe.
+                    if lookahead > 0 && i + lookahead < len {
+                        self.provider
+                            .aux_vectors
+                            .prefetch_hint(id_buffer[i + lookahead].into_usize());
+                    }
+
+                    let vector = self.provider.aux_vectors.get_vector(id.into_usize())?;
+                    let distance = computer.evaluate_similarity(vector);
+                    on_neighbors(distance, *id);
+                }
+            }
+            Ok(())
+        };
+
+        std::future::ready(f())
+    }
 }
 
 impl<V, D, Ctx> Accessor for QuantAccessor<'_, V, D, Ctx>
@@ -404,66 +451,6 @@ where
             .query_computer(query, self.layout, self.is_search)
             .bridge_err()
             .map(UnwrapErr::new)
-    }
-}
-
-impl<V, D, Ctx, T> ExpandBeam<&[T]> for QuantAccessor<'_, V, D, Ctx>
-where
-    T: VectorRepr,
-    V: AsyncFriendly,
-    D: AsyncFriendly,
-    Ctx: ExecutionContext,
-{
-    fn expand_beam<Itr, P, F>(
-        &mut self,
-        ids: Itr,
-        computer: &Self::QueryComputer,
-        mut pred: P,
-        mut on_neighbors: F,
-    ) -> impl std::future::Future<Output = ANNResult<()>> + Send
-    where
-        Itr: Iterator<Item = Self::Id> + Send,
-        P: glue::HybridPredicate<Self::Id> + Send + Sync,
-        F: FnMut(f32, Self::Id) + Send,
-    {
-        let f = move || -> ANNResult<()> {
-            let mut neighbors = AdjacencyList::new();
-            for n in ids {
-                self.provider
-                    .neighbor_provider
-                    .get_neighbors_sync(n.into_usize(), &mut neighbors)?;
-
-                // Reuse the internal buffer to collect the results and give us random access
-                // capabilities.
-                let id_buffer = &mut self.id_buffer;
-                id_buffer.clear();
-                id_buffer.extend(neighbors.iter().filter(|i| pred.eval_mut(i)));
-
-                let len = id_buffer.len();
-                let lookahead = self.provider.aux_vectors.prefetch_lookahead();
-
-                // Prefetch the first few vectors.
-                for id in id_buffer.iter().take(lookahead) {
-                    self.provider.aux_vectors.prefetch_hint(id.into_usize());
-                }
-
-                for (i, id) in id_buffer.iter().enumerate() {
-                    // Prefetch `lookahead` iterations ahead as long as it is safe.
-                    if lookahead > 0 && i + lookahead < len {
-                        self.provider
-                            .aux_vectors
-                            .prefetch_hint(id_buffer[i + lookahead].into_usize());
-                    }
-
-                    let vector = self.provider.aux_vectors.get_vector(id.into_usize())?;
-                    let distance = computer.evaluate_similarity(vector);
-                    on_neighbors(distance, *id);
-                }
-            }
-            Ok(())
-        };
-
-        std::future::ready(f())
     }
 }
 

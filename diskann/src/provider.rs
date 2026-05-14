@@ -479,7 +479,7 @@ pub trait BuildQueryComputer<T>: Accessor {
 ///
 /// Generally, neighbor access and data access are logically decoupled, being served from
 /// different stores. However, there are situations where data and neighbors are
-/// interleaved in the underlying storage medium.
+/// interlfor<'a> eaved in the underlying storage medium.
 ///
 /// As such, [`Accessors`] used in congunction with graph operations need to additionally
 /// provide an implementation of this trait.

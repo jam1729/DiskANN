@@ -87,8 +87,7 @@ use crate::{
     graph::{SearchOutputBuffer, workingset},
     neighbor::Neighbor,
     provider::{
-        Accessor, AsNeighbor, AsNeighborMut, BuildDistanceComputer, BuildQueryComputer,
-        DataProvider, HasId,
+        Accessor, AsNeighborMut, BuildDistanceComputer, BuildQueryComputer, DataProvider, HasId,
     },
     utils::VectorId,
 };
@@ -107,6 +106,18 @@ pub trait SearchExt<T>: BuildQueryComputer<T> {
     ) -> impl std::future::Future<Output = ANNResult<()>> + Send
     where
         F: FnMut(Self::Id, f32) + Send;
+
+    fn expand_beam<Itr, P, F>(
+        &mut self,
+        ids: Itr,
+        computer: &Self::QueryComputer,
+        pred: P,
+        on_neighbors: F,
+    ) -> impl std::future::Future<Output = ANNResult<()>> + Send
+    where
+        Itr: Iterator<Item = Self::Id> + Send,
+        P: HybridPredicate<Self::Id> + Send + Sync,
+        F: FnMut(f32, Self::Id) + Send;
 
     /// Default is to never terminate early.
     fn terminate_early(&mut self) -> bool {
@@ -259,19 +270,19 @@ impl<T> HybridPredicate<T> for NotInMut<'_, T> where T: Clone + Eq + std::hash::
 /// ## Error Handling
 ///
 /// Transient errors yielded by `distances_unordered` are acknowledged and not escalated.
-pub trait ExpandBeam<T>: BuildQueryComputer<T> + AsNeighbor {
-    fn expand_beam<Itr, P, F>(
-        &mut self,
-        ids: Itr,
-        computer: &Self::QueryComputer,
-        pred: P,
-        on_neighbors: F,
-    ) -> impl std::future::Future<Output = ANNResult<()>> + Send
-    where
-        Itr: Iterator<Item = Self::Id> + Send,
-        P: HybridPredicate<Self::Id> + Send + Sync,
-        F: FnMut(f32, Self::Id) + Send;
-}
+// pub trait ExpandBeam<T>: BuildQueryComputer<T> {
+//     fn expand_beam<Itr, P, F>(
+//         &mut self,
+//         ids: Itr,
+//         computer: &Self::QueryComputer,
+//         pred: P,
+//         on_neighbors: F,
+//     ) -> impl std::future::Future<Output = ANNResult<()>> + Send
+//     where
+//         Itr: Iterator<Item = Self::Id> + Send,
+//         P: HybridPredicate<Self::Id> + Send + Sync,
+//         F: FnMut(f32, Self::Id) + Send;
+// }
 
 /// A search strategy for query objects of type `T`.
 ///
@@ -285,12 +296,7 @@ where
     ///
     /// We could grab this type from the `SearchAccessor` associated type, but it's
     /// useful enough that we move it up here.
-    type QueryComputer: for<'a, 'b> PreprocessedDistanceFunction<
-            <Self::SearchAccessor<'a> as Accessor>::ElementRef<'b>,
-            f32,
-        > + Send
-        + Sync
-        + 'static;
+    type QueryComputer: Send + Sync + 'static + for<'a> DoesNotCaptureSelf<Self::SearchAccessor<'a>>;
 
     /// An error that can occur when getting a search_accessor.
     type SearchAccessorError: StandardError;
@@ -298,8 +304,7 @@ where
     /// The concrete type of the accessor that is used to access `Self` during the greedy
     /// graph search. The query will be provided to the accessor exactly once during search
     /// to construct the query computer.
-    type SearchAccessor<'a>: ExpandBeam<T, QueryComputer = Self::QueryComputer, Id = Provider::InternalId>
-        + SearchExt<T>;
+    type SearchAccessor<'a>: SearchExt<T, QueryComputer = Self::QueryComputer, Id = Provider::InternalId>;
 
     /// Construct and return the search accessor.
     fn search_accessor<'a>(
@@ -308,6 +313,9 @@ where
         context: &'a Provider::Context,
     ) -> Result<Self::SearchAccessor<'a>, Self::SearchAccessorError>;
 }
+
+pub trait DoesNotCaptureSelf<T> {}
+impl<T, U> DoesNotCaptureSelf<T> for U {}
 
 /// Opt-in trait for strategies that have a default post-processor.
 ///
@@ -773,8 +781,7 @@ where
     /// of associated types.
     ///
     /// Lifting the accessor all the way to the trait level makes the caching provider possible.
-    type DeleteSearchAccessor<'a>: ExpandBeam<Self::DeleteElement<'a>, Id = Provider::InternalId>
-        + SearchExt<Self::DeleteElement<'a>>;
+    type DeleteSearchAccessor<'a>: SearchExt<Self::DeleteElement<'a>, Id = Provider::InternalId>;
 
     /// The processor used during the delete-search phase.
     type SearchPostProcessor: for<'a> SearchPostProcess<Self::DeleteSearchAccessor<'a>, Self::DeleteElement<'a>>

@@ -20,7 +20,7 @@ use diskann::{
     error::StandardError,
     graph::{
         SearchOutputBuffer,
-        glue::{self, ExpandBeam, SearchExt, SearchPostProcessStep, SearchStrategy},
+        glue::{self, SearchExt, SearchPostProcessStep, SearchStrategy},
         index::QueryLabelProvider,
     },
     neighbor::Neighbor,
@@ -117,7 +117,8 @@ where
 {
     /// An accessor that returns the ID in addition to the element yielded by the inner
     /// accessor.
-    type SearchAccessor<'a> = BetaAccessor<Strategy::SearchAccessor<'a>>;
+    type SearchAccessor<'a>
+        = BetaAccessor<Strategy::SearchAccessor<'a>>;
 
     /// A [`PreprocessedDistanceFunction`] that combines applies the beta filtering factor
     /// if the vector ID portion of `Element` satisfies the filter predicate.
@@ -147,7 +148,7 @@ where
     I: VectorId,
     O: Send,
     Provider: DataProvider<InternalId = I>,
-    Strategy: glue::DefaultPostProcessor<Provider, T, O>,
+    Strategy: glue::DefaultPostProcessor<Provider, T, O> ,
 {
     type Processor = glue::Pipeline<Unwrap, Strategy::Processor>;
 
@@ -192,6 +193,24 @@ where
         self.inner
             .start_point_distances(computer.inner(), move |id, distance| {
                 f(id, computer.apply(id, distance));
+            })
+    }
+
+    fn expand_beam<Itr, P, F>(
+        &mut self,
+        ids: Itr,
+        computer: &Self::QueryComputer,
+        pred: P,
+        mut on_neighbors: F,
+    ) -> impl std::future::Future<Output = ANNResult<()>> + Send
+    where
+        Itr: Iterator<Item = Self::Id> + Send,
+        P: glue::HybridPredicate<Self::Id> + Send + Sync,
+        F: FnMut(f32, Self::Id) + Send,
+    {
+        self.inner
+            .expand_beam(ids, computer.inner(), pred, move |distance, id| {
+                on_neighbors(computer.apply(id, distance), id)
             })
     }
 }
@@ -239,29 +258,6 @@ where
     }
 }
 
-impl<Inner, T> ExpandBeam<T> for BetaAccessor<Inner>
-where
-    Inner: ExpandBeam<T>,
-{
-    fn expand_beam<Itr, P, F>(
-        &mut self,
-        ids: Itr,
-        computer: &Self::QueryComputer,
-        pred: P,
-        mut on_neighbors: F,
-    ) -> impl std::future::Future<Output = ANNResult<()>> + Send
-    where
-        Itr: Iterator<Item = Self::Id> + Send,
-        P: glue::HybridPredicate<Self::Id> + Send + Sync,
-        F: FnMut(f32, Self::Id) + Send,
-    {
-        self.inner
-            .expand_beam(ids, computer.inner(), pred, move |distance, id| {
-                on_neighbors(computer.apply(id, distance), id)
-            })
-    }
-}
-
 /// A [`PreprocessedDistanceFunction`] that applied `beta` filtering to the inner computer.
 pub struct BetaComputer<Inner, I: VectorId> {
     inner: Inner,
@@ -297,19 +293,19 @@ where
     }
 }
 
-impl<T, Inner, I> PreprocessedDistanceFunction<Pair<I, T>, f32> for BetaComputer<Inner, I>
-where
-    I: VectorId,
-    Inner: PreprocessedDistanceFunction<T, f32>,
-{
-    /// Check whether the ID satisfied the predicate computed by the label provider.
-    ///
-    /// If so, multiply the distance computed by `Inner` by `beta`.
-    #[inline(always)]
-    fn evaluate_similarity(&self, x: Pair<I, T>) -> f32 {
-        self.apply(x.id, self.inner.evaluate_similarity(x.element))
-    }
-}
+// impl<T, Inner, I> PreprocessedDistanceFunction<Pair<I, T>, f32> for BetaComputer<Inner, I>
+// where
+//     I: VectorId,
+//     Inner: PreprocessedDistanceFunction<T, f32>,
+// {
+//     /// Check whether the ID satisfied the predicate computed by the label provider.
+//     ///
+//     /// If so, multiply the distance computed by `Inner` by `beta`.
+//     #[inline(always)]
+//     fn evaluate_similarity(&self, x: Pair<I, T>) -> f32 {
+//         self.apply(x.id, self.inner.evaluate_similarity(x.element))
+//     }
+// }
 
 // ///////////
 // // Tests //

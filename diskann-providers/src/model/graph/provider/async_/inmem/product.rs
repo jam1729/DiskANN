@@ -11,8 +11,8 @@ use diskann::{
     graph::{
         AdjacencyList,
         glue::{
-            self, DefaultPostProcessor, ExpandBeam, InplaceDeleteStrategy, InsertStrategy,
-            PruneStrategy, SearchExt, SearchStrategy,
+            self, DefaultPostProcessor, InplaceDeleteStrategy, InsertStrategy, PruneStrategy,
+            SearchExt, SearchStrategy,
         },
         workingset,
     },
@@ -142,6 +142,40 @@ where
             Ok(())
         }
     }
+
+    fn expand_beam<Itr, P, F>(
+        &mut self,
+        ids: Itr,
+        computer: &Self::QueryComputer,
+        mut pred: P,
+        mut on_neighbors: F,
+    ) -> impl std::future::Future<Output = ANNResult<()>> + Send
+    where
+        Itr: Iterator<Item = Self::Id> + Send,
+        P: glue::HybridPredicate<Self::Id> + Send + Sync,
+        F: FnMut(f32, Self::Id) + Send,
+    {
+        let f = move || -> ANNResult<()> {
+            let mut neighbors = AdjacencyList::new();
+            for n in ids {
+                self.provider
+                    .neighbor_provider
+                    .get_neighbors_sync(n.into_usize(), &mut neighbors)?;
+                for i in neighbors.iter().filter(|i| pred.eval_mut(i)) {
+                    // SAFETY: We're accepting the consequences of potential unsynchronized,
+                    // concurrent mutation.
+                    let distance = computer.evaluate_similarity(unsafe {
+                        self.provider.aux_vectors.get_vector_sync(i.into_usize())
+                    });
+
+                    on_neighbors(distance, *i);
+                }
+            }
+            Ok(())
+        };
+
+        std::future::ready(f())
+    }
 }
 
 impl<'a, V, D, Ctx> QuantAccessor<'a, V, D, Ctx>
@@ -208,48 +242,6 @@ where
         &self,
     ) -> Result<Self::DistanceComputer, Self::DistanceComputerError> {
         Ok(self.provider.aux_vectors.distance_computer())
-    }
-}
-
-impl<T, V, D, Ctx> ExpandBeam<&[T]> for QuantAccessor<'_, V, D, Ctx>
-where
-    T: VectorRepr,
-    V: AsyncFriendly,
-    D: AsyncFriendly,
-    Ctx: ExecutionContext,
-{
-    fn expand_beam<Itr, P, F>(
-        &mut self,
-        ids: Itr,
-        computer: &Self::QueryComputer,
-        mut pred: P,
-        mut on_neighbors: F,
-    ) -> impl std::future::Future<Output = ANNResult<()>> + Send
-    where
-        Itr: Iterator<Item = Self::Id> + Send,
-        P: glue::HybridPredicate<Self::Id> + Send + Sync,
-        F: FnMut(f32, Self::Id) + Send,
-    {
-        let f = move || -> ANNResult<()> {
-            let mut neighbors = AdjacencyList::new();
-            for n in ids {
-                self.provider
-                    .neighbor_provider
-                    .get_neighbors_sync(n.into_usize(), &mut neighbors)?;
-                for i in neighbors.iter().filter(|i| pred.eval_mut(i)) {
-                    // SAFETY: We're accepting the consequences of potential unsynchronized,
-                    // concurrent mutation.
-                    let distance = computer.evaluate_similarity(unsafe {
-                        self.provider.aux_vectors.get_vector_sync(i.into_usize())
-                    });
-
-                    on_neighbors(distance, *i);
-                }
-            }
-            Ok(())
-        };
-
-        std::future::ready(f())
     }
 }
 

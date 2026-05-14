@@ -21,8 +21,7 @@ use diskann::{
     graph::{
         self,
         glue::{
-            self, DefaultPostProcessor, ExpandBeam, IdIterator, SearchExt, SearchPostProcess,
-            SearchStrategy,
+            self, DefaultPostProcessor, IdIterator, SearchExt, SearchPostProcess, SearchStrategy,
         },
         search::Knn,
         search_output_buffer, AdjacencyList, DiskANNIndex,
@@ -348,7 +347,8 @@ where
     ProviderFactory: VertexProviderFactory<Data>,
 {
     type QueryComputer = DiskQueryComputer;
-    type SearchAccessor<'a> = DiskAccessor<'a, Data, ProviderFactory::VertexProviderType>;
+    type SearchAccessor<'a>
+        = DiskAccessor<'a, Data, ProviderFactory::VertexProviderType>;
     type SearchAccessorError = ANNError;
 
     fn search_accessor<'a>(
@@ -427,50 +427,6 @@ where
                 .aligned_pqtable_dist_scratch
                 .to_vec(),
         })
-    }
-}
-
-impl<Data, VP> ExpandBeam<&[Data::VectorDataType]> for DiskAccessor<'_, Data, VP>
-where
-    Data: GraphDataType<VectorIdType = u32>,
-    VP: VertexProvider<Data>,
-{
-    fn expand_beam<Itr, P, F>(
-        &mut self,
-        ids: Itr,
-        _computer: &Self::QueryComputer,
-        mut pred: P,
-        mut f: F,
-    ) -> impl std::future::Future<Output = ANNResult<()>> + Send
-    where
-        Itr: Iterator<Item = Self::Id> + Send,
-        P: glue::HybridPredicate<Self::Id> + Send + Sync,
-        F: FnMut(f32, Self::Id) + Send,
-    {
-        let result = (|| {
-            let io_limit = self.provider.search_io_limit - self.io_tracker.io_count();
-            let load_ids: Box<[_]> = ids.take(io_limit).collect();
-
-            self.ensure_loaded(&load_ids)?;
-            let mut ids = Vec::new();
-            for i in load_ids {
-                ids.clear();
-                ids.extend(
-                    self.scratch
-                        .vertex_provider
-                        .get_adjacency_list(&i)?
-                        .iter()
-                        .copied()
-                        .filter(|id| pred.eval_mut(id)),
-                );
-
-                self.pq_distances(&ids, &mut f)?;
-            }
-
-            Ok(())
-        })();
-
-        std::future::ready(result)
     }
 }
 
@@ -605,6 +561,44 @@ where
 
     fn terminate_early(&mut self) -> bool {
         self.io_tracker.io_count() > self.provider.search_io_limit
+    }
+
+    fn expand_beam<Itr, P, F>(
+        &mut self,
+        ids: Itr,
+        _computer: &Self::QueryComputer,
+        mut pred: P,
+        mut f: F,
+    ) -> impl std::future::Future<Output = ANNResult<()>> + Send
+    where
+        Itr: Iterator<Item = Self::Id> + Send,
+        P: glue::HybridPredicate<Self::Id> + Send + Sync,
+        F: FnMut(f32, Self::Id) + Send,
+    {
+        let result = (|| {
+            let io_limit = self.provider.search_io_limit - self.io_tracker.io_count();
+            let load_ids: Box<[_]> = ids.take(io_limit).collect();
+
+            self.ensure_loaded(&load_ids)?;
+            let mut ids = Vec::new();
+            for i in load_ids {
+                ids.clear();
+                ids.extend(
+                    self.scratch
+                        .vertex_provider
+                        .get_adjacency_list(&i)?
+                        .iter()
+                        .copied()
+                        .filter(|id| pred.eval_mut(id)),
+                );
+
+                self.pq_distances(&ids, &mut f)?;
+            }
+
+            Ok(())
+        })();
+
+        std::future::ready(result)
     }
 }
 

@@ -1121,9 +1121,7 @@ impl glue::SearchExt<&[f32]> for Accessor<'_> {
             Ok(())
         }
     }
-}
 
-impl glue::ExpandBeam<&[f32]> for Accessor<'_> {
     fn expand_beam<Itr, P, F>(
         &mut self,
         ids: Itr,
@@ -1150,6 +1148,34 @@ impl glue::ExpandBeam<&[f32]> for Accessor<'_> {
         }
     }
 }
+
+// impl glue::ExpandBeam<&[f32]> for Accessor<'_> {
+//     fn expand_beam<Itr, P, F>(
+//         &mut self,
+//         ids: Itr,
+//         computer: &Self::QueryComputer,
+//         mut pred: P,
+//         mut on_neighbors: F,
+//     ) -> impl std::future::Future<Output = ANNResult<()>> + Send
+//     where
+//         Itr: Iterator<Item = Self::Id> + Send,
+//         P: glue::HybridPredicate<Self::Id> + Send + Sync,
+//         F: FnMut(f32, Self::Id) + Send,
+//     {
+//         async move {
+//             let mut neighbors = AdjacencyList::new();
+//             for id in ids {
+//                 self.provider.get_neighbors(id, &mut neighbors)?;
+//                 for &n in neighbors.iter().filter(|i| pred.eval_mut(i)) {
+//                     if let Some(buf) = self.get(n).allow_transient("transient failures allowed")? {
+//                         on_neighbors(computer.evaluate_similarity(buf), n)
+//                     }
+//                 }
+//             }
+//             Ok(())
+//         }
+//     }
+// }
 
 type WorkingSet = workingset::Map<u32, Box<[f32]>, workingset::map::Ref<[f32]>>;
 type View<'a> = workingset::map::View<'a, u32, Box<[f32]>, workingset::map::Ref<[f32]>>;

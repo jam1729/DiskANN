@@ -14,8 +14,8 @@ use crate::{
     error::IntoANNResult,
     graph::{
         glue::{
-            self, ExpandBeam, HybridPredicate, Predicate, PredicateMut, SearchExt,
-            SearchPostProcess, SearchStrategy,
+            self, HybridPredicate, Predicate, PredicateMut, SearchExt, SearchPostProcess,
+            SearchStrategy,
         },
         index::{
             DiskANNIndex, InternalSearchStats, QueryLabelProvider, QueryVisitDecision, SearchStats,
@@ -180,7 +180,7 @@ pub(crate) async fn multihop_search_internal<I, A, T, SR>(
 ) -> ANNResult<InternalSearchStats>
 where
     I: VectorId,
-    A: ExpandBeam<T, Id = I> + SearchExt<T>,
+    A: SearchExt<T, Id = I>,
     SR: SearchRecord<I> + ?Sized,
 {
     let beam_width = search_params.beam_width().get();

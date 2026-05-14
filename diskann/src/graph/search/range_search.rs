@@ -13,7 +13,7 @@ use crate::{
     ANNError, ANNErrorKind, ANNResult,
     error::IntoANNResult,
     graph::{
-        glue::{self, ExpandBeam, SearchExt, SearchStrategy},
+        glue::{self, SearchExt, SearchStrategy},
         index::{DiskANNIndex, InternalSearchStats, SearchStats},
         search::record::NoopSearchRecord,
         search_output_buffer::{self, SearchOutputBuffer},
@@ -331,7 +331,7 @@ pub(crate) async fn range_search_internal<I, A, T>(
 ) -> ANNResult<InternalSearchStats>
 where
     I: crate::utils::VectorId,
-    A: ExpandBeam<T, Id = I> + SearchExt<T>,
+    A: SearchExt<T, Id = I>,
 {
     let beam_width = search_params.beam_width().unwrap_or(1);
 
