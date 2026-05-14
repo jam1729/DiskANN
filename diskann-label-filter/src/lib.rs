@@ -17,11 +17,11 @@ pub mod utils {
     pub mod jsonl_reader;
 }
 
-pub mod inline_beta_search {
-    pub mod encoded_document_accessor;
-    pub mod inline_beta_filter;
-    pub mod predicate_evaluator;
-}
+// pub mod inline_beta_search {
+//     pub mod encoded_document_accessor;
+//     pub mod inline_beta_filter;
+//     pub mod predicate_evaluator;
+// }
 
 // Persisent Index Traits
 pub mod traits {

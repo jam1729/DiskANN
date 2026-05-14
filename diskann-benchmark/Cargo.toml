@@ -28,7 +28,6 @@ thiserror.workspace = true
 tokio = { workspace = true, features = ["rt-multi-thread"] }
 diskann-vector.workspace = true
 diskann-wide.workspace = true
-diskann-label-filter.workspace = true
 diskann-tools = { workspace = true }
 diskann-disk = { workspace = true, optional = true }
 cfg-if.workspace = true
@@ -38,6 +37,7 @@ opentelemetry_sdk = { workspace = true, optional = true }
 scopeguard = { version = "1.2", optional = true }
 diskann-benchmark-core = { workspace = true, features = ["bigann"] }
 itertools.workspace = true
+diskann-label-filter.workspace = true
 
 [lints]
 clippy.undocumented_unsafe_blocks = "warn"

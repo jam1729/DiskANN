@@ -13,13 +13,13 @@ use std::{
 };
 
 use dashmap::{DashMap, mapref::entry::Entry};
-use diskann_utils::views::Matrix;
-use diskann_vector::distance::Metric;
+use diskann_utils::{future::SendFuture, views::Matrix};
+use diskann_vector::{PreprocessedDistanceFunction, distance::Metric};
 use thiserror::Error;
 
 use crate::{
     ANNError, ANNResult, default_post_processor,
-    error::{Infallible, RankedError, StandardError, ToRanked, TransientError, message},
+    error::{ErrorExt, Infallible, RankedError, StandardError, ToRanked, TransientError, message},
     graph::{AdjacencyList, SearchOutputBuffer, glue, test::synthetic, workingset},
     internal::counter::{Counter, LocalCounter},
     neighbor::Neighbor,
@@ -1034,21 +1034,8 @@ impl<'a> Accessor<'a> {
             transient_ids,
         }
     }
-}
 
-impl provider::HasId for Accessor<'_> {
-    type Id = u32;
-}
-
-impl provider::Accessor for Accessor<'_> {
-    type Element<'a>
-        = &'a [f32]
-    where
-        Self: 'a;
-    type ElementRef<'a> = &'a [f32];
-    type GetError = AccessError;
-
-    async fn get_element(&mut self, id: u32) -> Result<&[f32], AccessError> {
+    pub fn get(&mut self, id: u32) -> Result<&[f32], AccessError> {
         match self.provider.terms.get(&id) {
             Some(term) => {
                 if let Some(transient) = &self.transient_ids
@@ -1064,6 +1051,36 @@ impl provider::Accessor for Accessor<'_> {
             None => Err(AccessError::InvalidId(AccessedInvalidId(id))),
         }
     }
+}
+
+impl provider::HasId for Accessor<'_> {
+    type Id = u32;
+}
+
+impl provider::Accessor for Accessor<'_> {
+    // type Element<'a>
+    //     = &'a [f32]
+    // where
+    //     Self: 'a;
+    type ElementRef<'a> = &'a [f32];
+    // type GetError = AccessError;
+
+    // async fn get_element(&mut self, id: u32) -> Result<&[f32], AccessError> {
+    //     match self.provider.terms.get(&id) {
+    //         Some(term) => {
+    //             if let Some(transient) = &self.transient_ids
+    //                 && transient.contains(&id)
+    //             {
+    //                 return Err(AccessError::Transient(TransientAccessError::new(id)));
+    //             }
+
+    //             self.get_vector.increment();
+    //             self.buffer.copy_from_slice(&term.data);
+    //             Ok(&*self.buffer)
+    //         }
+    //         None => Err(AccessError::InvalidId(AccessedInvalidId(id))),
+    //     }
+    // }
 }
 
 impl<'a> provider::DelegateNeighbor<'a> for Accessor<'_> {
@@ -1103,13 +1120,99 @@ impl provider::BuildDistanceComputer for Accessor<'_> {
 // Glue //
 //------//
 
-impl glue::SearchExt for Accessor<'_> {
+impl glue::SearchExt<&[f32]> for Accessor<'_> {
     fn starting_points(&self) -> impl Future<Output = ANNResult<Vec<u32>>> + Send {
         futures_util::future::ok(self.provider.config.start_points.keys().copied().collect())
     }
+
+    fn start_point_distances<F>(
+        &mut self,
+        computer: &Self::QueryComputer,
+        mut f: F,
+    ) -> impl std::future::Future<Output = ANNResult<()>> + Send
+    where
+        F: FnMut(Self::Id, f32) + Send,
+    {
+        async move {
+            for &i in self.provider.config.start_points.keys() {
+                f(
+                    i,
+                    computer.evaluate_similarity(self.get(i).escalate("start points must exist")?),
+                )
+            }
+            Ok(())
+        }
+    }
 }
 
-impl glue::ExpandBeam<&[f32]> for Accessor<'_> {}
+impl glue::ExpandBeam<&[f32]> for Accessor<'_> {
+    fn expand_beam<Itr, P, F>(
+        &mut self,
+        ids: Itr,
+        computer: &Self::QueryComputer,
+        mut pred: P,
+        mut on_neighbors: F,
+    ) -> impl std::future::Future<Output = ANNResult<()>> + Send
+    where
+        Itr: Iterator<Item = Self::Id> + Send,
+        P: glue::HybridPredicate<Self::Id> + Send + Sync,
+        F: FnMut(f32, Self::Id) + Send,
+    {
+        async move {
+            let mut neighbors = AdjacencyList::new();
+            for id in ids {
+                self.provider.get_neighbors(id, &mut neighbors)?;
+                for &n in neighbors.iter().filter(|i| pred.eval_mut(i)) {
+                    if let Some(buf) = self.get(n).allow_transient("transient failures allowed")? {
+                        on_neighbors(computer.evaluate_similarity(buf), n)
+                    }
+                }
+            }
+            Ok(())
+        }
+    }
+}
+
+type WorkingSet = workingset::Map<u32, Box<[f32]>, workingset::map::Ref<[f32]>>;
+type View<'a> = workingset::map::View<'a, u32, Box<[f32]>, workingset::map::Ref<[f32]>>;
+
+impl workingset::Fill<WorkingSet> for Accessor<'_> {
+    type Error = ANNError;
+    type View<'a>
+        = View<'a>
+    where
+        Self: 'a,
+        WorkingSet: 'a;
+
+    fn fill<'a, Itr>(
+        &'a mut self,
+        set: &'a mut WorkingSet,
+        itr: Itr,
+    ) -> impl SendFuture<Result<Self::View<'a>, Self::Error>>
+    where
+        Itr: ExactSizeIterator<Item = Self::Id> + Clone + Send + Sync,
+        Self: 'a,
+    {
+        async {
+            use workingset::map::Entry;
+
+            set.prepare(itr.clone());
+            for i in itr {
+                match set.entry(i) {
+                    Entry::Seeded(_) | Entry::Occupied(_) => { /* nothing to do */ }
+                    Entry::Vacant(vacant) => {
+                        if let Some(buf) =
+                            self.get(i).allow_transient("transient failures allowed")?
+                        {
+                            vacant.insert(buf.into());
+                        }
+                    }
+                }
+            }
+            Ok(set.view())
+        }
+    }
+}
 
 impl glue::IdIterator<std::vec::IntoIter<u32>> for Accessor<'_> {
     async fn id_iterator(&mut self) -> Result<std::vec::IntoIter<u32>, ANNError> {
@@ -1648,7 +1751,7 @@ mod tests {
         let mut accessor = super::Accessor::new(&provider);
         let id = 5;
 
-        assert!(rt.block_on(accessor.get_element(5)).is_err());
+        assert!(accessor.get(5).is_err());
 
         // Setting with the wrong dimension is an error.
         {
@@ -1658,7 +1761,7 @@ mod tests {
                 .unwrap_err();
             let msg = err.to_string();
             assert_message_contains!(msg, "wrong dim");
-            assert!(rt.block_on(accessor.get_element(id)).is_err());
+            assert!(accessor.get(id).is_err());
         }
 
         // Setting with the correct dimension is successful.
@@ -1669,7 +1772,7 @@ mod tests {
                 .unwrap();
             rt.block_on(guard.complete());
 
-            let element = rt.block_on(accessor.get_element(id)).unwrap();
+            let element = accessor.get(id).unwrap();
             assert_eq!(v, element);
         }
 

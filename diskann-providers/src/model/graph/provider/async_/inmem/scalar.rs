@@ -9,6 +9,7 @@ use crate::storage::{StorageReadProvider, StorageWriteProvider};
 use diskann::{
     ANNError, ANNResult, default_post_processor,
     graph::{
+        AdjacencyList,
         glue::{
             self, DefaultPostProcessor, ExpandBeam, FilterStartPoints, InsertStrategy, Pipeline,
             PruneStrategy, SearchExt, SearchStrategy,
@@ -390,15 +391,34 @@ impl<const NBITS: usize, V, D, Ctx> HasId for QuantAccessor<'_, NBITS, V, D, Ctx
     type Id = u32;
 }
 
-impl<const NBITS: usize, V, D, Ctx> SearchExt for QuantAccessor<'_, NBITS, V, D, Ctx>
+impl<const NBITS: usize, V, D, Ctx, T> SearchExt<&[T]> for QuantAccessor<'_, NBITS, V, D, Ctx>
 where
+    T: VectorRepr,
     V: AsyncFriendly,
     D: AsyncFriendly,
     Ctx: ExecutionContext,
     Unsigned: Representation<NBITS>,
+    QueryComputer<NBITS>: for<'a> PreprocessedDistanceFunction<CVRef<'a, NBITS>, f32>,
 {
     fn starting_points(&self) -> impl Future<Output = ANNResult<Vec<u32>>> {
         std::future::ready(self.provider.starting_points())
+    }
+
+    fn start_point_distances<F>(
+        &mut self,
+        computer: &Self::QueryComputer,
+        mut f: F,
+    ) -> impl std::future::Future<Output = ANNResult<()>> + Send
+    where
+        F: FnMut(Self::Id, f32) + Send,
+    {
+        async move {
+            for i in self.provider.starting_points()? {
+                let vector = self.provider.aux_vectors.get_vector(i.into_usize())?;
+                f(i, computer.evaluate_similarity(vector));
+            }
+            Ok(())
+        }
     }
 }
 
@@ -427,85 +447,85 @@ where
     Ctx: ExecutionContext,
     Unsigned: Representation<NBITS>,
 {
-    /// This accessor returns raw slices. There *is* a chance of racing when the fast
-    /// providers are used. We just have to live with it.
-    type Element<'a>
-        = CVRef<'a, NBITS>
-    where
-        Self: 'a;
+    // /// This accessor returns raw slices. There *is* a chance of racing when the fast
+    // /// providers are used. We just have to live with it.
+    // type Element<'a>
+    //     = CVRef<'a, NBITS>
+    // where
+    //     Self: 'a;
 
     /// `ElementRef` has an arbitrarily short lifetime.
     type ElementRef<'a> = CVRef<'a, NBITS>;
 
-    /// Choose to panic on an out-of-bounds access rather than propagate an error.
-    type GetError = ANNError;
+    // /// Choose to panic on an out-of-bounds access rather than propagate an error.
+    // type GetError = ANNError;
 
-    /// Return the quantized vector stored at index `i`.
-    ///
-    /// This function always completes synchronously.
-    fn get_element(
-        &mut self,
-        id: Self::Id,
-    ) -> impl Future<Output = Result<Self::Element<'_>, Self::GetError>> + Send {
-        // SAFETY: We've decided to live with UB that can result from potentially mixing
-        // unsynchronized reads and writes on the underlying memory.
-        std::future::ready(
-            match self.provider.aux_vectors.get_vector(id.into_usize()) {
-                Ok(v) => Ok(v),
-                Err(err) => Err(err.into()),
-            },
-        )
-    }
+    // /// Return the quantized vector stored at index `i`.
+    // ///
+    // /// This function always completes synchronously.
+    // fn get_element(
+    //     &mut self,
+    //     id: Self::Id,
+    // ) -> impl Future<Output = Result<Self::Element<'_>, Self::GetError>> + Send {
+    //     // SAFETY: We've decided to live with UB that can result from potentially mixing
+    //     // unsynchronized reads and writes on the underlying memory.
+    //     std::future::ready(
+    //         match self.provider.aux_vectors.get_vector(id.into_usize()) {
+    //             Ok(v) => Ok(v),
+    //             Err(err) => Err(err.into()),
+    //         },
+    //     )
+    // }
 
-    /// Perform a bulk operation.
-    ///
-    /// This implementation uses prefetching.
-    fn on_elements_unordered<Itr, F>(
-        &mut self,
-        itr: Itr,
-        mut f: F,
-    ) -> impl Future<Output = Result<(), Self::GetError>> + Send
-    where
-        Self: Sync,
-        Itr: Iterator<Item = Self::Id> + Send,
-        F: Send + for<'b> FnMut(Self::ElementRef<'b>, Self::Id),
-    {
-        // Reuse the internal buffer to collect the results and give us random access
-        // capabilities.
-        let id_buffer = &mut self.id_buffer;
-        id_buffer.clear();
-        id_buffer.extend(itr);
+    // /// Perform a bulk operation.
+    // ///
+    // /// This implementation uses prefetching.
+    // fn on_elements_unordered<Itr, F>(
+    //     &mut self,
+    //     itr: Itr,
+    //     mut f: F,
+    // ) -> impl Future<Output = Result<(), Self::GetError>> + Send
+    // where
+    //     Self: Sync,
+    //     Itr: Iterator<Item = Self::Id> + Send,
+    //     F: Send + for<'b> FnMut(Self::ElementRef<'b>, Self::Id),
+    // {
+    //     // Reuse the internal buffer to collect the results and give us random access
+    //     // capabilities.
+    //     let id_buffer = &mut self.id_buffer;
+    //     id_buffer.clear();
+    //     id_buffer.extend(itr);
 
-        let len = id_buffer.len();
-        let lookahead = self.provider.aux_vectors.prefetch_lookahead();
+    //     let len = id_buffer.len();
+    //     let lookahead = self.provider.aux_vectors.prefetch_lookahead();
 
-        // Prefetch the first few vectors.
-        for id in id_buffer.iter().take(lookahead) {
-            self.provider.aux_vectors.prefetch_hint(id.into_usize());
-        }
+    //     // Prefetch the first few vectors.
+    //     for id in id_buffer.iter().take(lookahead) {
+    //         self.provider.aux_vectors.prefetch_hint(id.into_usize());
+    //     }
 
-        for (i, id) in id_buffer.iter().enumerate() {
-            // Prefetch `lookahead` iterations ahead as long as it is safe.
-            if lookahead > 0 && i + lookahead < len {
-                self.provider
-                    .aux_vectors
-                    .prefetch_hint(id_buffer[i + lookahead].into_usize());
-            }
+    //     for (i, id) in id_buffer.iter().enumerate() {
+    //         // Prefetch `lookahead` iterations ahead as long as it is safe.
+    //         if lookahead > 0 && i + lookahead < len {
+    //             self.provider
+    //                 .aux_vectors
+    //                 .prefetch_hint(id_buffer[i + lookahead].into_usize());
+    //         }
 
-            let vector = match self.provider.aux_vectors.get_vector(id.into_usize()) {
-                Ok(v) => v,
-                Err(e) => return std::future::ready(Err(e.into())),
-            };
+    //         let vector = match self.provider.aux_vectors.get_vector(id.into_usize()) {
+    //             Ok(v) => v,
+    //             Err(e) => return std::future::ready(Err(e.into())),
+    //         };
 
-            // Invoke the passed closure on the vector.
-            //
-            // SAFETY: We're accepting the consequences of potential unsynchronized,
-            // concurrent mutation.
-            f(vector, *id)
-        }
+    //         // Invoke the passed closure on the vector.
+    //         //
+    //         // SAFETY: We're accepting the consequences of potential unsynchronized,
+    //         // concurrent mutation.
+    //         f(vector, *id)
+    //     }
 
-        std::future::ready(Ok(()))
-    }
+    //     std::future::ready(Ok(()))
+    // }
 }
 
 impl<'a, const NBITS: usize, V, D, Ctx> DelegateNeighbor<'a> for QuantAccessor<'_, NBITS, V, D, Ctx>
@@ -554,6 +574,59 @@ where
     Unsigned: Representation<NBITS>,
     QueryComputer<NBITS>: for<'a> PreprocessedDistanceFunction<CVRef<'a, NBITS>, f32>,
 {
+    fn expand_beam<Itr, P, F>(
+        &mut self,
+        ids: Itr,
+        computer: &Self::QueryComputer,
+        mut pred: P,
+        mut on_neighbors: F,
+    ) -> impl std::future::Future<Output = ANNResult<()>> + Send
+    where
+        Itr: Iterator<Item = Self::Id> + Send,
+        P: glue::HybridPredicate<Self::Id> + Send + Sync,
+        F: FnMut(f32, Self::Id) + Send,
+    {
+        let f = move || -> ANNResult<()> {
+            let mut neighbors = AdjacencyList::new();
+            for n in ids {
+                self.provider
+                    .neighbor_provider
+                    .get_neighbors_sync(n.into_usize(), &mut neighbors)?;
+
+                // Reuse the internal buffer to collect the results and give us random access
+                // capabilities.
+                let id_buffer = &mut self.id_buffer;
+                id_buffer.clear();
+                id_buffer.extend(neighbors.iter().filter(|i| pred.eval_mut(i)));
+
+                let len = id_buffer.len();
+                let lookahead = self.provider.aux_vectors.prefetch_lookahead();
+
+                // Prefetch the first few vectors.
+                for id in id_buffer.iter().take(lookahead) {
+                    self.provider.aux_vectors.prefetch_hint(id.into_usize());
+                }
+
+                for (i, id) in id_buffer.iter().enumerate() {
+                    // Prefetch `lookahead` iterations ahead as long as it is safe.
+                    if lookahead > 0 && i + lookahead < len {
+                        self.provider
+                            .aux_vectors
+                            .prefetch_hint(id_buffer[i + lookahead].into_usize());
+                    }
+
+                    let vector = self.provider.aux_vectors.get_vector(id.into_usize())?;
+
+                    // Invoke the passed closure on the vector.
+                    let distance = computer.evaluate_similarity(vector);
+                    on_neighbors(distance, *id);
+                }
+            }
+            Ok(())
+        };
+
+        std::future::ready(f())
+    }
 }
 
 impl<const NBITS: usize, V, D, Ctx> BuildDistanceComputer for QuantAccessor<'_, NBITS, V, D, Ctx>

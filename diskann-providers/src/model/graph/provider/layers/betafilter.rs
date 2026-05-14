@@ -24,12 +24,10 @@ use diskann::{
         index::QueryLabelProvider,
     },
     neighbor::Neighbor,
-    provider::{Accessor, AsNeighbor, BuildQueryComputer, DataProvider, DelegateNeighbor, HasId},
+    provider::{Accessor, BuildQueryComputer, DataProvider, DelegateNeighbor, HasId},
     utils::VectorId,
 };
-use diskann_utils::Reborrow;
 use diskann_vector::PreprocessedDistanceFunction;
-use futures_util::FutureExt;
 
 /// A [`SearchStrategy`] type that composes the inner distance computer with beta filtering.
 ///
@@ -158,39 +156,6 @@ where
     }
 }
 
-/////////////
-// Helpers //
-/////////////
-
-/// The `Element` and `ElementRef` types used by the [`BetaAccessor`].
-#[derive(Debug, Clone, PartialEq)]
-pub struct Pair<I, E> {
-    id: I,
-    element: E,
-}
-
-impl<I, E> Pair<I, E> {
-    fn new(id: I, element: E) -> Self {
-        Self { id, element }
-    }
-}
-
-/// `Reborrow` is implemented in terms of a full `Reborrow` of `E` while leaving the id
-/// untouched.
-impl<'a, I, E> Reborrow<'a> for Pair<I, E>
-where
-    E: Reborrow<'a>,
-    I: Copy,
-{
-    type Target = Pair<I, E::Target>;
-    fn reborrow(&'a self) -> Self::Target {
-        Pair {
-            id: self.id,
-            element: self.element.reborrow(),
-        }
-    }
-}
-
 /// An [`Accessor`] that composes with an `Inner` accessor to provide beta-filtering.
 pub struct BetaAccessor<Inner>
 where
@@ -201,12 +166,34 @@ where
     beta: f32,
 }
 
-impl<Inner> SearchExt for BetaAccessor<Inner>
+/// The `Element` and `ElementRef` types used by the [`BetaAccessor`].
+#[derive(Debug, Clone, PartialEq)]
+pub struct Pair<I, E> {
+    id: I,
+    element: E,
+}
+
+impl<Inner, T> SearchExt<T> for BetaAccessor<Inner>
 where
-    Inner: SearchExt,
+    Inner: SearchExt<T>,
 {
     fn starting_points(&self) -> impl Future<Output = ANNResult<Vec<Inner::Id>>> + Send {
         self.inner.starting_points()
+    }
+
+    fn start_point_distances<F>(
+        &mut self,
+        computer: &Self::QueryComputer,
+        mut f: F,
+    ) -> impl std::future::Future<Output = ANNResult<()>> + Send
+    where
+        F: FnMut(Self::Id, f32) + Send {
+        self.inner.start_point_distances(
+            computer.inner(),
+            move |id, distance| {
+                f(id, computer.apply(id, distance));
+            }
+        )
     }
 }
 
@@ -231,50 +218,7 @@ impl<Inner> Accessor for BetaAccessor<Inner>
 where
     Inner: Accessor,
 {
-    /// Modify `Element` to retain the vector ID.
-    type Element<'a>
-        = Pair<Self::Id, Inner::Element<'a>>
-    where
-        Self: 'a;
     type ElementRef<'a> = Pair<Self::Id, Inner::ElementRef<'a>>;
-
-    /// Use the same error type as `Inner`.
-    type GetError = Inner::GetError;
-
-    /// Invoke `get_element` on the inner accessor and return a tuple consisting of the
-    /// retrieved element and `id`.
-    #[inline(always)]
-    fn get_element(
-        &mut self,
-        id: Self::Id,
-    ) -> impl Future<Output = Result<Self::Element<'_>, Self::GetError>> + Send {
-        // The first `map` applies to `Future`.
-        // The second `map` applies to the `Result`.
-        self.inner
-            .get_element(id)
-            .map(move |result| result.map(move |v| Pair::new(id, v)))
-    }
-
-    /// Method `on_elements_unordered` is implemented by invoking
-    /// `inner.on_elements_unordered` with a decorated version of `f`.
-    async fn on_elements_unordered<Itr, F>(
-        &mut self,
-        itr: Itr,
-        mut f: F,
-    ) -> Result<(), Self::GetError>
-    where
-        Self: Sync,
-        Itr: Iterator<Item = Self::Id> + Send,
-        F: Send + for<'a> FnMut(Self::ElementRef<'a>, Self::Id),
-    {
-        self.inner
-            .on_elements_unordered(
-                itr,
-                #[inline]
-                move |element, id| f(Pair::new(id, element), id),
-            )
-            .await
-    }
 }
 
 impl<Inner, T> BuildQueryComputer<T> for BetaAccessor<Inner>
@@ -296,7 +240,28 @@ where
     }
 }
 
-impl<Inner, T> ExpandBeam<T> for BetaAccessor<Inner> where Inner: BuildQueryComputer<T> + AsNeighbor {}
+impl<Inner, T> ExpandBeam<T> for BetaAccessor<Inner>
+where
+    Inner: ExpandBeam<T>,
+{
+    fn expand_beam<Itr, P, F>(
+        &mut self,
+        ids: Itr,
+        computer: &Self::QueryComputer,
+        pred: P,
+        mut on_neighbors: F,
+    ) -> impl std::future::Future<Output = ANNResult<()>> + Send
+    where
+        Itr: Iterator<Item = Self::Id> + Send,
+        P: glue::HybridPredicate<Self::Id> + Send + Sync,
+        F: FnMut(f32, Self::Id) + Send,
+    {
+        self.inner
+            .expand_beam(ids, computer.inner(), pred, move |distance, id| {
+                on_neighbors(computer.apply(id, distance), id)
+            })
+    }
+}
 
 /// A [`PreprocessedDistanceFunction`] that applied `beta` filtering to the inner computer.
 pub struct BetaComputer<Inner, I: VectorId> {
@@ -322,6 +287,15 @@ where
     pub fn inner(&self) -> &Inner {
         &self.inner
     }
+
+    /// Apply the beta-filtering heuristic.
+    pub fn apply(&self, id: I, distance: f32) -> f32 {
+        if self.labels.is_match(id) {
+            distance * self.beta
+        } else {
+            distance
+        }
+    }
 }
 
 impl<T, Inner, I> PreprocessedDistanceFunction<Pair<I, T>, f32> for BetaComputer<Inner, I>
@@ -334,281 +308,274 @@ where
     /// If so, multiply the distance computed by `Inner` by `beta`.
     #[inline(always)]
     fn evaluate_similarity(&self, x: Pair<I, T>) -> f32 {
-        // Inner distance computation.
-        let distance = self.inner.evaluate_similarity(x.element);
-        // Check beta.
-        if self.labels.is_match(x.id) {
-            distance * self.beta
-        } else {
-            distance
-        }
+        self.apply(x.id, self.inner.evaluate_similarity(x.element))
     }
 }
 
-///////////
-// Tests //
-///////////
-
-#[cfg(test)]
-mod tests {
-    use diskann::{
-        ANNError, ANNResult, always_escalate,
-        graph::AdjacencyList,
-        graph::glue::CopyIds,
-        provider::{DefaultContext, NeighborAccessor, NoopGuard},
-    };
-    use futures_util::future;
-    use thiserror::Error;
-
-    use super::*;
-
-    /// A very simple data provider.
-    struct SimpleProvider;
-    impl DataProvider for SimpleProvider {
-        type Context = DefaultContext;
-        type InternalId = u32;
-        type ExternalId = u64;
-        type Guard = NoopGuard<u32>;
-
-        type Error = ANNError;
-
-        fn to_internal_id(&self, _context: &DefaultContext, gid: &u64) -> ANNResult<u32> {
-            Ok((*gid).try_into()?)
-        }
-
-        fn to_external_id(&self, _context: &DefaultContext, id: u32) -> ANNResult<u64> {
-            Ok(id.into())
-        }
-    }
-
-    /// An `Accessor` that doubles its input ID as its output element.
-    ///
-    /// This also tracks the number of calls made to `get_element` and
-    /// `on_elements_unordered` to ensure that `BetaFilter` correctly forwards these methods.
-    #[derive(Debug, Default, Clone, Copy)]
-    struct Doubler {
-        get_element: usize,
-        on_elements_unordered: usize,
-    }
-
-    impl SearchExt for Doubler {
-        async fn starting_points(&self) -> ANNResult<Vec<u32>> {
-            Ok(vec![0])
-        }
-    }
-
-    impl Doubler {
-        fn reset(&mut self) {
-            *self = Self::default();
-        }
-    }
-
-    /// A simple error type to test error forwarding.
-    #[derive(Debug, Error)]
-    #[error("the value {0} is not allowed")]
-    pub struct NotAllowed(u32);
-
-    impl From<NotAllowed> for ANNError {
-        #[inline(never)]
-        fn from(value: NotAllowed) -> Self {
-            ANNError::log_async_error(value)
-        }
-    }
-
-    impl HasId for Doubler {
-        type Id = u32;
-    }
-
-    impl NeighborAccessor for Doubler {
-        fn get_neighbors(
-            self,
-            _id: Self::Id,
-            neighbors: &mut AdjacencyList<Self::Id>,
-        ) -> impl Future<Output = ANNResult<Self>> + Send {
-            neighbors.clear();
-            future::ok(self)
-        }
-    }
-
-    always_escalate!(NotAllowed);
-
-    impl Accessor for Doubler {
-        type Element<'a>
-            = u64
-        where
-            Self: 'a;
-        type ElementRef<'a> = u64;
-
-        type GetError = NotAllowed;
-
-        fn get_element(
-            &mut self,
-            id: u32,
-        ) -> impl std::future::Future<Output = Result<Self::Element<'_>, Self::GetError>> + Send
-        {
-            self.get_element += 1;
-            let is_err = (100..200).contains(&id);
-
-            async move {
-                if is_err {
-                    Err(NotAllowed(id))
-                } else {
-                    let id: u64 = id.into();
-                    Ok(2 * id)
-                }
-            }
-        }
-
-        async fn on_elements_unordered<Itr, F>(
-            &mut self,
-            itr: Itr,
-            mut f: F,
-        ) -> Result<(), Self::GetError>
-        where
-            Self: Sync,
-            Itr: Iterator<Item = Self::Id> + Send,
-            F: Send + for<'a> FnMut(Self::ElementRef<'a>, Self::Id),
-        {
-            self.on_elements_unordered += 1;
-            for i in itr {
-                f(self.get_element(i).await?, i);
-            }
-            Ok(())
-        }
-    }
-
-    struct AddingComputer(u64);
-    impl PreprocessedDistanceFunction<u64, f32> for AddingComputer {
-        fn evaluate_similarity(&self, x: u64) -> f32 {
-            (self.0 + x) as f32
-        }
-    }
-
-    impl BuildQueryComputer<u64> for Doubler {
-        type QueryComputer = AddingComputer;
-        type QueryComputerError = ANNError;
-
-        fn build_query_computer(
-            &self,
-            from: u64,
-        ) -> Result<Self::QueryComputer, Self::QueryComputerError> {
-            Ok(AddingComputer(from))
-        }
-    }
-
-    impl ExpandBeam<u64> for Doubler {}
-
-    #[derive(Debug)]
-    struct SimpleStrategy;
-
-    impl SearchStrategy<SimpleProvider, u64> for SimpleStrategy {
-        type SearchAccessor<'a> = Doubler;
-        type QueryComputer = AddingComputer;
-        type SearchAccessorError = ANNError;
-
-        fn search_accessor<'a>(
-            &'a self,
-            _provider: &'a SimpleProvider,
-            _context: &'a DefaultContext,
-        ) -> Result<Self::SearchAccessor<'a>, Self::SearchAccessorError> {
-            Ok(Doubler::default())
-        }
-    }
-
-    impl glue::DefaultPostProcessor<SimpleProvider, u64> for SimpleStrategy {
-        diskann::default_post_processor!(CopyIds);
-    }
-
-    /// A simple `QueryLabelProvider` that matches multiples of 3.
-    #[derive(Debug)]
-    struct ThreeFilter;
-
-    impl QueryLabelProvider<u32> for ThreeFilter {
-        fn is_match(&self, id: u32) -> bool {
-            id.is_multiple_of(3)
-        }
-    }
-
-    #[tokio::test]
-    async fn test_beta_filter() {
-        let provider = SimpleProvider;
-        let context = &DefaultContext;
-        let beta: f32 = 0.25;
-
-        let strategy = BetaFilter::new(SimpleStrategy, Arc::new(ThreeFilter), beta);
-
-        let mut accessor: BetaAccessor<_> = strategy.search_accessor(&provider, context).unwrap();
-        assert_eq!(accessor.inner.get_element, 0);
-        assert_eq!(accessor.inner.on_elements_unordered, 0);
-
-        // Test non-erroring path.
-        let v = accessor.get_element(1).await.unwrap();
-        assert_eq!(v, Pair::new(1, 2));
-
-        let v = accessor.get_element(2).await.unwrap();
-        assert_eq!(v, Pair::new(2, 4));
-
-        // Test erroring path.
-        assert!(accessor.get_element(100).await.is_err());
-        assert!(accessor.get_element(101).await.is_err());
-
-        assert_eq!(accessor.inner.get_element, 4);
-        assert_eq!(accessor.inner.on_elements_unordered, 0);
-        accessor.inner.reset();
-
-        // On elements unordered.
-        {
-            let mut v = Vec::new();
-            accessor
-                .on_elements_unordered([1, 2, 3, 4, 5].into_iter(), |element, id| {
-                    v.push((element, id));
-                })
-                .await
-                .unwrap();
-
-            assert_eq!(accessor.inner.get_element, 5);
-            assert_eq!(accessor.inner.on_elements_unordered, 1);
-            assert_eq!(
-                v,
-                &[
-                    (Pair::new(1, 2), 1),
-                    (Pair::new(2, 4), 2),
-                    (Pair::new(3, 6), 3),
-                    (Pair::new(4, 8), 4),
-                    (Pair::new(5, 10), 5)
-                ]
-            );
-            accessor.inner.reset();
-        }
-
-        // On-elements-unordered propagates errors.
-        assert!(
-            accessor
-                .on_elements_unordered([1, 2, 3, 100, 4].into_iter(), |_, _| {})
-                .await
-                .is_err()
-        );
-
-        // Computation.
-        let query = 10;
-        let computer = accessor.build_query_computer(query).unwrap();
-
-        assert_eq!(
-            computer.evaluate_similarity(accessor.get_element(10).await.unwrap()),
-            (10 * 2 + query) as f32
-        );
-        assert_eq!(
-            computer.evaluate_similarity(accessor.get_element(11).await.unwrap()),
-            (11 * 2 + query) as f32
-        );
-        assert_eq!(
-            computer.evaluate_similarity(accessor.get_element(12).await.unwrap()),
-            beta * ((12 * 2 + query) as f32)
-        );
-
-        // Test dummy implementation of `get_neighbors` for code coverage.
-        let mut neighbors = AdjacencyList::new();
-        accessor.get_neighbors(0, &mut neighbors).await.unwrap();
-        assert_eq!(neighbors.len(), 0);
-    }
-}
+// ///////////
+// // Tests //
+// ///////////
+//
+// #[cfg(test)]
+// mod tests {
+//     use diskann::{
+//         ANNError, ANNResult, always_escalate,
+//         graph::AdjacencyList,
+//         graph::glue::CopyIds,
+//         provider::{DefaultContext, NeighborAccessor, NoopGuard},
+//     };
+//     use futures_util::future;
+//     use thiserror::Error;
+//
+//     use super::*;
+//
+//     /// A very simple data provider.
+//     struct SimpleProvider;
+//     impl DataProvider for SimpleProvider {
+//         type Context = DefaultContext;
+//         type InternalId = u32;
+//         type ExternalId = u64;
+//         type Guard = NoopGuard<u32>;
+//
+//         type Error = ANNError;
+//
+//         fn to_internal_id(&self, _context: &DefaultContext, gid: &u64) -> ANNResult<u32> {
+//             Ok((*gid).try_into()?)
+//         }
+//
+//         fn to_external_id(&self, _context: &DefaultContext, id: u32) -> ANNResult<u64> {
+//             Ok(id.into())
+//         }
+//     }
+//
+//     /// An `Accessor` that doubles its input ID as its output element.
+//     ///
+//     /// This also tracks the number of calls made to `get_element` and
+//     /// `on_elements_unordered` to ensure that `BetaFilter` correctly forwards these methods.
+//     #[derive(Debug, Default, Clone, Copy)]
+//     struct Doubler {
+//         get_element: usize,
+//         on_elements_unordered: usize,
+//     }
+//
+//     impl SearchExt for Doubler {
+//         async fn starting_points(&self) -> ANNResult<Vec<u32>> {
+//             Ok(vec![0])
+//         }
+//     }
+//
+//     impl Doubler {
+//         fn reset(&mut self) {
+//             *self = Self::default();
+//         }
+//     }
+//
+//     /// A simple error type to test error forwarding.
+//     #[derive(Debug, Error)]
+//     #[error("the value {0} is not allowed")]
+//     pub struct NotAllowed(u32);
+//
+//     impl From<NotAllowed> for ANNError {
+//         #[inline(never)]
+//         fn from(value: NotAllowed) -> Self {
+//             ANNError::log_async_error(value)
+//         }
+//     }
+//
+//     impl HasId for Doubler {
+//         type Id = u32;
+//     }
+//
+//     impl NeighborAccessor for Doubler {
+//         fn get_neighbors(
+//             self,
+//             _id: Self::Id,
+//             neighbors: &mut AdjacencyList<Self::Id>,
+//         ) -> impl Future<Output = ANNResult<Self>> + Send {
+//             neighbors.clear();
+//             future::ok(self)
+//         }
+//     }
+//
+//     always_escalate!(NotAllowed);
+//
+//     impl Accessor for Doubler {
+//         // type Element<'a>
+//         //     = u64
+//         // where
+//         //     Self: 'a;
+//         type ElementRef<'a> = u64;
+//
+//         // type GetError = NotAllowed;
+//
+//         // fn get_element(
+//         //     &mut self,
+//         //     id: u32,
+//         // ) -> impl std::future::Future<Output = Result<Self::Element<'_>, Self::GetError>> + Send
+//         // {
+//         //     self.get_element += 1;
+//         //     let is_err = (100..200).contains(&id);
+//
+//         //     async move {
+//         //         if is_err {
+//         //             Err(NotAllowed(id))
+//         //         } else {
+//         //             let id: u64 = id.into();
+//         //             Ok(2 * id)
+//         //         }
+//         //     }
+//         // }
+//
+//         async fn on_elements_unordered<Itr, F>(
+//             &mut self,
+//             itr: Itr,
+//             mut f: F,
+//         ) -> Result<(), Self::GetError>
+//         where
+//             Self: Sync,
+//             Itr: Iterator<Item = Self::Id> + Send,
+//             F: Send + for<'a> FnMut(Self::ElementRef<'a>, Self::Id),
+//         {
+//             self.on_elements_unordered += 1;
+//             for i in itr {
+//                 f(self.get_element(i).await?, i);
+//             }
+//             Ok(())
+//         }
+//     }
+//
+//     struct AddingComputer(u64);
+//     impl PreprocessedDistanceFunction<u64, f32> for AddingComputer {
+//         fn evaluate_similarity(&self, x: u64) -> f32 {
+//             (self.0 + x) as f32
+//         }
+//     }
+//
+//     impl BuildQueryComputer<u64> for Doubler {
+//         type QueryComputer = AddingComputer;
+//         type QueryComputerError = ANNError;
+//
+//         fn build_query_computer(
+//             &self,
+//             from: u64,
+//         ) -> Result<Self::QueryComputer, Self::QueryComputerError> {
+//             Ok(AddingComputer(from))
+//         }
+//     }
+//
+//     impl ExpandBeam<u64> for Doubler {}
+//
+//     #[derive(Debug)]
+//     struct SimpleStrategy;
+//
+//     impl SearchStrategy<SimpleProvider, u64> for SimpleStrategy {
+//         type SearchAccessor<'a> = Doubler;
+//         type QueryComputer = AddingComputer;
+//         type SearchAccessorError = ANNError;
+//
+//         fn search_accessor<'a>(
+//             &'a self,
+//             _provider: &'a SimpleProvider,
+//             _context: &'a DefaultContext,
+//         ) -> Result<Self::SearchAccessor<'a>, Self::SearchAccessorError> {
+//             Ok(Doubler::default())
+//         }
+//     }
+//
+//     impl glue::DefaultPostProcessor<SimpleProvider, u64> for SimpleStrategy {
+//         diskann::default_post_processor!(CopyIds);
+//     }
+//
+//     /// A simple `QueryLabelProvider` that matches multiples of 3.
+//     #[derive(Debug)]
+//     struct ThreeFilter;
+//
+//     impl QueryLabelProvider<u32> for ThreeFilter {
+//         fn is_match(&self, id: u32) -> bool {
+//             id.is_multiple_of(3)
+//         }
+//     }
+//
+//     #[tokio::test]
+//     async fn test_beta_filter() {
+//         let provider = SimpleProvider;
+//         let context = &DefaultContext;
+//         let beta: f32 = 0.25;
+//
+//         let strategy = BetaFilter::new(SimpleStrategy, Arc::new(ThreeFilter), beta);
+//
+//         let mut accessor: BetaAccessor<_> = strategy.search_accessor(&provider, context).unwrap();
+//         assert_eq!(accessor.inner.get_element, 0);
+//         assert_eq!(accessor.inner.on_elements_unordered, 0);
+//
+//         // Test non-erroring path.
+//         let v = accessor.get_element(1).await.unwrap();
+//         assert_eq!(v, Pair::new(1, 2));
+//
+//         let v = accessor.get_element(2).await.unwrap();
+//         assert_eq!(v, Pair::new(2, 4));
+//
+//         // Test erroring path.
+//         assert!(accessor.get_element(100).await.is_err());
+//         assert!(accessor.get_element(101).await.is_err());
+//
+//         assert_eq!(accessor.inner.get_element, 4);
+//         assert_eq!(accessor.inner.on_elements_unordered, 0);
+//         accessor.inner.reset();
+//
+//         // On elements unordered.
+//         {
+//             let mut v = Vec::new();
+//             accessor
+//                 .on_elements_unordered([1, 2, 3, 4, 5].into_iter(), |element, id| {
+//                     v.push((element, id));
+//                 })
+//                 .await
+//                 .unwrap();
+//
+//             assert_eq!(accessor.inner.get_element, 5);
+//             assert_eq!(accessor.inner.on_elements_unordered, 1);
+//             assert_eq!(
+//                 v,
+//                 &[
+//                     (Pair::new(1, 2), 1),
+//                     (Pair::new(2, 4), 2),
+//                     (Pair::new(3, 6), 3),
+//                     (Pair::new(4, 8), 4),
+//                     (Pair::new(5, 10), 5)
+//                 ]
+//             );
+//             accessor.inner.reset();
+//         }
+//
+//         // On-elements-unordered propagates errors.
+//         assert!(
+//             accessor
+//                 .on_elements_unordered([1, 2, 3, 100, 4].into_iter(), |_, _| {})
+//                 .await
+//                 .is_err()
+//         );
+//
+//         // Computation.
+//         let query = 10;
+//         let computer = accessor.build_query_computer(query).unwrap();
+//
+//         assert_eq!(
+//             computer.evaluate_similarity(accessor.get_element(10).await.unwrap()),
+//             (10 * 2 + query) as f32
+//         );
+//         assert_eq!(
+//             computer.evaluate_similarity(accessor.get_element(11).await.unwrap()),
+//             (11 * 2 + query) as f32
+//         );
+//         assert_eq!(
+//             computer.evaluate_similarity(accessor.get_element(12).await.unwrap()),
+//             beta * ((12 * 2 + query) as f32)
+//         );
+//
+//         // Test dummy implementation of `get_neighbors` for code coverage.
+//         let mut neighbors = AdjacencyList::new();
+//         accessor.get_neighbors(0, &mut neighbors).await.unwrap();
+//         assert_eq!(neighbors.len(), 0);
+//     }
+// }

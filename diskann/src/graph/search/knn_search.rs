@@ -202,7 +202,6 @@ where
             let stats = index
                 .search_internal(
                     Some(self.beam_width.get()),
-                    &start_ids,
                     &mut accessor,
                     &computer,
                     &mut scratch,
@@ -278,7 +277,6 @@ where
             let stats = index
                 .search_internal(
                     Some(self.inner.beam_width.get()),
-                    &start_ids,
                     &mut accessor,
                     &computer,
                     &mut scratch,

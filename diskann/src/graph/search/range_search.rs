@@ -191,7 +191,6 @@ where
             let initial_stats = index
                 .search_internal(
                     self.beam_width(),
-                    &start_ids,
                     &mut accessor,
                     &computer,
                     &mut scratch,
@@ -332,7 +331,7 @@ pub(crate) async fn range_search_internal<I, A, T>(
 ) -> ANNResult<InternalSearchStats>
 where
     I: crate::utils::VectorId,
-    A: ExpandBeam<T, Id = I> + SearchExt,
+    A: ExpandBeam<T, Id = I> + SearchExt<T>,
 {
     let beam_width = search_params.beam_width().unwrap_or(1);
 

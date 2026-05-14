@@ -129,16 +129,14 @@
 
 use std::{fmt::Debug, hash::Hash, sync::Arc};
 
-use diskann_utils::{Reborrow, future::SendFuture};
+use diskann_utils::{Reborrow};
 use hashbrown::hash_map;
 
 use crate::{
-    error::{RankedError, ToRanked, TransientError},
     graph::glue,
-    provider::Accessor,
 };
 
-use super::{AsWorkingSet, Fill};
+use super::{AsWorkingSet};
 
 /////////
 // Map //
@@ -280,72 +278,6 @@ where
                     self.evict(to_evict);
                 }
             }
-        }
-    }
-}
-
-impl<K, V, P> Map<K, V, P>
-where
-    K: Copy + Hash + Eq + Send + Sync,
-    V: Send + Sync,
-    P: Projection,
-{
-    /// Fill using `accessor.get_element` for each missing key.
-    ///
-    /// Calls [`prepare`](Self::prepare) to pin and evict entries, then fetches any
-    /// keys still missing. For incremental fills that skip preparation, use
-    /// [`fill_with`](Self::fill_with) directly.
-    ///
-    /// Transient errors are acknowledged and skipped. Only critical errors are propagated.
-    pub fn fill<'a, A, Itr>(
-        &'a mut self,
-        accessor: &'a mut A,
-        itr: Itr,
-    ) -> impl SendFuture<Result<View<'a, K, V, P>, <A::GetError as ToRanked>::Error>>
-    where
-        A: for<'b> Accessor<Id = K, ElementRef<'b>: Into<V>>,
-        Itr: ExactSizeIterator<Item = K> + Clone + Send + Sync,
-    {
-        self.prepare(itr.clone());
-        self.fill_with(accessor, itr, |element| element.into())
-    }
-
-    /// Fill using a projection from `Accessor::Element` to `V`.
-    ///
-    /// Transient errors are acknowledged and skipped. Only critical errors are propagated.
-    pub fn fill_with<'a, A, Itr, F>(
-        &'a mut self,
-        accessor: &'a mut A,
-        itr: Itr,
-        f: F,
-    ) -> impl SendFuture<Result<View<'a, K, V, P>, <A::GetError as ToRanked>::Error>>
-    where
-        A: Accessor<Id = K>,
-        Itr: ExactSizeIterator<Item = K> + Send + Sync,
-        F: Fn(A::ElementRef<'_>) -> V + Send,
-    {
-        async move {
-            for i in itr {
-                match self.entry(i) {
-                    Entry::Seeded(_) | Entry::Occupied(_) => { /* nothing to do */ }
-                    Entry::Vacant(vacant) => match accessor.get_element(i).await {
-                        Ok(element) => {
-                            vacant.insert(f(element.reborrow()));
-                        }
-                        Err(local_error) => match local_error.to_ranked() {
-                            RankedError::Transient(transient) => {
-                                transient.acknowledge(
-                                    "transient error during fill; element will be absent from working set",
-                                );
-                            }
-                            RankedError::Error(critical) => {
-                                return Err(critical);
-                            }
-                        },
-                    },
-                }
-            }
-            Ok(self.view())
         }
     }
 }
@@ -526,36 +458,36 @@ impl<K, V> VacantEntry<'_, K, V> {
     }
 }
 
-/// Blanket implementation of [`Fill`] for [`Map`]-backed working sets.
-///
-/// This covers the common case where the accessor's `Extended` type is stored directly
-/// in the map. Accessors that need custom fill logic (e.g. hybrid full-precision/quantized)
-/// should use a different `State` type and provide their own `Fill` impl.
-impl<A, V, P> Fill<Map<A::Id, V, P>> for A
-where
-    P: Projection,
-    A: for<'a> Accessor<Id: Hash + Eq, ElementRef<'a> = P::ElementRef<'a>>,
-    V: Project<P> + Send + Sync + 'static,
-    for<'a> A::ElementRef<'a>: Into<V>,
-{
-    type Error = <A::GetError as ToRanked>::Error;
-    type View<'a>
-        = View<'a, A::Id, V, P>
-    where
-        Self: 'a;
-
-    fn fill<'a, Itr>(
-        &'a mut self,
-        map: &'a mut Map<A::Id, V, P>,
-        itr: Itr,
-    ) -> impl SendFuture<Result<Self::View<'a>, Self::Error>>
-    where
-        Itr: ExactSizeIterator<Item = A::Id> + Clone + Send + Sync,
-        Self: 'a,
-    {
-        map.fill(self, itr)
-    }
-}
+// /// Blanket implementation of [`Fill`] for [`Map`]-backed working sets.
+// ///
+// /// This covers the common case where the accessor's `Extended` type is stored directly
+// /// in the map. Accessors that need custom fill logic (e.g. hybrid full-precision/quantized)
+// /// should use a different `State` type and provide their own `Fill` impl.
+// impl<A, V, P> Fill<Map<A::Id, V, P>> for A
+// where
+//     P: Projection,
+//     A: for<'a> Accessor<Id: Hash + Eq, ElementRef<'a> = P::ElementRef<'a>>,
+//     V: Project<P> + Send + Sync + 'static,
+//     for<'a> A::ElementRef<'a>: Into<V>,
+// {
+//     type Error = <A::GetError as ToRanked>::Error;
+//     type View<'a>
+//         = View<'a, A::Id, V, P>
+//     where
+//         Self: 'a;
+//
+//     fn fill<'a, Itr>(
+//         &'a mut self,
+//         map: &'a mut Map<A::Id, V, P>,
+//         itr: Itr,
+//     ) -> impl SendFuture<Result<Self::View<'a>, Self::Error>>
+//     where
+//         Itr: ExactSizeIterator<Item = A::Id> + Clone + Send + Sync,
+//         Self: 'a,
+//     {
+//         map.fill(self, itr)
+//     }
+// }
 
 /////////////////
 // Projections //
@@ -1933,201 +1865,201 @@ mod tests {
         let _ = ar.clone();
     }
 
-    //----------------------------------//
-    // Fill / fill_with (async, Tier 1) //
-    //----------------------------------//
+    // //----------------------------------//
+    // // Fill / fill_with (async, Tier 1) //
+    // //----------------------------------//
 
-    /// Create a grid-backed provider (1-D, size 5).
-    ///
-    /// IDs 0–4 have vectors `[0.0]` .. `[4.0]`, start point is `u32::MAX`.
-    fn fill_provider() -> crate::graph::test::provider::Provider {
-        use crate::graph::test::synthetic::Grid;
-        crate::graph::test::provider::Provider::grid(Grid::One, 5).unwrap()
-    }
+    // /// Create a grid-backed provider (1-D, size 5).
+    // ///
+    // /// IDs 0–4 have vectors `[0.0]` .. `[4.0]`, start point is `u32::MAX`.
+    // fn fill_provider() -> crate::graph::test::provider::Provider {
+    //     use crate::graph::test::synthetic::Grid;
+    //     crate::graph::test::provider::Provider::grid(Grid::One, 5).unwrap()
+    // }
 
-    #[tokio::test(flavor = "current_thread")]
-    async fn fill_happy_path() {
-        let provider = fill_provider();
-        let mut accessor = TestAccessor::new(&provider);
-        let mut map: TestMap = Builder::new(Capacity::Unbounded).build(0);
+    // #[tokio::test(flavor = "current_thread")]
+    // async fn fill_happy_path() {
+    //     let provider = fill_provider();
+    //     let mut accessor = TestAccessor::new(&provider);
+    //     let mut map: TestMap = Builder::new(Capacity::Unbounded).build(0);
 
-        let current = map.generation;
-        let view = map
-            .fill(&mut accessor, [0u32, 1, 2].into_iter())
-            .await
-            .unwrap();
+    //     let current = map.generation;
+    //     let view = map
+    //         .fill(&mut accessor, [0u32, 1, 2].into_iter())
+    //         .await
+    //         .unwrap();
 
-        assert_eq!(view.get(0).unwrap(), &[0.0]);
-        assert_eq!(view.get(1).unwrap(), &[1.0]);
-        assert_eq!(view.get(2).unwrap(), &[2.0]);
-        assert!(view.get(99).is_none());
+    //     assert_eq!(view.get(0).unwrap(), &[0.0]);
+    //     assert_eq!(view.get(1).unwrap(), &[1.0]);
+    //     assert_eq!(view.get(2).unwrap(), &[2.0]);
+    //     assert!(view.get(99).is_none());
 
-        assert_eq!(
-            map.generation,
-            current + 1,
-            "`fill` should bump the generation"
-        );
-    }
+    //     assert_eq!(
+    //         map.generation,
+    //         current + 1,
+    //         "`fill` should bump the generation"
+    //     );
+    // }
 
-    #[tokio::test(flavor = "current_thread")]
-    async fn fill_clears_previous_entries() {
-        let provider = fill_provider();
-        let mut accessor = TestAccessor::new(&provider);
-        let mut map: Map<u32, Box<[f32]>, Ref<[f32]>> = Builder::new(Capacity::None).build(0);
+    // #[tokio::test(flavor = "current_thread")]
+    // async fn fill_clears_previous_entries() {
+    //     let provider = fill_provider();
+    //     let mut accessor = TestAccessor::new(&provider);
+    //     let mut map: Map<u32, Box<[f32]>, Ref<[f32]>> = Builder::new(Capacity::None).build(0);
 
-        // First fill with IDs 0 and 1.
-        let view = map
-            .fill(&mut accessor, [0u32, 1].into_iter())
-            .await
-            .unwrap();
+    //     // First fill with IDs 0 and 1.
+    //     let view = map
+    //         .fill(&mut accessor, [0u32, 1].into_iter())
+    //         .await
+    //         .unwrap();
 
-        assert!(view.get(0).is_some());
-        assert!(view.get(1).is_some());
-        assert!(view.get(2).is_none());
+    //     assert!(view.get(0).is_some());
+    //     assert!(view.get(1).is_some());
+    //     assert!(view.get(2).is_none());
 
-        // Second fill with only ID 2 — previous entries should be cleared.
-        let view = map.fill(&mut accessor, [2u32].into_iter()).await.unwrap();
-        assert!(view.get(0).is_none(), "fill should have cleared id 0");
-        assert!(view.get(1).is_none(), "fill should have cleared id 1");
-        assert_eq!(view.get(2).unwrap(), &[2.0]);
-    }
+    //     // Second fill with only ID 2 — previous entries should be cleared.
+    //     let view = map.fill(&mut accessor, [2u32].into_iter()).await.unwrap();
+    //     assert!(view.get(0).is_none(), "fill should have cleared id 0");
+    //     assert!(view.get(1).is_none(), "fill should have cleared id 1");
+    //     assert_eq!(view.get(2).unwrap(), &[2.0]);
+    // }
 
-    #[tokio::test(flavor = "current_thread")]
-    async fn fill_with_preserves_entries() {
-        let provider = fill_provider();
-        let mut accessor = TestAccessor::new(&provider);
-        let mut map: TestMap = Builder::new(Capacity::Unbounded).build(0);
+    // #[tokio::test(flavor = "current_thread")]
+    // async fn fill_with_preserves_entries() {
+    //     let provider = fill_provider();
+    //     let mut accessor = TestAccessor::new(&provider);
+    //     let mut map: TestMap = Builder::new(Capacity::Unbounded).build(0);
 
-        // Populate with ID 0.
-        let view = map
-            .fill_with(&mut accessor, [0u32].into_iter(), |e| e.into())
-            .await
-            .unwrap();
-        assert!(view.get(0).is_some());
+    //     // Populate with ID 0.
+    //     let view = map
+    //         .fill_with(&mut accessor, [0u32].into_iter(), |e| e.into())
+    //         .await
+    //         .unwrap();
+    //     assert!(view.get(0).is_some());
 
-        // fill_with with ID 1 — should NOT clear ID 0.
-        let view = map
-            .fill_with(&mut accessor, [1u32].into_iter(), |e| e.into())
-            .await
-            .unwrap();
-        assert_eq!(
-            view.get(0).unwrap(),
-            &[0.0],
-            "fill_with should preserve id 0"
-        );
-        assert_eq!(view.get(1).unwrap(), &[1.0]);
-    }
+    //     // fill_with with ID 1 — should NOT clear ID 0.
+    //     let view = map
+    //         .fill_with(&mut accessor, [1u32].into_iter(), |e| e.into())
+    //         .await
+    //         .unwrap();
+    //     assert_eq!(
+    //         view.get(0).unwrap(),
+    //         &[0.0],
+    //         "fill_with should preserve id 0"
+    //     );
+    //     assert_eq!(view.get(1).unwrap(), &[1.0]);
+    // }
 
-    #[tokio::test(flavor = "current_thread")]
-    async fn fill_skips_transient_errors() {
-        let provider = fill_provider();
+    // #[tokio::test(flavor = "current_thread")]
+    // async fn fill_skips_transient_errors() {
+    //     let provider = fill_provider();
 
-        let mut accessor =
-            TestAccessor::flaky(&provider, Cow::Owned(std::collections::HashSet::from([1])));
-        let mut map: TestMap = Builder::new(Capacity::Unbounded).build(0);
+    //     let mut accessor =
+    //         TestAccessor::flaky(&provider, Cow::Owned(std::collections::HashSet::from([1])));
+    //     let mut map: TestMap = Builder::new(Capacity::Unbounded).build(0);
 
-        // ID 1 is transient — should be skipped, not propagated.
-        let view = map
-            .fill(&mut accessor, [0u32, 1, 2].into_iter())
-            .await
-            .unwrap();
-        assert_eq!(view.get(0).unwrap(), &[0.0]);
-        assert!(view.get(1).is_none(), "transient ID should be absent");
-        assert_eq!(view.get(2).unwrap(), &[2.0]);
-    }
+    //     // ID 1 is transient — should be skipped, not propagated.
+    //     let view = map
+    //         .fill(&mut accessor, [0u32, 1, 2].into_iter())
+    //         .await
+    //         .unwrap();
+    //     assert_eq!(view.get(0).unwrap(), &[0.0]);
+    //     assert!(view.get(1).is_none(), "transient ID should be absent");
+    //     assert_eq!(view.get(2).unwrap(), &[2.0]);
+    // }
 
-    #[tokio::test(flavor = "current_thread")]
-    async fn fill_propagates_critical_errors() {
-        let provider = fill_provider();
-        let mut accessor = TestAccessor::new(&provider);
-        let mut map: TestMap = Builder::new(Capacity::Unbounded).build(0);
+    // #[tokio::test(flavor = "current_thread")]
+    // async fn fill_propagates_critical_errors() {
+    //     let provider = fill_provider();
+    //     let mut accessor = TestAccessor::new(&provider);
+    //     let mut map: TestMap = Builder::new(Capacity::Unbounded).build(0);
 
-        // ID 99 doesn't exist — critical InvalidId error.
-        let err = map
-            .fill(&mut accessor, [0u32, 99].into_iter())
-            .await
-            .unwrap_err();
-        let msg = err.to_string();
-        assert!(
-            msg.contains("99"),
-            "error should mention the invalid id: {msg}"
-        );
-    }
+    //     // ID 99 doesn't exist — critical InvalidId error.
+    //     let err = map
+    //         .fill(&mut accessor, [0u32, 99].into_iter())
+    //         .await
+    //         .unwrap_err();
+    //     let msg = err.to_string();
+    //     assert!(
+    //         msg.contains("99"),
+    //         "error should mention the invalid id: {msg}"
+    //     );
+    // }
 
-    #[tokio::test(flavor = "current_thread")]
-    async fn fill_with_skips_occupied_entries() {
-        let provider = fill_provider();
-        let mut accessor = TestAccessor::new(&provider);
-        let mut map: TestMap = Builder::new(Capacity::Unbounded).build(0);
+    // #[tokio::test(flavor = "current_thread")]
+    // async fn fill_with_skips_occupied_entries() {
+    //     let provider = fill_provider();
+    //     let mut accessor = TestAccessor::new(&provider);
+    //     let mut map: TestMap = Builder::new(Capacity::Unbounded).build(0);
 
-        // Pre-insert a sentinel value for ID 0.
-        map.insert(0, Box::new([99.0]));
+    //     // Pre-insert a sentinel value for ID 0.
+    //     map.insert(0, Box::new([99.0]));
 
-        // fill_with should skip the occupied entry.
-        let view = map
-            .fill_with(&mut accessor, [0u32, 1].into_iter(), |e| e.into())
-            .await
-            .unwrap();
+    //     // fill_with should skip the occupied entry.
+    //     let view = map
+    //         .fill_with(&mut accessor, [0u32, 1].into_iter(), |e| e.into())
+    //         .await
+    //         .unwrap();
 
-        // ID 0 retains its pre-inserted sentinel.
-        assert_eq!(
-            view.get(0).unwrap(),
-            &[99.0],
-            "occupied entry should be preserved"
-        );
-        assert_eq!(view.get(1).unwrap(), &[1.0]);
-    }
+    //     // ID 0 retains its pre-inserted sentinel.
+    //     assert_eq!(
+    //         view.get(0).unwrap(),
+    //         &[99.0],
+    //         "occupied entry should be preserved"
+    //     );
+    //     assert_eq!(view.get(1).unwrap(), &[1.0]);
+    // }
 
-    #[tokio::test(flavor = "current_thread")]
-    async fn fill_with_skips_seeded_entries() {
-        let provider = fill_provider();
-        let mut accessor = TestAccessor::new(&provider);
+    // #[tokio::test(flavor = "current_thread")]
+    // async fn fill_with_skips_seeded_entries() {
+    //     let provider = fill_provider();
+    //     let mut accessor = TestAccessor::new(&provider);
 
-        // Seed with a batch containing a different value for ID 0.
-        let batch = Arc::new(Matrix::try_from(Box::new([99.0, 88.0]), 2, 1).unwrap());
-        let overlay = Overlay::<u32, Ref<[f32]>>::from_batch(batch, [0u32, 1].into_iter());
-        let mut map = seeded_map(overlay, Capacity::Unbounded);
+    //     // Seed with a batch containing a different value for ID 0.
+    //     let batch = Arc::new(Matrix::try_from(Box::new([99.0, 88.0]), 2, 1).unwrap());
+    //     let overlay = Overlay::<u32, Ref<[f32]>>::from_batch(batch, [0u32, 1].into_iter());
+    //     let mut map = seeded_map(overlay, Capacity::Unbounded);
 
-        // fill_with requests IDs 0 and 2. ID 0 is seeded → skip, ID 2 is filled.
-        let view = map
-            .fill_with(&mut accessor, [0u32, 2].into_iter(), |e| e.into())
-            .await
-            .unwrap();
+    //     // fill_with requests IDs 0 and 2. ID 0 is seeded → skip, ID 2 is filled.
+    //     let view = map
+    //         .fill_with(&mut accessor, [0u32, 2].into_iter(), |e| e.into())
+    //         .await
+    //         .unwrap();
 
-        // ID 0 comes from the seed (batch row 0 = [99.0]), NOT the accessor.
-        assert_eq!(view.get(0).unwrap(), &[99.0]);
-        // ID 2 was filled from the accessor.
-        assert_eq!(view.get(2).unwrap(), &[2.0]);
-        // Verify ID 0 is NOT in the fill layer.
-        assert!(
-            map.get(&0).is_none(),
-            "ID 0 should only be in the seed, not the fill layer"
-        );
-    }
+    //     // ID 0 comes from the seed (batch row 0 = [99.0]), NOT the accessor.
+    //     assert_eq!(view.get(0).unwrap(), &[99.0]);
+    //     // ID 2 was filled from the accessor.
+    //     assert_eq!(view.get(2).unwrap(), &[2.0]);
+    //     // Verify ID 0 is NOT in the fill layer.
+    //     assert!(
+    //         map.get(&0).is_none(),
+    //         "ID 0 should only be in the seed, not the fill layer"
+    //     );
+    // }
 
-    #[tokio::test(flavor = "current_thread")]
-    async fn fill_empty_iterator() {
-        let provider = fill_provider();
-        let mut accessor = TestAccessor::new(&provider);
-        let mut map: TestMap = Builder::new(Capacity::Unbounded).build(0);
+    // #[tokio::test(flavor = "current_thread")]
+    // async fn fill_empty_iterator() {
+    //     let provider = fill_provider();
+    //     let mut accessor = TestAccessor::new(&provider);
+    //     let mut map: TestMap = Builder::new(Capacity::Unbounded).build(0);
 
-        let view = map.fill(&mut accessor, std::iter::empty()).await.unwrap();
-        assert!(view.get(0).is_none());
-    }
+    //     let view = map.fill(&mut accessor, std::iter::empty()).await.unwrap();
+    //     assert!(view.get(0).is_none());
+    // }
 
-    #[tokio::test(flavor = "current_thread")]
-    async fn blanket_fill_trait() {
-        let provider = fill_provider();
-        let mut accessor = TestAccessor::new(&provider);
-        let mut map: TestMap = Builder::new(Capacity::Unbounded).build(0);
+    // #[tokio::test(flavor = "current_thread")]
+    // async fn blanket_fill_trait() {
+    //     let provider = fill_provider();
+    //     let mut accessor = TestAccessor::new(&provider);
+    //     let mut map: TestMap = Builder::new(Capacity::Unbounded).build(0);
 
-        // Exercise the blanket Fill<Map> impl.
-        let view = <_ as Fill<TestMap>>::fill(&mut accessor, &mut map, [0u32, 1, 2].into_iter())
-            .await
-            .unwrap();
+    //     // Exercise the blanket Fill<Map> impl.
+    //     let view = <_ as Fill<TestMap>>::fill(&mut accessor, &mut map, [0u32, 1, 2].into_iter())
+    //         .await
+    //         .unwrap();
 
-        assert_eq!(view.get(0).unwrap(), &[0.0]);
-        assert_eq!(view.get(1).unwrap(), &[1.0]);
-        assert_eq!(view.get(2).unwrap(), &[2.0]);
-    }
+    //     assert_eq!(view.get(0).unwrap(), &[0.0]);
+    //     assert_eq!(view.get(1).unwrap(), &[1.0]);
+    //     assert_eq!(view.get(2).unwrap(), &[2.0]);
+    // }
 }

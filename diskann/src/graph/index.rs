@@ -16,7 +16,7 @@ use diskann_utils::{
     Reborrow,
     future::{AssertSend, SendFuture, boxit},
 };
-use diskann_vector::{DistanceFunction, PreprocessedDistanceFunction};
+use diskann_vector::{DistanceFunction};
 use futures_util::FutureExt;
 use hashbrown::HashSet;
 use thiserror::Error;
@@ -25,12 +25,11 @@ use tokio::task::JoinSet;
 use super::{
     AdjacencyList, Config, ConsolidateKind, InplaceDeleteMethod, Search,
     glue::{
-        self, Batch, ExpandBeam, IdIterator, InplaceDeleteStrategy, InsertStrategy,
+        self, Batch, ExpandBeam, InplaceDeleteStrategy, InsertStrategy,
         MultiInsertStrategy, PruneStrategy, SearchExt, SearchPostProcess, SearchStrategy,
     },
     internal::{BackedgeBuffer, SortedNeighbors, prune},
     search::{
-        Knn,
         record::{NoopSearchRecord, SearchRecord, VisitedSearchRecord},
         scratch::{self, PriorityQueueConfiguration, SearchScratch, SearchScratchParams},
     },
@@ -346,7 +345,6 @@ where
 
                 self.search_internal(
                     None, // beam_width
-                    &start_ids,
                     &mut accessor,
                     &computer,
                     &mut scratch,
@@ -475,7 +473,6 @@ where
 
                 self.search_internal(
                     None, // beam_width
-                    &start_ids,
                     &mut accessor,
                     &computer,
                     &mut scratch,
@@ -1291,7 +1288,6 @@ where
 
             self.search_internal(
                 None, // beam_width
-                &start_ids,
                 &mut search_accessor,
                 &computer,
                 &mut scratch,
@@ -2018,34 +2014,43 @@ where
     pub(crate) fn search_internal<A, T, SR, Q>(
         &self,
         beam_width: Option<usize>,
-        start_ids: &[DP::InternalId],
         accessor: &mut A,
         computer: &A::QueryComputer,
         scratch: &mut SearchScratch<DP::InternalId, Q>,
         search_record: &mut SR,
     ) -> impl SendFuture<ANNResult<InternalSearchStats>>
     where
-        A: ExpandBeam<T, Id = DP::InternalId> + SearchExt,
+        A: ExpandBeam<T, Id = DP::InternalId> + SearchExt<T>,
         SR: SearchRecord<DP::InternalId> + ?Sized,
         Q: NeighborQueue<DP::InternalId>,
     {
         async move {
             let beam_width = beam_width.unwrap_or(1);
 
-            // paged search can call search_internal multiple times, we only need to initialize
-            // state if not already initialized.
             if scratch.visited.is_empty() {
-                for id in start_ids {
-                    scratch.visited.insert(*id);
-                    let element = accessor
-                        .get_element(*id)
-                        .await
-                        .escalate("start point retrieval must succeed")?;
-                    let dist = computer.evaluate_similarity(element.reborrow());
-                    scratch.best.insert(Neighbor::new(*id, dist));
-                    scratch.cmps += 1;
-                }
+                accessor
+                    .start_point_distances(computer, |id, dist| {
+                        scratch.visited.insert(id);
+                        scratch.best.insert(Neighbor::new(id, dist));
+                        scratch.cmps += 1;
+                    })
+                    .await?;
             }
+
+            // // paged search can call search_internal multiple times, we only need to initialize
+            // // state if not already initialized.
+            // if scratch.visited.is_empty() {
+            //     for id in start_ids {
+            //         scratch.visited.insert(*id);
+            //         let element = accessor
+            //             .get_element(*id)
+            //             .await
+            //             .escalate("start point retrieval must succeed")?;
+            //         let dist = computer.evaluate_similarity(element.reborrow());
+            //         scratch.best.insert(Neighbor::new(*id, dist));
+            //         scratch.cmps += 1;
+            //     }
+            // }
 
             let mut neighbors = Vec::with_capacity(self.max_degree_with_slack());
             while scratch.best.has_notvisited_node() && !accessor.terminate_early() {
@@ -2183,98 +2188,99 @@ where
         search_params.search(self, strategy, processor, context, query, output)
     }
 
-    /// Performs a brute-force flat search over the points matching a provided filter function.
-    ///
-    /// This method executes a linear scan through all points in the index, applying the provided
-    /// `vector_filter` to select candidate points. It computes the similarity between the query
-    /// vector and each candidate, returning the top results according to the provided search parameters.
-    ///
-    /// # Arguments
-    ///
-    /// * `strategy` - The search strategy to use for accessing and processing elements.
-    /// * `context` - The context to pass through to providers.
-    /// * `query` - The query vector for which nearest neighbors are sought.
-    /// * `vector_filter` - A predicate function used to filter candidate vectors based on their external IDs.
-    /// * `search_params` - Parameters controlling the search behavior, such as search depth (`l_value`).
-    /// * `output` - A mutable buffer to store the search results. Must be pre-allocated by the caller.
-    ///
-    /// # Returns
-    ///
-    /// Returns search statistics including the number of distance computations performed.
-    ///
-    /// # Errors
-    ///
-    /// Returns an error if there is a failure accessing elements or if the provided parameters are invalid.
-    ///
-    /// # Notes
-    ///
-    /// This method is computationally expensive for large datasets, as it does not leverage the graph structure
-    /// and instead performs a linear scan of all filtered points.
-    pub async fn flat_search<'a, S, T, O, OB, I>(
-        &'a self,
-        strategy: &'a S,
-        context: &'a DP::Context,
-        query: T,
-        vector_filter: &(dyn Fn(&DP::ExternalId) -> bool + Send + Sync),
-        search_params: &Knn,
-        output: &mut OB,
-    ) -> ANNResult<SearchStats>
-    where
-        T: Copy + Send,
-        S: glue::DefaultSearchStrategy<DP, T, O, SearchAccessor<'a>: IdIterator<I>>,
-        I: Iterator<Item = <DP as DataProvider>::InternalId>,
-        O: Send,
-        OB: search_output_buffer::SearchOutputBuffer<O> + Send,
-    {
-        let mut accessor = strategy
-            .search_accessor(&self.data_provider, context)
-            .into_ann_result()?;
-        let computer = accessor.build_query_computer(query).into_ann_result()?;
+    // /// Performs a brute-force flat search over the points matching a provided filter function.
+    // ///
+    // /// This method executes a linear scan through all points in the index, applying the provided
+    // /// `vector_filter` to select candidate points. It computes the similarity between the query
+    // /// vector and each candidate, returning the top results according to the provided search parameters.
+    // ///
+    // /// # Arguments
+    // ///
+    // /// * `strategy` - The search strategy to use for accessing and processing elements.
+    // /// * `context` - The context to pass through to providers.
+    // /// * `query` - The query vector for which nearest neighbors are sought.
+    // /// * `vector_filter` - A predicate function used to filter candidate vectors based on their external IDs.
+    // /// * `search_params` - Parameters controlling the search behavior, such as search depth (`l_value`).
+    // /// * `output` - A mutable buffer to store the search results. Must be pre-allocated by the caller.
+    // ///
+    // /// # Returns
+    // ///
+    // /// Returns search statistics including the number of distance computations performed.
+    // ///
+    // /// # Errors
+    // ///
+    // /// Returns an error if there is a failure accessing elements or if the provided parameters are invalid.
+    // ///
+    // /// # Notes
+    // ///
+    // /// This method is computationally expensive for large datasets, as it does not leverage the graph structure
+    // /// and instead performs a linear scan of all filtered points.
+    // pub async fn flat_search<'a, S, T, O, OB, I>(
+    //     &'a self,
+    //     strategy: &'a S,
+    //     context: &'a DP::Context,
+    //     query: T,
+    //     vector_filter: &(dyn Fn(&DP::ExternalId) -> bool + Send + Sync),
+    //     search_params: &Knn,
+    //     output: &mut OB,
+    // ) -> ANNResult<SearchStats>
+    // where
+    //     T: Copy + Send,
+    //     S: glue::DefaultSearchStrategy<DP, T, O, SearchAccessor<'a>: IdIterator<I>>,
+    //     I: Iterator<Item = <DP as DataProvider>::InternalId>,
+    //     O: Send,
+    //     OB: search_output_buffer::SearchOutputBuffer<O> + Send,
+    // {
+    //     let mut accessor = strategy
+    //         .search_accessor(&self.data_provider, context)
+    //         .into_ann_result()?;
+    //     let computer = accessor.build_query_computer(query).into_ann_result()?;
 
-        let mut scratch = {
-            let num_start_points = accessor.starting_points().await?.len();
-            self.search_scratch(search_params.l_value().get(), num_start_points)
-        };
+    //     let mut scratch = {
+    //         let num_start_points = accessor.starting_points().await?.len();
+    //         self.search_scratch(search_params.l_value().get(), num_start_points)
+    //     };
 
-        let id_iterator = accessor.id_iterator().await?;
-        for id in id_iterator {
-            let external_id = self
-                .data_provider
-                .to_external_id(context, id)
-                .escalate("external id should be found")?;
+    //     let id_iterator = accessor.id_iterator().await?;
+    //     for id in id_iterator {
+    //         let external_id = self
+    //             .data_provider
+    //             .to_external_id(context, id)
+    //             .escalate("external id should be found")?;
 
-            if vector_filter(&external_id) {
-                scratch.visited.insert(id);
-                let element = accessor
-                    .get_element(id)
-                    .await
-                    .escalate("matched point retrieval must succeed")?;
-                let dist = computer.evaluate_similarity(element.reborrow());
-                scratch.best.insert(Neighbor::new(id, dist));
-                scratch.cmps += 1;
-            }
-        }
+    //         if vector_filter(&external_id)
+    //         {
+    //             scratch.visited.insert(id);
+    //             let element = accessor
+    //                 .get_element(id)
+    //                 .await
+    //                 .escalate("matched point retrieval must succeed")?;
+    //             let dist = computer.evaluate_similarity(element.reborrow());
+    //             scratch.best.insert(Neighbor::new(id, dist));
+    //             scratch.cmps += 1;
+    //         }
+    //     }
 
-        let result_count = strategy
-            .default_post_processor()
-            .post_process(
-                &mut accessor,
-                query,
-                &computer,
-                scratch.best.iter().take(search_params.l_value().get()),
-                output,
-            )
-            .send()
-            .await
-            .into_ann_result()?;
+    //     let result_count = strategy
+    //         .default_post_processor()
+    //         .post_process(
+    //             &mut accessor,
+    //             query,
+    //             &computer,
+    //             scratch.best.iter().take(search_params.l_value().get()),
+    //             output,
+    //         )
+    //         .send()
+    //         .await
+    //         .into_ann_result()?;
 
-        Ok(SearchStats {
-            cmps: scratch.cmps,
-            hops: scratch.hops,
-            result_count: result_count as u32,
-            range_search_second_round: false,
-        })
-    }
+    //     Ok(SearchStats {
+    //         cmps: scratch.cmps,
+    //         hops: scratch.hops,
+    //         result_count: result_count as u32,
+    //         range_search_second_round: false,
+    //     })
+    // }
 
     //////////////////
     // Paged Search //
@@ -2427,7 +2433,6 @@ where
                 let start_ids = accessor.starting_points().await?;
                 self.search_internal(
                     None, // beam_width
-                    &start_ids,
                     &mut accessor,
                     &search_state.extra.1,
                     &mut search_state.scratch,

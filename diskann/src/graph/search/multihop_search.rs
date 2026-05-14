@@ -5,15 +5,13 @@
 
 //! Label-filtered search using multi-hop expansion.
 
-use diskann_utils::Reborrow;
 use diskann_utils::future::SendFuture;
-use diskann_vector::PreprocessedDistanceFunction;
 use hashbrown::HashSet;
 
 use super::{Knn, Search, record::SearchRecord, scratch::SearchScratch};
 use crate::{
     ANNResult,
-    error::{ErrorExt, IntoANNResult},
+    error::{IntoANNResult},
     graph::{
         glue::{
             self, ExpandBeam, HybridPredicate, Predicate, PredicateMut, SearchExt,
@@ -182,7 +180,7 @@ pub(crate) async fn multihop_search_internal<I, A, T, SR>(
 ) -> ANNResult<InternalSearchStats>
 where
     I: VectorId,
-    A: ExpandBeam<T, Id = I> + SearchExt,
+    A: ExpandBeam<T, Id = I> + SearchExt<T>,
     SR: SearchRecord<I> + ?Sized,
 {
     let beam_width = search_params.beam_width().get();
@@ -194,21 +192,13 @@ where
         range_search_second_round: false,
     };
 
-    // Initialize search state if not already initialized.
-    // This allows paged search to call multihop_search_internal multiple times
-    if scratch.visited.is_empty() {
-        let start_ids = accessor.starting_points().await?;
-
-        for id in start_ids {
+    accessor
+        .start_point_distances(computer, |id, dist| {
             scratch.visited.insert(id);
-            let element = accessor
-                .get_element(id)
-                .await
-                .escalate("start point retrieval must succeed")?;
-            let dist = computer.evaluate_similarity(element.reborrow());
             scratch.best.insert(Neighbor::new(id, dist));
-        }
-    }
+            scratch.cmps += 1;
+        })
+        .await?;
 
     // Pre-allocate with good capacity to avoid repeated allocations
     let mut one_hop_neighbors = Vec::with_capacity(max_degree_with_slack);

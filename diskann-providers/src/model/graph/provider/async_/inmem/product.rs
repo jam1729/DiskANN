@@ -9,6 +9,7 @@ use diskann::default_post_processor;
 use diskann::{
     ANNError, ANNResult,
     graph::{
+        AdjacencyList,
         glue::{
             self, DefaultPostProcessor, ExpandBeam, InplaceDeleteStrategy, InsertStrategy,
             PruneStrategy, SearchExt, SearchStrategy,
@@ -22,7 +23,7 @@ use diskann::{
     utils::{IntoUsize, VectorRepr},
 };
 use diskann_utils::future::AsyncFriendly;
-use diskann_vector::distance::Metric;
+use diskann_vector::{PreprocessedDistanceFunction, distance::Metric};
 
 use crate::model::{
     graph::provider::async_::{
@@ -109,14 +110,37 @@ impl<V, D, Ctx> HasId for QuantAccessor<'_, V, D, Ctx> {
     type Id = u32;
 }
 
-impl<V, D, Ctx> SearchExt for QuantAccessor<'_, V, D, Ctx>
+impl<V, D, Ctx, T> SearchExt<&[T]> for QuantAccessor<'_, V, D, Ctx>
 where
+    T: VectorRepr,
     V: AsyncFriendly,
     D: AsyncFriendly,
     Ctx: ExecutionContext,
 {
     fn starting_points(&self) -> impl Future<Output = ANNResult<Vec<u32>>> {
         std::future::ready(self.provider.starting_points())
+    }
+
+    fn start_point_distances<F>(
+        &mut self,
+        computer: &Self::QueryComputer,
+        mut f: F,
+    ) -> impl std::future::Future<Output = ANNResult<()>> + Send
+    where
+        F: FnMut(Self::Id, f32) + Send,
+    {
+        async move {
+            for i in self.provider.starting_points()? {
+                // SAFETY: We're accepting the consequences of potential unsynchronized,
+                // concurrent mutation.
+                let distance = computer.evaluate_similarity(unsafe {
+                    self.provider.aux_vectors.get_vector_sync(i.into_usize())
+                });
+
+                f(i, distance);
+            }
+            Ok(())
+        }
     }
 }
 
@@ -149,54 +173,54 @@ where
     D: AsyncFriendly,
     Ctx: ExecutionContext,
 {
-    /// This accessor returns raw slices. There *is* a chance of racing when the fast
-    /// providers are used. We just have to live with it.
-    type Element<'a>
-        = &'a [u8]
-    where
-        Self: 'a;
+    // /// This accessor returns raw slices. There *is* a chance of racing when the fast
+    // /// providers are used. We just have to live with it.
+    // type Element<'a>
+    //     = &'a [u8]
+    // where
+    //     Self: 'a;
 
     /// `ElementRef` has an arbitrarily short lifetime.
     type ElementRef<'a> = &'a [u8];
 
-    /// Choose to panic on an out-of-bounds access rather than propagate an error.
-    type GetError = Panics;
+    // /// Choose to panic on an out-of-bounds access rather than propagate an error.
+    // type GetError = Panics;
 
-    /// Return the quantized vector stored at index `i`.
-    ///
-    /// This function always completes synchronously.
-    fn get_element(
-        &mut self,
-        id: Self::Id,
-    ) -> impl Future<Output = Result<Self::Element<'_>, Self::GetError>> + Send {
-        // SAFETY: We've decided to live with UB that can result from potentially mixing
-        // unsynchronized reads and writes on the underlying memory.
-        std::future::ready(Ok(unsafe {
-            self.provider.aux_vectors.get_vector_sync(id.into_usize())
-        }))
-    }
+    // /// Return the quantized vector stored at index `i`.
+    // ///
+    // /// This function always completes synchronously.
+    // fn get_element(
+    //     &mut self,
+    //     id: Self::Id,
+    // ) -> impl Future<Output = Result<Self::Element<'_>, Self::GetError>> + Send {
+    //     // SAFETY: We've decided to live with UB that can result from potentially mixing
+    //     // unsynchronized reads and writes on the underlying memory.
+    //     std::future::ready(Ok(unsafe {
+    //         self.provider.aux_vectors.get_vector_sync(id.into_usize())
+    //     }))
+    // }
 
-    /// Perform a bulk operation.
-    fn on_elements_unordered<Itr, F>(
-        &mut self,
-        itr: Itr,
-        mut f: F,
-    ) -> impl Future<Output = Result<(), Self::GetError>> + Send
-    where
-        Self: Sync,
-        Itr: Iterator<Item = Self::Id> + Send,
-        F: Send + for<'b> FnMut(Self::ElementRef<'b>, Self::Id),
-    {
-        for i in itr {
-            // SAFETY: We're accepting the consequences of potential unsynchronized,
-            // concurrent mutation.
-            f(
-                unsafe { self.provider.aux_vectors.get_vector_sync(i.into_usize()) },
-                i,
-            )
-        }
-        std::future::ready(Ok(()))
-    }
+    // /// Perform a bulk operation.
+    // fn on_elements_unordered<Itr, F>(
+    //     &mut self,
+    //     itr: Itr,
+    //     mut f: F,
+    // ) -> impl Future<Output = Result<(), Self::GetError>> + Send
+    // where
+    //     Self: Sync,
+    //     Itr: Iterator<Item = Self::Id> + Send,
+    //     F: Send + for<'b> FnMut(Self::ElementRef<'b>, Self::Id),
+    // {
+    //     for i in itr {
+    //         // SAFETY: We're accepting the consequences of potential unsynchronized,
+    //         // concurrent mutation.
+    //         f(
+    //             unsafe { self.provider.aux_vectors.get_vector_sync(i.into_usize()) },
+    //             i,
+    //         )
+    //     }
+    //     std::future::ready(Ok(()))
+    // }
 }
 
 impl<T, V, D, Ctx> BuildQueryComputer<&[T]> for QuantAccessor<'_, V, D, Ctx>
@@ -240,6 +264,39 @@ where
     D: AsyncFriendly,
     Ctx: ExecutionContext,
 {
+    fn expand_beam<Itr, P, F>(
+        &mut self,
+        ids: Itr,
+        computer: &Self::QueryComputer,
+        mut pred: P,
+        mut on_neighbors: F,
+    ) -> impl std::future::Future<Output = ANNResult<()>> + Send
+    where
+        Itr: Iterator<Item = Self::Id> + Send,
+        P: glue::HybridPredicate<Self::Id> + Send + Sync,
+        F: FnMut(f32, Self::Id) + Send,
+    {
+        let f = move || -> ANNResult<()> {
+            let mut neighbors = AdjacencyList::new();
+            for n in ids {
+                self.provider
+                    .neighbor_provider
+                    .get_neighbors_sync(n.into_usize(), &mut neighbors)?;
+                for i in neighbors.iter().filter(|i| pred.eval_mut(i)) {
+                    // SAFETY: We're accepting the consequences of potential unsynchronized,
+                    // concurrent mutation.
+                    let distance = computer.evaluate_similarity(unsafe {
+                        self.provider.aux_vectors.get_vector_sync(i.into_usize())
+                    });
+
+                    on_neighbors(distance, *i);
+                }
+            }
+            Ok(())
+        };
+
+        std::future::ready(f())
+    }
 }
 
 //-------------------//
@@ -322,33 +379,33 @@ where
     D: AsyncFriendly,
     Ctx: ExecutionContext,
 {
-    /// The [`distances::pq::Hybrid`] is an enum consisting of either a full-precision
-    /// vector or a quantized vector.
-    ///
-    /// This accessor can return either.
-    type Element<'a>
-        = distances::pq::Hybrid<&'a [T], &'a [u8]>
-    where
-        Self: 'a;
+    // /// The [`distances::pq::Hybrid`] is an enum consisting of either a full-precision
+    // /// vector or a quantized vector.
+    // ///
+    // /// This accessor can return either.
+    // type Element<'a>
+    //     = distances::pq::Hybrid<&'a [T], &'a [u8]>
+    // where
+    //     Self: 'a;
 
     /// `ElementRef` has an arbitrarily short lifetime.
     type ElementRef<'a> = distances::pq::Hybrid<&'a [T], &'a [u8]>;
 
-    /// Choose to panic on an out-of-bounds access rather than propagate an error.
-    type GetError = Panics;
+    // /// Choose to panic on an out-of-bounds access rather than propagate an error.
+    // type GetError = Panics;
 
-    /// The default behavior of `get_element` returns a full-precision vector. The
-    /// implementation of [`Fill`] is how the `max_fp_vecs_per_fill` is used.
-    fn get_element(
-        &mut self,
-        id: Self::Id,
-    ) -> impl Future<Output = Result<Self::Element<'_>, Self::GetError>> + Send {
-        // SAFETY: We've decided to live with UB that can result from potentially mixing
-        // unsynchronized reads and writes on the underlying memory.
-        std::future::ready(Ok(unsafe {
-            distances::pq::Hybrid::Full(self.provider.base_vectors.get_vector_sync(id.into_usize()))
-        }))
-    }
+    // /// The default behavior of `get_element` returns a full-precision vector. The
+    // /// implementation of [`Fill`] is how the `max_fp_vecs_per_fill` is used.
+    // fn get_element(
+    //     &mut self,
+    //     id: Self::Id,
+    // ) -> impl Future<Output = Result<Self::Element<'_>, Self::GetError>> + Send {
+    //     // SAFETY: We've decided to live with UB that can result from potentially mixing
+    //     // unsynchronized reads and writes on the underlying memory.
+    //     std::future::ready(Ok(unsafe {
+    //         distances::pq::Hybrid::Full(self.provider.base_vectors.get_vector_sync(id.into_usize()))
+    //     }))
+    // }
 }
 
 impl<T, D, Ctx> BuildDistanceComputer for HybridAccessor<'_, T, D, Ctx>
