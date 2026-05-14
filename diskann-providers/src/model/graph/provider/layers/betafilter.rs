@@ -247,270 +247,128 @@ where
     }
 }
 
-// ///////////
-// // Tests //
-// ///////////
-//
-// #[cfg(test)]
-// mod tests {
-//     use diskann::{
-//         ANNError, ANNResult, always_escalate,
-//         graph::AdjacencyList,
-//         graph::glue::CopyIds,
-//         provider::{DefaultContext, NeighborAccessor, NoopGuard},
-//     };
-//     use futures_util::future;
-//     use thiserror::Error;
-//
-//     use super::*;
-//
-//     /// A very simple data provider.
-//     struct SimpleProvider;
-//     impl DataProvider for SimpleProvider {
-//         type Context = DefaultContext;
-//         type InternalId = u32;
-//         type ExternalId = u64;
-//         type Guard = NoopGuard<u32>;
-//
-//         type Error = ANNError;
-//
-//         fn to_internal_id(&self, _context: &DefaultContext, gid: &u64) -> ANNResult<u32> {
-//             Ok((*gid).try_into()?)
-//         }
-//
-//         fn to_external_id(&self, _context: &DefaultContext, id: u32) -> ANNResult<u64> {
-//             Ok(id.into())
-//         }
-//     }
-//
-//     /// An `Accessor` that doubles its input ID as its output element.
-//     ///
-//     /// This also tracks the number of calls made to `get_element` and
-//     /// `on_elements_unordered` to ensure that `BetaFilter` correctly forwards these methods.
-//     #[derive(Debug, Default, Clone, Copy)]
-//     struct Doubler {
-//         get_element: usize,
-//         on_elements_unordered: usize,
-//     }
-//
-//     impl SearchExt for Doubler {
-//         async fn starting_points(&self) -> ANNResult<Vec<u32>> {
-//             Ok(vec![0])
-//         }
-//     }
-//
-//     impl Doubler {
-//         fn reset(&mut self) {
-//             *self = Self::default();
-//         }
-//     }
-//
-//     /// A simple error type to test error forwarding.
-//     #[derive(Debug, Error)]
-//     #[error("the value {0} is not allowed")]
-//     pub struct NotAllowed(u32);
-//
-//     impl From<NotAllowed> for ANNError {
-//         #[inline(never)]
-//         fn from(value: NotAllowed) -> Self {
-//             ANNError::log_async_error(value)
-//         }
-//     }
-//
-//     impl HasId for Doubler {
-//         type Id = u32;
-//     }
-//
-//     impl NeighborAccessor for Doubler {
-//         fn get_neighbors(
-//             self,
-//             _id: Self::Id,
-//             neighbors: &mut AdjacencyList<Self::Id>,
-//         ) -> impl Future<Output = ANNResult<Self>> + Send {
-//             neighbors.clear();
-//             future::ok(self)
-//         }
-//     }
-//
-//     always_escalate!(NotAllowed);
-//
-//     impl Accessor for Doubler {
-//         // type Element<'a>
-//         //     = u64
-//         // where
-//         //     Self: 'a;
-//         type ElementRef<'a> = u64;
-//
-//         // type GetError = NotAllowed;
-//
-//         // fn get_element(
-//         //     &mut self,
-//         //     id: u32,
-//         // ) -> impl std::future::Future<Output = Result<Self::Element<'_>, Self::GetError>> + Send
-//         // {
-//         //     self.get_element += 1;
-//         //     let is_err = (100..200).contains(&id);
-//
-//         //     async move {
-//         //         if is_err {
-//         //             Err(NotAllowed(id))
-//         //         } else {
-//         //             let id: u64 = id.into();
-//         //             Ok(2 * id)
-//         //         }
-//         //     }
-//         // }
-//
-//         async fn on_elements_unordered<Itr, F>(
-//             &mut self,
-//             itr: Itr,
-//             mut f: F,
-//         ) -> Result<(), Self::GetError>
-//         where
-//             Self: Sync,
-//             Itr: Iterator<Item = Self::Id> + Send,
-//             F: Send + for<'a> FnMut(Self::ElementRef<'a>, Self::Id),
-//         {
-//             self.on_elements_unordered += 1;
-//             for i in itr {
-//                 f(self.get_element(i).await?, i);
-//             }
-//             Ok(())
-//         }
-//     }
-//
-//     struct AddingComputer(u64);
-//     impl PreprocessedDistanceFunction<u64, f32> for AddingComputer {
-//         fn evaluate_similarity(&self, x: u64) -> f32 {
-//             (self.0 + x) as f32
-//         }
-//     }
-//
-//     impl BuildQueryComputer<u64> for Doubler {
-//         type QueryComputer = AddingComputer;
-//         type QueryComputerError = ANNError;
-//
-//         fn build_query_computer(
-//             &self,
-//             from: u64,
-//         ) -> Result<Self::QueryComputer, Self::QueryComputerError> {
-//             Ok(AddingComputer(from))
-//         }
-//     }
-//
-//     impl ExpandBeam<u64> for Doubler {}
-//
-//     #[derive(Debug)]
-//     struct SimpleStrategy;
-//
-//     impl SearchStrategy<SimpleProvider, u64> for SimpleStrategy {
-//         type SearchAccessor<'a> = Doubler;
-//         type QueryComputer = AddingComputer;
-//         type SearchAccessorError = ANNError;
-//
-//         fn search_accessor<'a>(
-//             &'a self,
-//             _provider: &'a SimpleProvider,
-//             _context: &'a DefaultContext,
-//         ) -> Result<Self::SearchAccessor<'a>, Self::SearchAccessorError> {
-//             Ok(Doubler::default())
-//         }
-//     }
-//
-//     impl glue::DefaultPostProcessor<SimpleProvider, u64> for SimpleStrategy {
-//         diskann::default_post_processor!(CopyIds);
-//     }
-//
-//     /// A simple `QueryLabelProvider` that matches multiples of 3.
-//     #[derive(Debug)]
-//     struct ThreeFilter;
-//
-//     impl QueryLabelProvider<u32> for ThreeFilter {
-//         fn is_match(&self, id: u32) -> bool {
-//             id.is_multiple_of(3)
-//         }
-//     }
-//
-//     #[tokio::test]
-//     async fn test_beta_filter() {
-//         let provider = SimpleProvider;
-//         let context = &DefaultContext;
-//         let beta: f32 = 0.25;
-//
-//         let strategy = BetaFilter::new(SimpleStrategy, Arc::new(ThreeFilter), beta);
-//
-//         let mut accessor: BetaAccessor<_> = strategy.search_accessor(&provider, context).unwrap();
-//         assert_eq!(accessor.inner.get_element, 0);
-//         assert_eq!(accessor.inner.on_elements_unordered, 0);
-//
-//         // Test non-erroring path.
-//         let v = accessor.get_element(1).await.unwrap();
-//         assert_eq!(v, Pair::new(1, 2));
-//
-//         let v = accessor.get_element(2).await.unwrap();
-//         assert_eq!(v, Pair::new(2, 4));
-//
-//         // Test erroring path.
-//         assert!(accessor.get_element(100).await.is_err());
-//         assert!(accessor.get_element(101).await.is_err());
-//
-//         assert_eq!(accessor.inner.get_element, 4);
-//         assert_eq!(accessor.inner.on_elements_unordered, 0);
-//         accessor.inner.reset();
-//
-//         // On elements unordered.
-//         {
-//             let mut v = Vec::new();
-//             accessor
-//                 .on_elements_unordered([1, 2, 3, 4, 5].into_iter(), |element, id| {
-//                     v.push((element, id));
-//                 })
-//                 .await
-//                 .unwrap();
-//
-//             assert_eq!(accessor.inner.get_element, 5);
-//             assert_eq!(accessor.inner.on_elements_unordered, 1);
-//             assert_eq!(
-//                 v,
-//                 &[
-//                     (Pair::new(1, 2), 1),
-//                     (Pair::new(2, 4), 2),
-//                     (Pair::new(3, 6), 3),
-//                     (Pair::new(4, 8), 4),
-//                     (Pair::new(5, 10), 5)
-//                 ]
-//             );
-//             accessor.inner.reset();
-//         }
-//
-//         // On-elements-unordered propagates errors.
-//         assert!(
-//             accessor
-//                 .on_elements_unordered([1, 2, 3, 100, 4].into_iter(), |_, _| {})
-//                 .await
-//                 .is_err()
-//         );
-//
-//         // Computation.
-//         let query = 10;
-//         let computer = accessor.build_query_computer(query).unwrap();
-//
-//         assert_eq!(
-//             computer.evaluate_similarity(accessor.get_element(10).await.unwrap()),
-//             (10 * 2 + query) as f32
-//         );
-//         assert_eq!(
-//             computer.evaluate_similarity(accessor.get_element(11).await.unwrap()),
-//             (11 * 2 + query) as f32
-//         );
-//         assert_eq!(
-//             computer.evaluate_similarity(accessor.get_element(12).await.unwrap()),
-//             beta * ((12 * 2 + query) as f32)
-//         );
-//
-//         // Test dummy implementation of `get_neighbors` for code coverage.
-//         let mut neighbors = AdjacencyList::new();
-//         accessor.get_neighbors(0, &mut neighbors).await.unwrap();
-//         assert_eq!(neighbors.len(), 0);
-//     }
-// }
+///////////
+// Tests //
+///////////
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    use diskann::graph::{
+        glue::{HybridPredicate, Predicate, PredicateMut},
+        test::{provider as test_provider, synthetic::Grid},
+    };
+    use std::collections::HashSet;
+
+    /// A simple `QueryLabelProvider` that matches multiples of 3.
+    #[derive(Debug)]
+    struct ThreeFilter;
+
+    impl QueryLabelProvider<u32> for ThreeFilter {
+        fn is_match(&self, id: u32) -> bool {
+            id.is_multiple_of(3)
+        }
+    }
+
+    struct NotIn<'a>(&'a mut HashSet<u32>);
+
+    impl Predicate<u32> for NotIn<'_> {
+        fn eval(&self, item: &u32) -> bool {
+            !self.0.contains(item)
+        }
+    }
+
+    impl PredicateMut<u32> for NotIn<'_> {
+        fn eval_mut(&mut self, item: &u32) -> bool {
+            self.0.insert(*item)
+        }
+    }
+
+    impl HybridPredicate<u32> for NotIn<'_> {}
+
+    #[tokio::test]
+    async fn test_beta_filter() {
+        // The grid of 4x4 will look like this:
+        //
+        // |             16
+        // | 3  7 11 15
+        // | 2  6 10 14
+        // | 1  5  9 13
+        // | 0  4  8 12
+        // +---------------
+        //
+        let provider = test_provider::Provider::grid(Grid::Two, 4).unwrap();
+        let context = test_provider::Context::new();
+
+        let beta: f32 = 0.25;
+
+        let strategy = BetaFilter::new(test_provider::Strategy::new(), Arc::new(ThreeFilter), beta);
+
+        let start_point_ids: Vec<_> = provider.start_point_ids().collect();
+        assert_eq!(
+            start_point_ids.len(),
+            1,
+            "grid should only have a single start point"
+        );
+        let start_point = start_point_ids[0];
+        assert_eq!(
+            start_point,
+            u32::MAX,
+            "`Provider::grid` is documented to use `u32::MAX` as its start point",
+        );
+
+        let mut visited = HashSet::new();
+        let mut buf = Vec::new();
+
+        let mut accessor = strategy.search_accessor(&provider, &context).unwrap();
+
+        assert_eq!(
+            &*accessor.starting_points().await.unwrap(),
+            &*start_point_ids,
+            "the underlying start points should match",
+        );
+
+        // Build a query computer for the point 0, 0.
+        let computer = accessor.build_query_computer(&[0.0, 0.0]).unwrap();
+
+        accessor
+            .expand_beam(
+                [0, 5, 10, 15].into_iter(),
+                &computer,
+                NotIn(&mut visited),
+                |distance, id| buf.push((distance, id)),
+            )
+            .await
+            .unwrap();
+
+        // The expansion order is unknown, but we know from the structure of the grid what
+        // the result should be.
+        //
+        // Since each entry in the beam is connected
+        buf.sort_by_key(|(_, id)| *id);
+        assert_eq!(
+            &*buf,
+            [
+                (1.0, 1),
+                (1.0, 4),
+                (5.0 * beta, 6),
+                (5.0 * beta, 9),
+                (13.0, 11),
+                (13.0, 14),
+            ]
+        );
+
+        buf.clear();
+        accessor
+            .start_point_distances(&computer, |id, distance| buf.push((distance, id)))
+            .await
+            .unwrap();
+
+        assert_eq!(
+            &*buf,
+            [(32.0 * beta, start_point)],
+            "u32::MAX is a multiple of 3"
+        );
+    }
+}

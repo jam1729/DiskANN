@@ -108,6 +108,50 @@ pub trait SearchExt<T>: BuildQueryComputer<T> + HasId + Send + Sync {
     where
         F: FnMut(Self::Id, f32) + Send;
 
+    /// A primitive routine used by graph search. This is purposely implemented as a
+    /// coarse-grained operation to enable optimization opportunities by the backend.
+    ///
+    /// # Description
+    ///
+    /// For each `i` in `itr`, fetch the adjacency list `v_i` for `i`. For each `v_i`, then
+    /// for each id `j` in `v_i`, compute the distance `d` using `computer` to the data
+    /// associated with `j` and invoke the closure `f` with `d` and `j`, provided
+    /// `pred.eval_mut(j)` evaluates to `true`.
+    ///
+    /// No specification is made on the traversal order of `ids`, the computation order of
+    /// the leaf elements, nor the order in which `pred` is evaluated.
+    ///
+    /// Restriction in the implementation are as follows:
+    ///
+    /// * If `pred.eval_mut()` returns `true` for an id `i`, then `on_neighbors` must be
+    ///   invoked for that item.
+    ///
+    ///   If an item `i` is already passed to `on_neighbors`, the implementation is not
+    ///   obligated to provided it again, though it **may** do so provided `pred.eval_mut()`
+    ///   continues to return `true`.
+    ///
+    /// * If `pred.eval_mut()` returns `false` for an item, then `on_neighbors` must not be
+    ///   invoked for that item.
+    ///
+    /// * `pred.eval()` may be invoked an arbitrary number of times. Proper predicate
+    ///   implementations  will ensure that
+    ///
+    ///   - `pred.eval() == true` implies `pred.eval_mut() == true` if `pred.eval_mut()` is
+    ///     invoked immediately after `pred.eval()`.
+    ///
+    ///   - `pred.eval() == false` implies `pred.eval_mut() == false` and vice-versa.
+    ///
+    /// * `pred.eval_mut()` must be invoked at most once for all transitive items in the beam.
+    ///
+    /// ## Predicate Requirements
+    ///
+    /// Well behaved predicates must never return `true` (allow an id to be forwarded to
+    /// `on_neighbors`) if it previously returned `false`. Implementations of `ExpandBeam`
+    /// are allowed to assume this holds.
+    ///
+    /// Additionally, the callback `on_neighbors` and the predicate have to cooperate. If the
+    /// callback requires unique items, the predicate must be structured such that `eval_mut`
+    /// correctly filters out duplicates.
     fn expand_beam<Itr, P, F>(
         &mut self,
         ids: Itr,
@@ -211,79 +255,6 @@ where
 
 /// The interfaces `contains` and `insert` agree with each other.
 impl<T> HybridPredicate<T> for NotInMut<'_, T> where T: Clone + Eq + std::hash::Hash {}
-
-/// A primitive routine used by graph search. This is purposely implemented as a
-/// coarse-grained operation to enable optimization opportunities by the backend.
-///
-/// # Description
-///
-/// For each `i` in `itr`, fetch the adjacency list `v_i` for `i`. For each `v_i`, then for
-/// each id `j` in `v_i`, compute the distance `d` using `computer` to the data associated with
-/// `j` and invoke the closure `f` with `d` and `j`, provided `pred.eval_mut(j)` evaluates to
-/// `true`.
-///
-/// No specification is made on the traversal order of `ids`, the computation order of the
-/// leaf elements, nor the order in which `pred` is evaluated.
-///
-/// Restriction in the implementation are as follows:
-///
-/// * If `pred.eval_mut()` returns `true` for an id `i`, then `on_neighbors` must be invoked
-///   for that item.
-///
-///   If an item `i` is already passed to `on_neighbors`, the implementation is not obligated
-///   to provided it again, though it **may** do so provided `pred.eval_mut()` continues to
-///   return `true`.
-///
-/// * If `pred.eval_mut()` returns `false` for an item, then `on_neighbors` must not be
-///   invoked for that item.
-///
-/// * `pred.eval()` may be invoked an arbitrary number of times. Proper predicate
-///   implementations  will ensure that
-///
-///   - `pred.eval() == true` implies `pred.eval_mut() == true` if `pred.eval_mut()` is
-///     invoked immediately after `pred.eval()`.
-///
-///   - `pred.eval() == false` implies `pred.eval_mut() == false` and vice-versa.
-///
-/// * `pred.eval_mut()` must be invoked at most once for all transitive items in the beam.
-///
-/// ## Predicate Requirements
-///
-/// Well behaved predicates must never return `true` (allow an id to be forwarded to
-/// `on_neighbors`) if it previously returned `false`. Implementations of `ExpandBeam` are
-/// allowed to assume this holds.
-///
-/// Additionally, the callback `on_neighbors` and the predicate have to cooperate. If the
-/// callback requires unique items, the predicate must be structured such that `eval_mut`
-/// correctly filters out duplicates.
-///
-/// # Provided Implementation
-///
-/// The provided implementation works on each element of `ids` sequentially, pre-filters
-/// the resulting candidate list using `pred.eval()` before invoking
-/// [`BuildQueryComputer::distances_unordered`].
-///
-/// The callback `on_neighbors` is decorated to the uses `pred.eval_mut()`.
-///
-/// This ensures that if `distances_unordered` errors, the predicate is not erroneously
-/// updated.
-///
-/// ## Error Handling
-///
-/// Transient errors yielded by `distances_unordered` are acknowledged and not escalated.
-// pub trait ExpandBeam<T>: BuildQueryComputer<T> {
-//     fn expand_beam<Itr, P, F>(
-//         &mut self,
-//         ids: Itr,
-//         computer: &Self::QueryComputer,
-//         pred: P,
-//         on_neighbors: F,
-//     ) -> impl std::future::Future<Output = ANNResult<()>> + Send
-//     where
-//         Itr: Iterator<Item = Self::Id> + Send,
-//         P: HybridPredicate<Self::Id> + Send + Sync,
-//         F: FnMut(f32, Self::Id) + Send;
-// }
 
 /// A search strategy for query objects of type `T`.
 ///
@@ -836,237 +807,162 @@ where
 // Tests //
 ///////////
 
-// #[cfg(test)]
-// mod tests {
-//     use std::sync::{
-//         Arc,
-//         atomic::{AtomicUsize, Ordering},
-//     };
-//
-//     use diskann_vector::PreprocessedDistanceFunction;
-//     use futures_util::future;
-//
-//     use super::*;
-//     use crate::{
-//         ANNResult, neighbor,
-//         provider::{DelegateNeighbor, ExecutionContext, HasId, NeighborAccessor},
-//     };
-//
-//     // A really simple provider that just holds floats and uses the absolute value for its
-//     // distances.
-//     struct SimpleProvider {
-//         items: Vec<f32>,
-//     }
-//
-//     #[derive(Default, Clone)]
-//     struct CountGetVector {
-//         count: Arc<AtomicUsize>,
-//     }
-//     impl ExecutionContext for CountGetVector {}
-//
-//     impl CountGetVector {
-//         fn count(&self) -> usize {
-//             self.count.load(Ordering::Relaxed)
-//         }
-//
-//         fn clear(&self) {
-//             self.count.store(0, Ordering::Relaxed)
-//         }
-//     }
-//
-//     impl DataProvider for SimpleProvider {
-//         type Context = CountGetVector;
-//         type InternalId = u32;
-//         type ExternalId = u32;
-//         type Error = ANNError;
-//         type Guard = crate::provider::NoopGuard<u32>;
-//
-//         /// Translate an external id to its corresponding internal id.
-//         fn to_internal_id(
-//             &self,
-//             _context: &CountGetVector,
-//             gid: &Self::ExternalId,
-//         ) -> Result<Self::InternalId, Self::Error> {
-//             Ok(*gid)
-//         }
-//
-//         /// Translate an internal id to its corresponding external id.
-//         fn to_external_id(
-//             &self,
-//             _context: &CountGetVector,
-//             id: Self::InternalId,
-//         ) -> Result<Self::ExternalId, Self::Error> {
-//             Ok(id)
-//         }
-//     }
-//
-//     #[derive(Clone, Copy)]
-//     struct Retriever<'a> {
-//         provider: &'a SimpleProvider,
-//         count: &'a CountGetVector,
-//     }
-//
-//     impl SearchExt for Retriever<'_> {
-//         async fn starting_points(&self) -> ANNResult<Vec<u32>> {
-//             Ok(vec![0])
-//         }
-//     }
-//
-//     impl<'a> Retriever<'a> {
-//         fn new(provider: &'a SimpleProvider, count: &'a CountGetVector) -> Self {
-//             Self { provider, count }
-//         }
-//     }
-//
-//     impl HasId for Retriever<'_> {
-//         type Id = u32;
-//     }
-//
-//     impl Accessor for Retriever<'_> {
-//         // type Element<'a>
-//         //     = f32
-//         // where
-//         //     Self: 'a;
-//         type ElementRef<'a> = f32;
-//
-//         // type GetError = ANNError;
-//         // fn get_element(
-//         //     &mut self,
-//         //     id: Self::Id,
-//         // ) -> impl std::future::Future<Output = Result<Self::Element<'_>, Self::GetError>> + Send
-//         // {
-//         //     let result = match self.provider.items.get(id as usize) {
-//         //         Some(v) => {
-//         //             self.count.count.fetch_add(1, Ordering::Relaxed);
-//         //             Ok(*v)
-//         //         }
-//         //         None => panic!("invalid id: {}", id),
-//         //     };
-//         //     async move { result }
-//         // }
-//     }
-//
-//     impl NeighborAccessor for Retriever<'_> {
-//         fn get_neighbors(
-//             self,
-//             _id: Self::Id,
-//             neighbors: &mut AdjacencyList<Self::Id>,
-//         ) -> impl Future<Output = ANNResult<Self>> + Send {
-//             neighbors.clear();
-//             future::ok(self)
-//         }
-//     }
-//
-//     struct QueryComputer;
-//     impl PreprocessedDistanceFunction<f32, f32> for QueryComputer {
-//         fn evaluate_similarity(&self, _changing: f32) -> f32 {
-//             panic!("this method should not be called")
-//         }
-//     }
-//
-//     impl BuildQueryComputer<f32> for Retriever<'_> {
-//         type QueryComputerError = ANNError;
-//         type QueryComputer = QueryComputer;
-//         fn build_query_computer(&self, _from: f32) -> Result<QueryComputer, ANNError> {
-//             Ok(QueryComputer)
-//         }
-//     }
-//
-//     impl ExpandBeam<f32> for Retriever<'_> {}
-//
-//     // This strategy explicitly does not define `post_process` so we can test the provided
-//     // implementation.
-//     struct Strategy;
-//
-//     impl SearchStrategy<SimpleProvider, f32> for Strategy {
-//         type QueryComputer = QueryComputer;
-//         type SearchAccessorError = ANNError;
-//         type SearchAccessor<'a> = Retriever<'a>;
-//
-//         fn search_accessor<'a>(
-//             &'a self,
-//             provider: &'a SimpleProvider,
-//             context: &'a CountGetVector,
-//         ) -> Result<Self::SearchAccessor<'a>, Self::SearchAccessorError> {
-//             Ok(Retriever::new(provider, context))
-//         }
-//     }
-//
-//     impl DefaultPostProcessor<SimpleProvider, f32> for Strategy {
-//         default_post_processor!(CopyIds);
-//     }
-//
-//     #[tokio::test(flavor = "current_thread")]
-//     async fn test_default_post_process() {
-//         let ctx = CountGetVector::default();
-//         let strategy = Strategy;
-//
-//         let num_points: usize = 100;
-//         let provider = SimpleProvider {
-//             items: (0..num_points).map(|i| i as f32).collect(),
-//         };
-//
-//         assert_eq!(provider.to_internal_id(&ctx, &10).unwrap(), 10);
-//         assert_eq!(provider.to_external_id(&ctx, 10).unwrap(), 10);
-//
-//         let mut accessor = strategy.search_accessor(&provider, &ctx).unwrap();
-//         assert_eq!(accessor.starting_points().await.unwrap().as_slice(), &[0]);
-//         for i in 0..num_points {
-//             assert_eq!(accessor.get_element(i as u32).await.unwrap(), i as f32);
-//         }
-//
-//         // Check dummy get_neighbors implmeentation for code coverage
-//         let mut neighbors = AdjacencyList::new();
-//         accessor
-//             .delegate_neighbor()
-//             .get_neighbors(0, &mut neighbors)
-//             .await
-//             .unwrap();
-//         assert_eq!(neighbors.len(), 0);
-//
-//         // Check that the correct number of reads were emitted.
-//         assert_eq!(ctx.count(), num_points);
-//         ctx.clear();
-//
-//         let query = 11.5;
-//         let computer = accessor.build_query_computer(query).unwrap();
-//
-//         for input_len in 0..10 {
-//             let input: Vec<_> = (0..input_len)
-//                 .map(|i| Neighbor::<u32>::new(i as u32, i as f32))
-//                 .collect();
-//             for output_len in 0..10 {
-//                 let mut output = vec![Neighbor::<u32>::default(); output_len];
-//
-//                 let count = strategy
-//                     .default_post_processor()
-//                     .post_process(
-//                         &mut accessor,
-//                         query,
-//                         &computer,
-//                         input.iter().copied(),
-//                         &mut neighbor::BackInserter::new(output.as_mut_slice()),
-//                     )
-//                     .await
-//                     .unwrap();
-//
-//                 assert_eq!(count, input_len.min(output_len));
-//
-//                 // Check that the in-range values were properly copied.
-//                 for (i, n) in output.iter().take(count).enumerate() {
-//                     assert_eq!(i, n.id as usize);
-//                     assert_eq!(i as f32, n.distance);
-//                 }
-//
-//                 // Check that out-of-range values were untouched.
-//                 for n in output.iter().skip(count) {
-//                     assert_eq!(n.id, 0);
-//                     assert_eq!(n.distance, 0.0);
-//                 }
-//             }
-//         }
-//
-//         // Ensure that no reads were emitted.
-//         assert_eq!(ctx.count(), 0);
-//     }
-// }
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::{
+        ANNResult, neighbor,
+        provider::{DefaultContext, HasId},
+    };
+
+    // A really simple provider that just holds floats and uses the absolute value for its
+    // distances.
+    struct SimpleProvider;
+
+    impl DataProvider for SimpleProvider {
+        type Context = DefaultContext;
+        type InternalId = u32;
+        type ExternalId = u32;
+        type Error = ANNError;
+        type Guard = crate::provider::NoopGuard<u32>;
+
+        /// Translate an external id to its corresponding internal id.
+        fn to_internal_id(
+            &self,
+            _context: &DefaultContext,
+            gid: &Self::ExternalId,
+        ) -> Result<Self::InternalId, Self::Error> {
+            Ok(*gid)
+        }
+
+        /// Translate an internal id to its corresponding external id.
+        fn to_external_id(
+            &self,
+            _context: &DefaultContext,
+            id: Self::InternalId,
+        ) -> Result<Self::ExternalId, Self::Error> {
+            Ok(id)
+        }
+    }
+
+    #[derive(Clone, Copy)]
+    struct Accessor;
+
+    impl SearchExt<f32> for Accessor {
+        async fn starting_points(&self) -> ANNResult<Vec<u32>> {
+            unimplemented!();
+        }
+
+        async fn start_point_distances<F>(
+            &mut self,
+            _computer: &Self::QueryComputer,
+            _f: F,
+        ) -> ANNResult<()>
+        where
+            F: FnMut(Self::Id, f32) + Send,
+        {
+            unimplemented!();
+        }
+
+        async fn expand_beam<Itr, P, F>(
+            &mut self,
+            _ids: Itr,
+            _computer: &Self::QueryComputer,
+            _pred: P,
+            _on_neighbors: F,
+        ) -> ANNResult<()>
+        where
+            Itr: Iterator<Item = Self::Id> + Send,
+            P: HybridPredicate<Self::Id> + Send + Sync,
+            F: FnMut(f32, Self::Id) + Send,
+        {
+            unimplemented!();
+        }
+    }
+
+    impl HasId for Accessor {
+        type Id = u32;
+    }
+
+    struct QueryComputer;
+
+    impl BuildQueryComputer<f32> for Accessor {
+        type QueryComputerError = ANNError;
+        type QueryComputer = QueryComputer;
+        fn build_query_computer(&self, _from: f32) -> Result<QueryComputer, ANNError> {
+            Ok(QueryComputer)
+        }
+    }
+
+    // This strategy explicitly does not define `post_process` so we can test the provided
+    // implementation.
+    struct Strategy;
+
+    impl SearchStrategy<SimpleProvider, f32> for Strategy {
+        type QueryComputer = QueryComputer;
+        type SearchAccessorError = ANNError;
+        type SearchAccessor<'a> = Accessor;
+
+        fn search_accessor<'a>(
+            &'a self,
+            _provider: &'a SimpleProvider,
+            _context: &'a DefaultContext,
+        ) -> Result<Self::SearchAccessor<'a>, Self::SearchAccessorError> {
+            Ok(Accessor)
+        }
+    }
+
+    impl DefaultPostProcessor<SimpleProvider, f32> for Strategy {
+        default_post_processor!(CopyIds);
+    }
+
+    #[tokio::test(flavor = "current_thread")]
+    async fn test_default_post_process() {
+        let ctx = DefaultContext;
+        let strategy = Strategy;
+        let provider = SimpleProvider;
+
+        assert_eq!(provider.to_internal_id(&ctx, &10).unwrap(), 10);
+        assert_eq!(provider.to_external_id(&ctx, 10).unwrap(), 10);
+
+        let mut accessor = strategy.search_accessor(&provider, &ctx).unwrap();
+
+        let query = 11.5;
+        let computer = accessor.build_query_computer(query).unwrap();
+
+        for input_len in 0..10 {
+            let input: Vec<_> = (0..input_len)
+                .map(|i| Neighbor::<u32>::new(i as u32, i as f32))
+                .collect();
+            for output_len in 0..10 {
+                let mut output = vec![Neighbor::<u32>::default(); output_len];
+
+                let count = strategy
+                    .default_post_processor()
+                    .post_process(
+                        &mut accessor,
+                        query,
+                        &computer,
+                        input.iter().copied(),
+                        &mut neighbor::BackInserter::new(output.as_mut_slice()),
+                    )
+                    .await
+                    .unwrap();
+
+                assert_eq!(count, input_len.min(output_len));
+
+                // Check that the in-range values were properly copied.
+                for (i, n) in output.iter().take(count).enumerate() {
+                    assert_eq!(i, n.id as usize);
+                    assert_eq!(i as f32, n.distance);
+                }
+
+                // Check that out-of-range values were untouched.
+                for n in output.iter().skip(count) {
+                    assert_eq!(n.id, 0);
+                    assert_eq!(n.distance, 0.0);
+                }
+            }
+        }
+    }
+}

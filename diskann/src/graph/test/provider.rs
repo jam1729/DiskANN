@@ -472,6 +472,11 @@ impl Provider {
             .map(|ref_multi| *ref_multi.key())
             .filter(|id| !self.is_start_point(*id))
     }
+
+    // Return all start point Ids.
+    pub fn start_point_ids(&self) -> impl Iterator<Item = u32> + '_ {
+        self.config.start_points.keys().copied()
+    }
 }
 
 /// Provider level metrics.
