@@ -115,6 +115,20 @@ class IterRecord:
 class CommandError(RuntimeError):
     pass
 
+
+def _json_safe(value: Any) -> Any:
+    if isinstance(value, Path):
+        return str(value)
+    if dataclasses.is_dataclass(value):
+        return _json_safe(dataclasses.asdict(value))
+    if isinstance(value, dict):
+        return {key: _json_safe(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [_json_safe(item) for item in value]
+    if isinstance(value, tuple):
+        return [_json_safe(item) for item in value]
+    return value
+
 def run_cmd(cmd: List[str], timeout: int = 0, verbose: bool = True) -> str:
     if verbose:
         print("[CMD]", " ".join(cmd), flush=True)
@@ -122,8 +136,8 @@ def run_cmd(cmd: List[str], timeout: int = 0, verbose: bool = True) -> str:
         proc = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, timeout=timeout or None, check=False)
     except subprocess.TimeoutExpired:
         raise CommandError(f"Timeout running command: {' '.join(cmd)}")
-    if verbose:
-        print(proc.stdout)
+    # if verbose:
+    #     print(proc.stdout)
     if proc.returncode != 0:
         raise CommandError(f"Command failed ({proc.returncode}): {' '.join(cmd)}\nOutput:\n{proc.stdout}")
     return proc.stdout
@@ -290,7 +304,7 @@ def greedy_search(cfg: Config) -> Dict[str, Any]:
     }
     if cfg.log_json:
         with open(cfg.log_json, 'w') as f:
-            json.dump(result, f, indent=2)
+            json.dump(_json_safe(result), f, indent=2)
     return result
 
 def parse_args(argv: List[str]) -> Config:
