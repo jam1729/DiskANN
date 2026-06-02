@@ -29,6 +29,12 @@ target_link_libraries(int8_to_float ${PROJECT_NAME})
 add_executable(int8_to_float_scale int8_to_float_scale.cpp)
 target_link_libraries(int8_to_float_scale ${PROJECT_NAME})
 
+add_executable(generate_sq_variable generate_sq_variable.cpp)
+target_link_libraries(generate_sq_variable ${PROJECT_NAME})
+
+add_executable(int8_to_float_scale_variable int8_to_float_scale_variable.cpp)
+target_link_libraries(int8_to_float_scale_variable ${PROJECT_NAME})
+
 add_executable(uint8_to_float uint8_to_float.cpp)
 target_link_libraries(uint8_to_float ${PROJECT_NAME})
 
