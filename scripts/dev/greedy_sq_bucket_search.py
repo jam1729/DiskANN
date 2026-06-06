@@ -266,57 +266,67 @@ def greedy_search(cfg: Config, bias: List[float], scale: List[float]) -> Dict[st
         print(f"\nInitial uniform allocation {current_alloc} ({rec.avg_bytes_per_vec:.1f} bytes) => recall={best_recall:.6f}\n")
         
     prev_iteration_records: List[IterRecord] = [rec]
+    candidates: List[Tuple[float, List[int], IterRecord]] = []
     
-    for it in range(1, cfg.max_iters + 1):
-        candidates: List[Tuple[float, List[int], IterRecord]] = []
-        
-        for b in range(cfg.num_buckets):
-            if current_alloc[b] + cfg.increment > cfg.max_per_bucket:
-                continue
-            if cfg.max_total_bytes is not None and sum(current_alloc) + cfg.increment > cfg.max_total_bytes:
-                continue
+    try:
+        for it in range(1, cfg.max_iters + 1):
+            candidates = []
+            
+            for b in range(cfg.num_buckets):
+                if current_alloc[b] + cfg.increment > cfg.max_per_bucket:
+                    continue
+                if cfg.max_total_bytes is not None and sum(current_alloc) + cfg.increment > cfg.max_total_bytes:
+                    continue
+                    
+                cand_alloc = current_alloc.copy()
+                cand_alloc[b] += cfg.increment
+                tag = f"it{it}_b{b}_plus{cfg.increment}"
                 
-            cand_alloc = current_alloc.copy()
-            cand_alloc[b] += cfg.increment
-            tag = f"it{it}_b{b}_plus{cfg.increment}"
-            
-            try:
-                recall, rec_cand = evaluate_allocation(cfg, bias, scale, cand_alloc, tag=tag)
-                rec_cand.iteration = it
-                candidates.append((recall, cand_alloc, rec_cand))
-            except Exception as e:
-                print(f"[WARN] Skipping candidate bucket {b} due to error: {e}")
-                continue
+                try:
+                    recall, rec_cand = evaluate_allocation(cfg, bias, scale, cand_alloc, tag=tag)
+                    rec_cand.iteration = it
+                    candidates.append((recall, cand_alloc, rec_cand))
+                except Exception as e:
+                    print(f"[WARN] Skipping candidate bucket {b} due to error: {e}")
+                    continue
+                    
+            if not candidates:
+                if cfg.verbose:
+                    print("All buckets at maximum precision or budget constraint met. Stopping search.")
+                break
                 
-        if not candidates:
-            if cfg.verbose:
-                print("All buckets at maximum precision or budget constraint met. Stopping search.")
-            break
+            # Select candidate with best recall (tie-breaker: fewer bytes, then lexicographically)
+            candidates.sort(key=lambda x: (-x[0], x[2].avg_bytes_per_vec, x[1]))
+            best_cand_recall, best_cand_alloc, best_cand_rec = candidates[0]
             
-        # Select candidate with best recall (tie-breaker: fewer bytes, then lexicographically)
-        candidates.sort(key=lambda x: (-x[0], x[2].avg_bytes_per_vec, x[1]))
-        best_cand_recall, best_cand_alloc, best_cand_rec = candidates[0]
-        
-        if best_cand_recall > best_recall + 1e-9:
-            best_recall = best_cand_recall
-            current_alloc = best_cand_alloc
-            best_cand_rec.improved = True
-            history.append(best_cand_rec)
-            
-            if cfg.verbose:
-                print(f"\n[ITER {it}] Upgrade SUCCESS -> New recall={best_recall:.6f} with alloc {current_alloc} ({best_cand_rec.avg_bytes_per_vec:.1f} bytes)\n")
-        else:
-            best_cand_rec.improved = False
-            history.append(best_cand_rec)
-            if cfg.verbose:
-                print(f"\n[ITER {it}] No candidate improved recall (best candidate recall={best_cand_recall:.6f}). Stopping search.\n")
+            if best_cand_recall > best_recall + 1e-9:
+                best_recall = best_cand_recall
+                current_alloc = best_cand_alloc
+                best_cand_rec.improved = True
+                history.append(best_cand_rec)
+                
+                if cfg.verbose:
+                    print(f"\n[ITER {it}] Upgrade SUCCESS -> New recall={best_recall:.6f} with alloc {current_alloc} ({best_cand_rec.avg_bytes_per_vec:.1f} bytes)\n")
+            else:
+                best_cand_rec.improved = False
+                history.append(best_cand_rec)
+                if cfg.verbose:
+                    print(f"\n[ITER {it}] No candidate improved recall (best candidate recall={best_cand_recall:.6f}). Stopping search.\n")
+                if not cfg.keep_all:
+                    _cleanup_iteration(prev_iteration_records, preserve_allocation=current_alloc, verbose=cfg.verbose)
+                break
+                
             if not cfg.keep_all:
                 _cleanup_iteration(prev_iteration_records, preserve_allocation=current_alloc, verbose=cfg.verbose)
-            break
-            
+            prev_iteration_records = [cand[2] for cand in candidates]
+    finally:
         if not cfg.keep_all:
-            _cleanup_iteration(prev_iteration_records, preserve_allocation=current_alloc, verbose=cfg.verbose)
-        prev_iteration_records = [cand[2] for cand in candidates]
+            to_clean = []
+            for cand in candidates:
+                to_clean.append(cand[2])
+            to_clean.extend(prev_iteration_records)
+            to_clean.extend(history)
+            _cleanup_iteration(to_clean, preserve_allocation=current_alloc, verbose=cfg.verbose)
         
     # Serialize results
     result = {

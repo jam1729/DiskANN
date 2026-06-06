@@ -2,7 +2,7 @@
 set -euo pipefail
 
 DATASET=quora_500k
-EMBEDDING_MODEL="openai_text_large_3"
+EMBEDDING_MODEL="cohere_v4"
 BASE_FILE_NAME=base.bin
 QUERY_FILE_NAME=query.bin
 

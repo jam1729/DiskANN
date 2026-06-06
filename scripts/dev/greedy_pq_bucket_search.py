@@ -248,55 +248,66 @@ def greedy_search(cfg: Config) -> Dict[str, Any]:
         print(f"Initial allocation {current_alloc} => recall={best_recall:.6f}")
     # Track artifacts from the previous iteration (candidates) for cleanup.
     prev_iteration_records: List[IterRecord] = [rec]
-    for it in range(1, cfg.max_iters + 1):
-        candidates: List[Tuple[float, List[int], IterRecord]] = []
-        improved = False
-        for b in range(cfg.num_buckets):
-            if current_alloc[b] + cfg.increment > cfg.max_per_bucket:
-                print(f"Iter {it}: Bucket {b} exceeded max_per_bucket")
-            if cfg.max_total_bytes is not None and sum(current_alloc) + cfg.increment > cfg.max_total_bytes:
-                print(f"Iter {it}: Total allocation exceeded max_total_bytes")
-                continue
-            cand_alloc = current_alloc.copy()
-            cand_alloc[b] += cfg.increment
-            tag = f"it{it}_b{b}_plus{cfg.increment}"
-            try:
-                recall, rec_cand = evaluate_allocation(cfg, cand_alloc, tag=tag)
-            except Exception as e:
-                print(f"[WARN] Skipping candidate bucket {b} due to error: {e}")
-                continue
-            rec_cand.iteration = it
-            candidates.append((recall, cand_alloc, rec_cand))
-        if not candidates:
-            if cfg.verbose:
-                print("No feasible candidates; stopping.")
-            break
-        # Choose best recall (tie-breaker: fewer bytes, then lexicographically)
-        candidates.sort(key=lambda x: (-x[0], sum(x[1]), x[1]))
-        best_cand_recall, best_cand_alloc, best_cand_rec = candidates[0]
-        if best_cand_recall > best_recall + 1e-9:  # improvement threshold
-            best_recall = best_cand_recall
-            current_alloc = best_cand_alloc
-            best_cand_rec.improved = True
-            history.append(best_cand_rec)
-            improved = True
-            if cfg.verbose:
-                print(f"Iter {it}: improved recall -> {best_recall:.6f} with alloc {current_alloc}")
-        else:
-            # Record best (non-improving) candidate for audit, then stop.
-            best_cand_rec.improved = False
-            history.append(best_cand_rec)
-            if cfg.verbose:
-                print(f"Iter {it}: no improvement (best candidate recall={best_cand_recall:.6f}); stopping.")
-            # Final cleanup of previous iteration candidates if needed
+    candidates: List[Tuple[float, List[int], IterRecord]] = []
+    try:
+        for it in range(1, cfg.max_iters + 1):
+            candidates = []
+            improved = False
+            for b in range(cfg.num_buckets):
+                if current_alloc[b] + cfg.increment > cfg.max_per_bucket:
+                    print(f"Iter {it}: Bucket {b} exceeded max_per_bucket")
+                if cfg.max_total_bytes is not None and sum(current_alloc) + cfg.increment > cfg.max_total_bytes:
+                    print(f"Iter {it}: Total allocation exceeded max_total_bytes")
+                    continue
+                cand_alloc = current_alloc.copy()
+                cand_alloc[b] += cfg.increment
+                tag = f"it{it}_b{b}_plus{cfg.increment}"
+                try:
+                    recall, rec_cand = evaluate_allocation(cfg, cand_alloc, tag=tag)
+                except Exception as e:
+                    print(f"[WARN] Skipping candidate bucket {b} due to error: {e}")
+                    continue
+                rec_cand.iteration = it
+                candidates.append((recall, cand_alloc, rec_cand))
+            if not candidates:
+                if cfg.verbose:
+                    print("No feasible candidates; stopping.")
+                break
+            # Choose best recall (tie-breaker: fewer bytes, then lexicographically)
+            candidates.sort(key=lambda x: (-x[0], sum(x[1]), x[1]))
+            best_cand_recall, best_cand_alloc, best_cand_rec = candidates[0]
+            if best_cand_recall > best_recall + 1e-9:  # improvement threshold
+                best_recall = best_cand_recall
+                current_alloc = best_cand_alloc
+                best_cand_rec.improved = True
+                history.append(best_cand_rec)
+                improved = True
+                if cfg.verbose:
+                    print(f"Iter {it}: improved recall -> {best_recall:.6f} with alloc {current_alloc}")
+            else:
+                # Record best (non-improving) candidate for audit, then stop.
+                best_cand_rec.improved = False
+                history.append(best_cand_rec)
+                if cfg.verbose:
+                    print(f"Iter {it}: no improvement (best candidate recall={best_cand_recall:.6f}); stopping.")
+                # Final cleanup of previous iteration candidates if needed
+                if not cfg.keep_all:
+                    _cleanup_iteration(prev_iteration_records, preserve_allocation=current_alloc, verbose=cfg.verbose)
+                break
+            # After completing this iteration and deciding to continue, cleanup artifacts from previous iteration
             if not cfg.keep_all:
                 _cleanup_iteration(prev_iteration_records, preserve_allocation=current_alloc, verbose=cfg.verbose)
-            break
-        # After completing this iteration and deciding to continue, cleanup artifacts from previous iteration
+            # Prepare for next iteration: current iteration's candidate records become previous
+            prev_iteration_records = [cand[2] for cand in candidates]
+    finally:
         if not cfg.keep_all:
-            _cleanup_iteration(prev_iteration_records, preserve_allocation=current_alloc, verbose=cfg.verbose)
-        # Prepare for next iteration: current iteration's candidate records become previous
-        prev_iteration_records = [cand[2] for cand in candidates]
+            to_clean = []
+            for cand in candidates:
+                to_clean.append(cand[2])
+            to_clean.extend(prev_iteration_records)
+            to_clean.extend(history)
+            _cleanup_iteration(to_clean, preserve_allocation=current_alloc, verbose=cfg.verbose)
+            
     result = {
         "final_allocation": current_alloc,
         "final_recall": best_recall,

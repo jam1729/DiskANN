@@ -4,7 +4,7 @@ set -euo pipefail
 set -x
 
 DATASET=quora_500k
-EMBEDDING_MODEL="openai_text_large_3"
+EMBEDDING_MODEL="cohere_v4"
 BASE_FILE_NAME=base.bin
 QUERY_FILE_NAME=query.bin
 RUN_NAME=${RUN_NAME:-chunks_buckets_8_init_8_inc_8_max_384_sampl_01_bytes_384}
