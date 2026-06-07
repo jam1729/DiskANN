@@ -35,6 +35,7 @@ PQ Sampling rate: Recall
 
   
   
+---
 ### MS Marco - text-embedding-3-large
 #### Uniform PQ
 Summary of recall results:
@@ -2077,6 +2078,7 @@ PQ_GREEDY_EVAL tag=it40_b6_plus8 alloc=[48, 48, 48, 48, 48, 48, 56, 40] bytes=38
 PQ_GREEDY_EVAL tag=it40_b7_plus8 alloc=[48, 48, 48, 48, 48, 48, 48, 48] bytes=384 recall=87.680700
 
 
+---
 ### DBPedia OpenAI-text-large-3
 
 #### Uniform PQ
@@ -3441,6 +3443,2025 @@ Bytes,Recall
 
 
 
+
+----
+### Quora openai text large 3
+##### Uniform
+PQ sweep completed!
+Results directory: /tmp/pq_sweep_1780692993
+
+
+Summary of recall results:
+Bytes,Recall
+64,51.3949
+96,63.7776
+128,72.0662
+160,77.6642
+192,81.486
+224,84.0399
+256,86.0162
+288,87.1963
+320,88.21
+352,89.1479
+384,89.9645
+
+
+##### Variable
+PQ_GREEDY_EVAL tag=init alloc=[8, 8, 8, 8, 8, 8, 8, 8] bytes=64 recall=51.366000
+
+PQ_GREEDY_EVAL tag=it1_b0_plus8 alloc=[16, 8, 8, 8, 8, 8, 8, 8] bytes=72 recall=56.897100
+
+PQ_GREEDY_EVAL tag=it1_b1_plus8 alloc=[8, 16, 8, 8, 8, 8, 8, 8] bytes=72 recall=56.316600
+
+PQ_GREEDY_EVAL tag=it1_b2_plus8 alloc=[8, 8, 16, 8, 8, 8, 8, 8] bytes=72 recall=55.286900
+
+PQ_GREEDY_EVAL tag=it1_b3_plus8 alloc=[8, 8, 8, 16, 8, 8, 8, 8] bytes=72 recall=54.694100
+
+PQ_GREEDY_EVAL tag=it1_b4_plus8 alloc=[8, 8, 8, 8, 16, 8, 8, 8] bytes=72 recall=53.605800
+
+PQ_GREEDY_EVAL tag=it1_b5_plus8 alloc=[8, 8, 8, 8, 8, 16, 8, 8] bytes=72 recall=53.656500
+
+PQ_GREEDY_EVAL tag=it1_b6_plus8 alloc=[8, 8, 8, 8, 8, 8, 16, 8] bytes=72 recall=53.478500
+
+PQ_GREEDY_EVAL tag=it1_b7_plus8 alloc=[8, 8, 8, 8, 8, 8, 8, 16] bytes=72 recall=53.721200
+
+PQ_GREEDY_EVAL tag=it2_b0_plus8 alloc=[24, 8, 8, 8, 8, 8, 8, 8] bytes=80 recall=61.226700
+
+PQ_GREEDY_EVAL tag=it2_b1_plus8 alloc=[16, 16, 8, 8, 8, 8, 8, 8] bytes=80 recall=61.082500
+
+PQ_GREEDY_EVAL tag=it2_b2_plus8 alloc=[16, 8, 16, 8, 8, 8, 8, 8] bytes=80 recall=60.409200
+
+PQ_GREEDY_EVAL tag=it2_b3_plus8 alloc=[16, 8, 8, 16, 8, 8, 8, 8] bytes=80 recall=59.700600
+
+PQ_GREEDY_EVAL tag=it2_b4_plus8 alloc=[16, 8, 8, 8, 16, 8, 8, 8] bytes=80 recall=58.883100
+
+PQ_GREEDY_EVAL tag=it2_b5_plus8 alloc=[16, 8, 8, 8, 8, 16, 8, 8] bytes=80 recall=59.244400
+
+PQ_GREEDY_EVAL tag=it2_b6_plus8 alloc=[16, 8, 8, 8, 8, 8, 16, 8] bytes=80 recall=58.820400
+
+PQ_GREEDY_EVAL tag=it2_b7_plus8 alloc=[16, 8, 8, 8, 8, 8, 8, 16] bytes=80 recall=59.128900
+
+PQ_GREEDY_EVAL tag=it3_b0_plus8 alloc=[32, 8, 8, 8, 8, 8, 8, 8] bytes=88 recall=64.221000
+
+PQ_GREEDY_EVAL tag=it3_b1_plus8 alloc=[24, 16, 8, 8, 8, 8, 8, 8] bytes=88 recall=65.039300
+
+PQ_GREEDY_EVAL tag=it3_b2_plus8 alloc=[24, 8, 16, 8, 8, 8, 8, 8] bytes=88 recall=64.164200
+
+PQ_GREEDY_EVAL tag=it3_b3_plus8 alloc=[24, 8, 8, 16, 8, 8, 8, 8] bytes=88 recall=63.681200
+
+PQ_GREEDY_EVAL tag=it3_b4_plus8 alloc=[24, 8, 8, 8, 16, 8, 8, 8] bytes=88 recall=63.026900
+
+PQ_GREEDY_EVAL tag=it3_b5_plus8 alloc=[24, 8, 8, 8, 8, 16, 8, 8] bytes=88 recall=62.947500
+
+PQ_GREEDY_EVAL tag=it3_b6_plus8 alloc=[24, 8, 8, 8, 8, 8, 16, 8] bytes=88 recall=62.852400
+
+PQ_GREEDY_EVAL tag=it3_b7_plus8 alloc=[24, 8, 8, 8, 8, 8, 8, 16] bytes=88 recall=63.077700
+
+PQ_GREEDY_EVAL tag=it4_b0_plus8 alloc=[32, 16, 8, 8, 8, 8, 8, 8] bytes=96 recall=67.604800
+
+PQ_GREEDY_EVAL tag=it4_b1_plus8 alloc=[24, 24, 8, 8, 8, 8, 8, 8] bytes=96 recall=67.576900
+
+PQ_GREEDY_EVAL tag=it4_b2_plus8 alloc=[24, 16, 16, 8, 8, 8, 8, 8] bytes=96 recall=67.585500
+
+PQ_GREEDY_EVAL tag=it4_b3_plus8 alloc=[24, 16, 8, 16, 8, 8, 8, 8] bytes=96 recall=67.134300
+
+PQ_GREEDY_EVAL tag=it4_b4_plus8 alloc=[24, 16, 8, 8, 16, 8, 8, 8] bytes=96 recall=66.350800
+
+PQ_GREEDY_EVAL tag=it4_b5_plus8 alloc=[24, 16, 8, 8, 8, 16, 8, 8] bytes=96 recall=66.453800
+
+PQ_GREEDY_EVAL tag=it4_b6_plus8 alloc=[24, 16, 8, 8, 8, 8, 16, 8] bytes=96 recall=66.571500
+
+PQ_GREEDY_EVAL tag=it4_b7_plus8 alloc=[24, 16, 8, 8, 8, 8, 8, 16] bytes=96 recall=66.503300
+
+PQ_GREEDY_EVAL tag=it5_b0_plus8 alloc=[40, 16, 8, 8, 8, 8, 8, 8] bytes=104 recall=69.499600
+
+PQ_GREEDY_EVAL tag=it5_b1_plus8 alloc=[32, 24, 8, 8, 8, 8, 8, 8] bytes=104 recall=70.014300
+
+PQ_GREEDY_EVAL tag=it5_b2_plus8 alloc=[32, 16, 16, 8, 8, 8, 8, 8] bytes=104 recall=70.009900
+
+PQ_GREEDY_EVAL tag=it5_b3_plus8 alloc=[32, 16, 8, 16, 8, 8, 8, 8] bytes=104 recall=69.557300
+
+PQ_GREEDY_EVAL tag=it5_b4_plus8 alloc=[32, 16, 8, 8, 16, 8, 8, 8] bytes=104 recall=68.947500
+
+PQ_GREEDY_EVAL tag=it5_b5_plus8 alloc=[32, 16, 8, 8, 8, 16, 8, 8] bytes=104 recall=68.871600
+
+PQ_GREEDY_EVAL tag=it5_b6_plus8 alloc=[32, 16, 8, 8, 8, 8, 16, 8] bytes=104 recall=68.896200
+
+PQ_GREEDY_EVAL tag=it5_b7_plus8 alloc=[32, 16, 8, 8, 8, 8, 8, 16] bytes=104 recall=69.067700
+
+PQ_GREEDY_EVAL tag=it6_b0_plus8 alloc=[40, 24, 8, 8, 8, 8, 8, 8] bytes=112 recall=71.776200
+
+PQ_GREEDY_EVAL tag=it6_b1_plus8 alloc=[32, 32, 8, 8, 8, 8, 8, 8] bytes=112 recall=71.693900
+
+PQ_GREEDY_EVAL tag=it6_b2_plus8 alloc=[32, 24, 16, 8, 8, 8, 8, 8] bytes=112 recall=72.236900
+
+PQ_GREEDY_EVAL tag=it6_b3_plus8 alloc=[32, 24, 8, 16, 8, 8, 8, 8] bytes=112 recall=71.972100
+
+PQ_GREEDY_EVAL tag=it6_b4_plus8 alloc=[32, 24, 8, 8, 16, 8, 8, 8] bytes=112 recall=71.458200
+
+PQ_GREEDY_EVAL tag=it6_b5_plus8 alloc=[32, 24, 8, 8, 8, 16, 8, 8] bytes=112 recall=71.364100
+
+PQ_GREEDY_EVAL tag=it6_b6_plus8 alloc=[32, 24, 8, 8, 8, 8, 16, 8] bytes=112 recall=71.254500
+
+PQ_GREEDY_EVAL tag=it6_b7_plus8 alloc=[32, 24, 8, 8, 8, 8, 8, 16] bytes=112 recall=71.355800
+
+PQ_GREEDY_EVAL tag=it7_b0_plus8 alloc=[40, 24, 16, 8, 8, 8, 8, 8] bytes=120 recall=73.799000
+
+PQ_GREEDY_EVAL tag=it7_b1_plus8 alloc=[32, 32, 16, 8, 8, 8, 8, 8] bytes=120 recall=73.931900
+
+PQ_GREEDY_EVAL tag=it7_b2_plus8 alloc=[32, 24, 24, 8, 8, 8, 8, 8] bytes=120 recall=73.920700
+
+PQ_GREEDY_EVAL tag=it7_b3_plus8 alloc=[32, 24, 16, 16, 8, 8, 8, 8] bytes=120 recall=74.110600
+
+PQ_GREEDY_EVAL tag=it7_b4_plus8 alloc=[32, 24, 16, 8, 16, 8, 8, 8] bytes=120 recall=73.443300
+
+PQ_GREEDY_EVAL tag=it7_b5_plus8 alloc=[32, 24, 16, 8, 8, 16, 8, 8] bytes=120 recall=73.434600
+
+PQ_GREEDY_EVAL tag=it7_b6_plus8 alloc=[32, 24, 16, 8, 8, 8, 16, 8] bytes=120 recall=73.504600
+
+PQ_GREEDY_EVAL tag=it7_b7_plus8 alloc=[32, 24, 16, 8, 8, 8, 8, 16] bytes=120 recall=73.541300
+
+PQ_GREEDY_EVAL tag=it8_b0_plus8 alloc=[40, 24, 16, 16, 8, 8, 8, 8] bytes=128 recall=75.461100
+
+PQ_GREEDY_EVAL tag=it8_b1_plus8 alloc=[32, 32, 16, 16, 8, 8, 8, 8] bytes=128 recall=75.666700
+
+PQ_GREEDY_EVAL tag=it8_b2_plus8 alloc=[32, 24, 24, 16, 8, 8, 8, 8] bytes=128 recall=75.544200
+
+PQ_GREEDY_EVAL tag=it8_b3_plus8 alloc=[32, 24, 16, 24, 8, 8, 8, 8] bytes=128 recall=75.217900
+
+PQ_GREEDY_EVAL tag=it8_b4_plus8 alloc=[32, 24, 16, 16, 16, 8, 8, 8] bytes=128 recall=75.158500
+
+PQ_GREEDY_EVAL tag=it8_b5_plus8 alloc=[32, 24, 16, 16, 8, 16, 8, 8] bytes=128 recall=75.241900
+
+PQ_GREEDY_EVAL tag=it8_b6_plus8 alloc=[32, 24, 16, 16, 8, 8, 16, 8] bytes=128 recall=75.192100
+
+PQ_GREEDY_EVAL tag=it8_b7_plus8 alloc=[32, 24, 16, 16, 8, 8, 8, 16] bytes=128 recall=75.211800
+
+PQ_GREEDY_EVAL tag=it9_b0_plus8 alloc=[40, 32, 16, 16, 8, 8, 8, 8] bytes=136 recall=76.851300
+
+PQ_GREEDY_EVAL tag=it9_b1_plus8 alloc=[32, 40, 16, 16, 8, 8, 8, 8] bytes=136 recall=76.578500
+
+PQ_GREEDY_EVAL tag=it9_b2_plus8 alloc=[32, 32, 24, 16, 8, 8, 8, 8] bytes=136 recall=76.888600
+
+PQ_GREEDY_EVAL tag=it9_b3_plus8 alloc=[32, 32, 16, 24, 8, 8, 8, 8] bytes=136 recall=76.672000
+
+PQ_GREEDY_EVAL tag=it9_b4_plus8 alloc=[32, 32, 16, 16, 16, 8, 8, 8] bytes=136 recall=76.696500
+
+PQ_GREEDY_EVAL tag=it9_b5_plus8 alloc=[32, 32, 16, 16, 8, 16, 8, 8] bytes=136 recall=76.597900
+
+PQ_GREEDY_EVAL tag=it9_b6_plus8 alloc=[32, 32, 16, 16, 8, 8, 16, 8] bytes=136 recall=76.666700
+
+PQ_GREEDY_EVAL tag=it9_b7_plus8 alloc=[32, 32, 16, 16, 8, 8, 8, 16] bytes=136 recall=76.584900
+
+PQ_GREEDY_EVAL tag=it10_b0_plus8 alloc=[40, 32, 24, 16, 8, 8, 8, 8] bytes=144 recall=78.199700
+
+PQ_GREEDY_EVAL tag=it10_b1_plus8 alloc=[32, 40, 24, 16, 8, 8, 8, 8] bytes=144 recall=77.926400
+
+PQ_GREEDY_EVAL tag=it10_b2_plus8 alloc=[32, 32, 32, 16, 8, 8, 8, 8] bytes=144 recall=77.962500
+
+PQ_GREEDY_EVAL tag=it10_b3_plus8 alloc=[32, 32, 24, 24, 8, 8, 8, 8] bytes=144 recall=78.011000
+
+PQ_GREEDY_EVAL tag=it10_b4_plus8 alloc=[32, 32, 24, 16, 16, 8, 8, 8] bytes=144 recall=78.023400
+
+PQ_GREEDY_EVAL tag=it10_b5_plus8 alloc=[32, 32, 24, 16, 8, 16, 8, 8] bytes=144 recall=77.935100
+
+PQ_GREEDY_EVAL tag=it10_b6_plus8 alloc=[32, 32, 24, 16, 8, 8, 16, 8] bytes=144 recall=78.044000
+
+PQ_GREEDY_EVAL tag=it10_b7_plus8 alloc=[32, 32, 24, 16, 8, 8, 8, 16] bytes=144 recall=78.024900
+
+PQ_GREEDY_EVAL tag=it11_b0_plus8 alloc=[48, 32, 24, 16, 8, 8, 8, 8] bytes=152 recall=79.120600
+
+PQ_GREEDY_EVAL tag=it11_b1_plus8 alloc=[40, 40, 24, 16, 8, 8, 8, 8] bytes=152 recall=79.085800
+
+PQ_GREEDY_EVAL tag=it11_b2_plus8 alloc=[40, 32, 32, 16, 8, 8, 8, 8] bytes=152 recall=79.163700
+
+PQ_GREEDY_EVAL tag=it11_b3_plus8 alloc=[40, 32, 24, 24, 8, 8, 8, 8] bytes=152 recall=79.173500
+
+PQ_GREEDY_EVAL tag=it11_b4_plus8 alloc=[40, 32, 24, 16, 16, 8, 8, 8] bytes=152 recall=79.173900
+
+PQ_GREEDY_EVAL tag=it11_b5_plus8 alloc=[40, 32, 24, 16, 8, 16, 8, 8] bytes=152 recall=79.075300
+
+PQ_GREEDY_EVAL tag=it11_b6_plus8 alloc=[40, 32, 24, 16, 8, 8, 16, 8] bytes=152 recall=79.118200
+
+PQ_GREEDY_EVAL tag=it11_b7_plus8 alloc=[40, 32, 24, 16, 8, 8, 8, 16] bytes=152 recall=79.118800
+
+PQ_GREEDY_EVAL tag=it12_b0_plus8 alloc=[48, 32, 24, 16, 16, 8, 8, 8] bytes=160 recall=79.996100
+
+PQ_GREEDY_EVAL tag=it12_b1_plus8 alloc=[40, 40, 24, 16, 16, 8, 8, 8] bytes=160 recall=79.941500
+
+PQ_GREEDY_EVAL tag=it12_b2_plus8 alloc=[40, 32, 32, 16, 16, 8, 8, 8] bytes=160 recall=79.978700
+
+PQ_GREEDY_EVAL tag=it12_b3_plus8 alloc=[40, 32, 24, 24, 16, 8, 8, 8] bytes=160 recall=80.089800
+
+PQ_GREEDY_EVAL tag=it12_b4_plus8 alloc=[40, 32, 24, 16, 24, 8, 8, 8] bytes=160 recall=79.827600
+
+PQ_GREEDY_EVAL tag=it12_b5_plus8 alloc=[40, 32, 24, 16, 16, 16, 8, 8] bytes=160 recall=80.067500
+
+PQ_GREEDY_EVAL tag=it12_b6_plus8 alloc=[40, 32, 24, 16, 16, 8, 16, 8] bytes=160 recall=80.029500
+
+PQ_GREEDY_EVAL tag=it12_b7_plus8 alloc=[40, 32, 24, 16, 16, 8, 8, 16] bytes=160 recall=80.028200
+
+PQ_GREEDY_EVAL tag=it13_b0_plus8 alloc=[48, 32, 24, 24, 16, 8, 8, 8] bytes=168 recall=80.921400
+
+PQ_GREEDY_EVAL tag=it13_b1_plus8 alloc=[40, 40, 24, 24, 16, 8, 8, 8] bytes=168 recall=80.898800
+
+PQ_GREEDY_EVAL tag=it13_b2_plus8 alloc=[40, 32, 32, 24, 16, 8, 8, 8] bytes=168 recall=80.955400
+
+PQ_GREEDY_EVAL tag=it13_b3_plus8 alloc=[40, 32, 24, 32, 16, 8, 8, 8] bytes=168 recall=80.746400
+
+PQ_GREEDY_EVAL tag=it13_b4_plus8 alloc=[40, 32, 24, 24, 24, 8, 8, 8] bytes=168 recall=80.682300
+
+PQ_GREEDY_EVAL tag=it13_b5_plus8 alloc=[40, 32, 24, 24, 16, 16, 8, 8] bytes=168 recall=80.901700
+
+PQ_GREEDY_EVAL tag=it13_b6_plus8 alloc=[40, 32, 24, 24, 16, 8, 16, 8] bytes=168 recall=80.980600
+
+PQ_GREEDY_EVAL tag=it13_b7_plus8 alloc=[40, 32, 24, 24, 16, 8, 8, 16] bytes=168 recall=80.928000
+
+PQ_GREEDY_EVAL tag=it14_b0_plus8 alloc=[48, 32, 24, 24, 16, 8, 16, 8] bytes=176 recall=81.680100
+
+PQ_GREEDY_EVAL tag=it14_b1_plus8 alloc=[40, 40, 24, 24, 16, 8, 16, 8] bytes=176 recall=81.728400
+
+PQ_GREEDY_EVAL tag=it14_b2_plus8 alloc=[40, 32, 32, 24, 16, 8, 16, 8] bytes=176 recall=81.704300
+
+PQ_GREEDY_EVAL tag=it14_b3_plus8 alloc=[40, 32, 24, 32, 16, 8, 16, 8] bytes=176 recall=81.588300
+
+PQ_GREEDY_EVAL tag=it14_b4_plus8 alloc=[40, 32, 24, 24, 24, 8, 16, 8] bytes=176 recall=81.528200
+
+PQ_GREEDY_EVAL tag=it14_b5_plus8 alloc=[40, 32, 24, 24, 16, 16, 16, 8] bytes=176 recall=81.711300
+
+PQ_GREEDY_EVAL tag=it14_b6_plus8 alloc=[40, 32, 24, 24, 16, 8, 24, 8] bytes=176 recall=81.489000
+
+PQ_GREEDY_EVAL tag=it14_b7_plus8 alloc=[40, 32, 24, 24, 16, 8, 16, 16] bytes=176 recall=81.732600
+
+PQ_GREEDY_EVAL tag=it15_b0_plus8 alloc=[48, 32, 24, 24, 16, 8, 16, 16] bytes=184 recall=82.524700
+
+PQ_GREEDY_EVAL tag=it15_b1_plus8 alloc=[40, 40, 24, 24, 16, 8, 16, 16] bytes=184 recall=82.501600
+
+PQ_GREEDY_EVAL tag=it15_b2_plus8 alloc=[40, 32, 32, 24, 16, 8, 16, 16] bytes=184 recall=82.467400
+
+PQ_GREEDY_EVAL tag=it15_b3_plus8 alloc=[40, 32, 24, 32, 16, 8, 16, 16] bytes=184 recall=82.320200
+
+PQ_GREEDY_EVAL tag=it15_b4_plus8 alloc=[40, 32, 24, 24, 24, 8, 16, 16] bytes=184 recall=82.249900
+
+PQ_GREEDY_EVAL tag=it15_b5_plus8 alloc=[40, 32, 24, 24, 16, 16, 16, 16] bytes=184 recall=82.435400
+
+PQ_GREEDY_EVAL tag=it15_b6_plus8 alloc=[40, 32, 24, 24, 16, 8, 24, 16] bytes=184 recall=82.319300
+
+PQ_GREEDY_EVAL tag=it15_b7_plus8 alloc=[40, 32, 24, 24, 16, 8, 16, 24] bytes=184 recall=82.301300
+
+PQ_GREEDY_EVAL tag=it16_b0_plus8 alloc=[56, 32, 24, 24, 16, 8, 16, 16] bytes=192 recall=83.051600
+
+PQ_GREEDY_EVAL tag=it16_b1_plus8 alloc=[48, 40, 24, 24, 16, 8, 16, 16] bytes=192 recall=83.157000
+
+PQ_GREEDY_EVAL tag=it16_b2_plus8 alloc=[48, 32, 32, 24, 16, 8, 16, 16] bytes=192 recall=83.154200
+
+PQ_GREEDY_EVAL tag=it16_b3_plus8 alloc=[48, 32, 24, 32, 16, 8, 16, 16] bytes=192 recall=83.081900
+
+PQ_GREEDY_EVAL tag=it16_b4_plus8 alloc=[48, 32, 24, 24, 24, 8, 16, 16] bytes=192 recall=83.062000
+
+PQ_GREEDY_EVAL tag=it16_b5_plus8 alloc=[48, 32, 24, 24, 16, 16, 16, 16] bytes=192 recall=83.169300
+
+PQ_GREEDY_EVAL tag=it16_b6_plus8 alloc=[48, 32, 24, 24, 16, 8, 24, 16] bytes=192 recall=83.015300
+
+PQ_GREEDY_EVAL tag=it16_b7_plus8 alloc=[48, 32, 24, 24, 16, 8, 16, 24] bytes=192 recall=83.020100
+
+PQ_GREEDY_EVAL tag=it17_b0_plus8 alloc=[56, 32, 24, 24, 16, 16, 16, 16] bytes=200 recall=83.665300
+
+PQ_GREEDY_EVAL tag=it17_b1_plus8 alloc=[48, 40, 24, 24, 16, 16, 16, 16] bytes=200 recall=83.875300
+
+PQ_GREEDY_EVAL tag=it17_b2_plus8 alloc=[48, 32, 32, 24, 16, 16, 16, 16] bytes=200 recall=83.873800
+
+PQ_GREEDY_EVAL tag=it17_b3_plus8 alloc=[48, 32, 24, 32, 16, 16, 16, 16] bytes=200 recall=83.733500
+
+PQ_GREEDY_EVAL tag=it17_b4_plus8 alloc=[48, 32, 24, 24, 24, 16, 16, 16] bytes=200 recall=83.689000
+
+PQ_GREEDY_EVAL tag=it17_b5_plus8 alloc=[48, 32, 24, 24, 16, 24, 16, 16] bytes=200 recall=83.729500
+
+PQ_GREEDY_EVAL tag=it17_b6_plus8 alloc=[48, 32, 24, 24, 16, 16, 24, 16] bytes=200 recall=83.672700
+
+PQ_GREEDY_EVAL tag=it17_b7_plus8 alloc=[48, 32, 24, 24, 16, 16, 16, 24] bytes=200 recall=83.688900
+
+PQ_GREEDY_EVAL tag=it18_b0_plus8 alloc=[56, 40, 24, 24, 16, 16, 16, 16] bytes=208 recall=84.431100
+
+PQ_GREEDY_EVAL tag=it18_b1_plus8 alloc=[48, 48, 24, 24, 16, 16, 16, 16] bytes=208 recall=84.401100
+
+PQ_GREEDY_EVAL tag=it18_b2_plus8 alloc=[48, 40, 32, 24, 16, 16, 16, 16] bytes=208 recall=84.474000
+
+PQ_GREEDY_EVAL tag=it18_b3_plus8 alloc=[48, 40, 24, 32, 16, 16, 16, 16] bytes=208 recall=84.435900
+
+PQ_GREEDY_EVAL tag=it18_b4_plus8 alloc=[48, 40, 24, 24, 24, 16, 16, 16] bytes=208 recall=84.297800
+
+PQ_GREEDY_EVAL tag=it18_b5_plus8 alloc=[48, 40, 24, 24, 16, 24, 16, 16] bytes=208 recall=84.313600
+
+PQ_GREEDY_EVAL tag=it18_b6_plus8 alloc=[48, 40, 24, 24, 16, 16, 24, 16] bytes=208 recall=84.338400
+
+PQ_GREEDY_EVAL tag=it18_b7_plus8 alloc=[48, 40, 24, 24, 16, 16, 16, 24] bytes=208 recall=84.335400
+
+PQ_GREEDY_EVAL tag=it19_b0_plus8 alloc=[56, 40, 32, 24, 16, 16, 16, 16] bytes=216 recall=84.975500
+
+PQ_GREEDY_EVAL tag=it19_b1_plus8 alloc=[48, 48, 32, 24, 16, 16, 16, 16] bytes=216 recall=85.041900
+
+PQ_GREEDY_EVAL tag=it19_b2_plus8 alloc=[48, 40, 40, 24, 16, 16, 16, 16] bytes=216 recall=84.977200
+
+PQ_GREEDY_EVAL tag=it19_b3_plus8 alloc=[48, 40, 32, 32, 16, 16, 16, 16] bytes=216 recall=85.010900
+
+PQ_GREEDY_EVAL tag=it19_b4_plus8 alloc=[48, 40, 32, 24, 24, 16, 16, 16] bytes=216 recall=84.977600
+
+PQ_GREEDY_EVAL tag=it19_b5_plus8 alloc=[48, 40, 32, 24, 16, 24, 16, 16] bytes=216 recall=84.973600
+
+PQ_GREEDY_EVAL tag=it19_b6_plus8 alloc=[48, 40, 32, 24, 16, 16, 24, 16] bytes=216 recall=84.931900
+
+PQ_GREEDY_EVAL tag=it19_b7_plus8 alloc=[48, 40, 32, 24, 16, 16, 16, 24] bytes=216 recall=84.959100
+
+PQ_GREEDY_EVAL tag=it20_b0_plus8 alloc=[56, 48, 32, 24, 16, 16, 16, 16] bytes=224 recall=85.492700
+
+PQ_GREEDY_EVAL tag=it20_b1_plus8 alloc=[48, 56, 32, 24, 16, 16, 16, 16] bytes=224 recall=85.412000
+
+PQ_GREEDY_EVAL tag=it20_b2_plus8 alloc=[48, 48, 40, 24, 16, 16, 16, 16] bytes=224 recall=85.453500
+
+PQ_GREEDY_EVAL tag=it20_b3_plus8 alloc=[48, 48, 32, 32, 16, 16, 16, 16] bytes=224 recall=85.492300
+
+PQ_GREEDY_EVAL tag=it20_b4_plus8 alloc=[48, 48, 32, 24, 24, 16, 16, 16] bytes=224 recall=85.439500
+
+PQ_GREEDY_EVAL tag=it20_b5_plus8 alloc=[48, 48, 32, 24, 16, 24, 16, 16] bytes=224 recall=85.489400
+
+PQ_GREEDY_EVAL tag=it20_b6_plus8 alloc=[48, 48, 32, 24, 16, 16, 24, 16] bytes=224 recall=85.409100
+
+PQ_GREEDY_EVAL tag=it20_b7_plus8 alloc=[48, 48, 32, 24, 16, 16, 16, 24] bytes=224 recall=85.439300
+
+PQ_GREEDY_EVAL tag=it21_b0_plus8 alloc=[64, 48, 32, 24, 16, 16, 16, 16] bytes=232 recall=85.859600
+
+PQ_GREEDY_EVAL tag=it21_b1_plus8 alloc=[56, 56, 32, 24, 16, 16, 16, 16] bytes=232 recall=85.830000
+
+PQ_GREEDY_EVAL tag=it21_b2_plus8 alloc=[56, 48, 40, 24, 16, 16, 16, 16] bytes=232 recall=85.925000
+
+PQ_GREEDY_EVAL tag=it21_b3_plus8 alloc=[56, 48, 32, 32, 16, 16, 16, 16] bytes=232 recall=85.936600
+
+PQ_GREEDY_EVAL tag=it21_b4_plus8 alloc=[56, 48, 32, 24, 24, 16, 16, 16] bytes=232 recall=85.912300
+
+PQ_GREEDY_EVAL tag=it21_b5_plus8 alloc=[56, 48, 32, 24, 16, 24, 16, 16] bytes=232 recall=85.906600
+
+PQ_GREEDY_EVAL tag=it21_b6_plus8 alloc=[56, 48, 32, 24, 16, 16, 24, 16] bytes=232 recall=85.885000
+
+PQ_GREEDY_EVAL tag=it21_b7_plus8 alloc=[56, 48, 32, 24, 16, 16, 16, 24] bytes=232 recall=85.877600
+
+PQ_GREEDY_EVAL tag=it22_b0_plus8 alloc=[64, 48, 32, 32, 16, 16, 16, 16] bytes=240 recall=86.287800
+
+PQ_GREEDY_EVAL tag=it22_b1_plus8 alloc=[56, 56, 32, 32, 16, 16, 16, 16] bytes=240 recall=86.299800
+
+PQ_GREEDY_EVAL tag=it22_b2_plus8 alloc=[56, 48, 40, 32, 16, 16, 16, 16] bytes=240 recall=86.352500
+
+PQ_GREEDY_EVAL tag=it22_b3_plus8 alloc=[56, 48, 32, 40, 16, 16, 16, 16] bytes=240 recall=86.243800
+
+PQ_GREEDY_EVAL tag=it22_b4_plus8 alloc=[56, 48, 32, 32, 24, 16, 16, 16] bytes=240 recall=86.296700
+
+PQ_GREEDY_EVAL tag=it22_b5_plus8 alloc=[56, 48, 32, 32, 16, 24, 16, 16] bytes=240 recall=86.381300
+
+PQ_GREEDY_EVAL tag=it22_b6_plus8 alloc=[56, 48, 32, 32, 16, 16, 24, 16] bytes=240 recall=86.337600
+
+PQ_GREEDY_EVAL tag=it22_b7_plus8 alloc=[56, 48, 32, 32, 16, 16, 16, 24] bytes=240 recall=86.355800
+
+PQ_GREEDY_EVAL tag=it23_b0_plus8 alloc=[64, 48, 32, 32, 16, 24, 16, 16] bytes=248 recall=86.653700
+
+PQ_GREEDY_EVAL tag=it23_b1_plus8 alloc=[56, 56, 32, 32, 16, 24, 16, 16] bytes=248 recall=86.640300
+
+PQ_GREEDY_EVAL tag=it23_b2_plus8 alloc=[56, 48, 40, 32, 16, 24, 16, 16] bytes=248 recall=86.755400
+
+PQ_GREEDY_EVAL tag=it23_b3_plus8 alloc=[56, 48, 32, 40, 16, 24, 16, 16] bytes=248 recall=86.710300
+
+PQ_GREEDY_EVAL tag=it23_b4_plus8 alloc=[56, 48, 32, 32, 24, 24, 16, 16] bytes=248 recall=86.681600
+
+PQ_GREEDY_EVAL tag=it23_b5_plus8 alloc=[56, 48, 32, 32, 16, 32, 16, 16] bytes=248 recall=86.587700
+
+PQ_GREEDY_EVAL tag=it23_b6_plus8 alloc=[56, 48, 32, 32, 16, 24, 24, 16] bytes=248 recall=86.673900
+
+PQ_GREEDY_EVAL tag=it23_b7_plus8 alloc=[56, 48, 32, 32, 16, 24, 16, 24] bytes=248 recall=86.690300
+
+PQ_GREEDY_EVAL tag=it24_b0_plus8 alloc=[64, 48, 40, 32, 16, 24, 16, 16] bytes=256 recall=87.065400
+
+PQ_GREEDY_EVAL tag=it24_b1_plus8 alloc=[56, 56, 40, 32, 16, 24, 16, 16] bytes=256 recall=87.069800
+
+PQ_GREEDY_EVAL tag=it24_b2_plus8 alloc=[56, 48, 48, 32, 16, 24, 16, 16] bytes=256 recall=87.044800
+
+PQ_GREEDY_EVAL tag=it24_b3_plus8 alloc=[56, 48, 40, 40, 16, 24, 16, 16] bytes=256 recall=87.027900
+
+PQ_GREEDY_EVAL tag=it24_b4_plus8 alloc=[56, 48, 40, 32, 24, 24, 16, 16] bytes=256 recall=87.106400
+
+PQ_GREEDY_EVAL tag=it24_b5_plus8 alloc=[56, 48, 40, 32, 16, 32, 16, 16] bytes=256 recall=86.988500
+
+PQ_GREEDY_EVAL tag=it24_b6_plus8 alloc=[56, 48, 40, 32, 16, 24, 24, 16] bytes=256 recall=87.086100
+
+PQ_GREEDY_EVAL tag=it24_b7_plus8 alloc=[56, 48, 40, 32, 16, 24, 16, 24] bytes=256 recall=87.095300
+
+PQ_GREEDY_EVAL tag=it25_b0_plus8 alloc=[64, 48, 40, 32, 24, 24, 16, 16] bytes=264 recall=87.438600
+
+PQ_GREEDY_EVAL tag=it25_b1_plus8 alloc=[56, 56, 40, 32, 24, 24, 16, 16] bytes=264 recall=87.399700
+
+PQ_GREEDY_EVAL tag=it25_b2_plus8 alloc=[56, 48, 48, 32, 24, 24, 16, 16] bytes=264 recall=87.380800
+
+PQ_GREEDY_EVAL tag=it25_b3_plus8 alloc=[56, 48, 40, 40, 24, 24, 16, 16] bytes=264 recall=87.372100
+
+PQ_GREEDY_EVAL tag=it25_b4_plus8 alloc=[56, 48, 40, 32, 32, 24, 16, 16] bytes=264 recall=87.306800
+
+PQ_GREEDY_EVAL tag=it25_b5_plus8 alloc=[56, 48, 40, 32, 24, 32, 16, 16] bytes=264 recall=87.338700
+
+PQ_GREEDY_EVAL tag=it25_b6_plus8 alloc=[56, 48, 40, 32, 24, 24, 24, 16] bytes=264 recall=87.391600
+
+PQ_GREEDY_EVAL tag=it25_b7_plus8 alloc=[56, 48, 40, 32, 24, 24, 16, 24] bytes=264 recall=87.439600
+
+PQ_GREEDY_EVAL tag=it26_b0_plus8 alloc=[64, 48, 40, 32, 24, 24, 16, 24] bytes=272 recall=87.727400
+
+PQ_GREEDY_EVAL tag=it26_b1_plus8 alloc=[56, 56, 40, 32, 24, 24, 16, 24] bytes=272 recall=87.761600
+
+PQ_GREEDY_EVAL tag=it26_b2_plus8 alloc=[56, 48, 48, 32, 24, 24, 16, 24] bytes=272 recall=87.746900
+
+PQ_GREEDY_EVAL tag=it26_b3_plus8 alloc=[56, 48, 40, 40, 24, 24, 16, 24] bytes=272 recall=87.674400
+
+PQ_GREEDY_EVAL tag=it26_b4_plus8 alloc=[56, 48, 40, 32, 32, 24, 16, 24] bytes=272 recall=87.683400
+
+PQ_GREEDY_EVAL tag=it26_b5_plus8 alloc=[56, 48, 40, 32, 24, 32, 16, 24] bytes=272 recall=87.645200
+
+PQ_GREEDY_EVAL tag=it26_b6_plus8 alloc=[56, 48, 40, 32, 24, 24, 24, 24] bytes=272 recall=87.719500
+
+PQ_GREEDY_EVAL tag=it26_b7_plus8 alloc=[56, 48, 40, 32, 24, 24, 16, 32] bytes=272 recall=87.674300
+
+PQ_GREEDY_EVAL tag=it27_b0_plus8 alloc=[64, 56, 40, 32, 24, 24, 16, 24] bytes=280 recall=88.071400
+
+PQ_GREEDY_EVAL tag=it27_b1_plus8 alloc=[56, 64, 40, 32, 24, 24, 16, 24] bytes=280 recall=88.010100
+
+PQ_GREEDY_EVAL tag=it27_b2_plus8 alloc=[56, 56, 48, 32, 24, 24, 16, 24] bytes=280 recall=88.003200
+
+PQ_GREEDY_EVAL tag=it27_b3_plus8 alloc=[56, 56, 40, 40, 24, 24, 16, 24] bytes=280 recall=87.947400
+
+PQ_GREEDY_EVAL tag=it27_b4_plus8 alloc=[56, 56, 40, 32, 32, 24, 16, 24] bytes=280 recall=87.977800
+
+PQ_GREEDY_EVAL tag=it27_b5_plus8 alloc=[56, 56, 40, 32, 24, 32, 16, 24] bytes=280 recall=87.915700
+
+PQ_GREEDY_EVAL tag=it27_b6_plus8 alloc=[56, 56, 40, 32, 24, 24, 24, 24] bytes=280 recall=88.016400
+
+PQ_GREEDY_EVAL tag=it27_b7_plus8 alloc=[56, 56, 40, 32, 24, 24, 16, 32] bytes=280 recall=87.984100
+
+PQ_GREEDY_EVAL tag=it28_b0_plus8 alloc=[72, 56, 40, 32, 24, 24, 16, 24] bytes=288 recall=88.342600
+
+PQ_GREEDY_EVAL tag=it28_b1_plus8 alloc=[64, 64, 40, 32, 24, 24, 16, 24] bytes=288 recall=88.357500
+
+PQ_GREEDY_EVAL tag=it28_b2_plus8 alloc=[64, 56, 48, 32, 24, 24, 16, 24] bytes=288 recall=88.324700
+
+PQ_GREEDY_EVAL tag=it28_b3_plus8 alloc=[64, 56, 40, 40, 24, 24, 16, 24] bytes=288 recall=88.323700
+
+PQ_GREEDY_EVAL tag=it28_b4_plus8 alloc=[64, 56, 40, 32, 32, 24, 16, 24] bytes=288 recall=88.283300
+
+PQ_GREEDY_EVAL tag=it28_b5_plus8 alloc=[64, 56, 40, 32, 24, 32, 16, 24] bytes=288 recall=88.290600
+
+PQ_GREEDY_EVAL tag=it28_b6_plus8 alloc=[64, 56, 40, 32, 24, 24, 24, 24] bytes=288 recall=88.363700
+
+PQ_GREEDY_EVAL tag=it28_b7_plus8 alloc=[64, 56, 40, 32, 24, 24, 16, 32] bytes=288 recall=88.298200
+
+PQ_GREEDY_EVAL tag=it29_b0_plus8 alloc=[72, 56, 40, 32, 24, 24, 24, 24] bytes=296 recall=88.562100
+
+PQ_GREEDY_EVAL tag=it29_b1_plus8 alloc=[64, 64, 40, 32, 24, 24, 24, 24] bytes=296 recall=88.600000
+
+PQ_GREEDY_EVAL tag=it29_b2_plus8 alloc=[64, 56, 48, 32, 24, 24, 24, 24] bytes=296 recall=88.644600
+
+PQ_GREEDY_EVAL tag=it29_b3_plus8 alloc=[64, 56, 40, 40, 24, 24, 24, 24] bytes=296 recall=88.627700
+
+PQ_GREEDY_EVAL tag=it29_b4_plus8 alloc=[64, 56, 40, 32, 32, 24, 24, 24] bytes=296 recall=88.577700
+
+PQ_GREEDY_EVAL tag=it29_b5_plus8 alloc=[64, 56, 40, 32, 24, 32, 24, 24] bytes=296 recall=88.608900
+
+PQ_GREEDY_EVAL tag=it29_b6_plus8 alloc=[64, 56, 40, 32, 24, 24, 32, 24] bytes=296 recall=88.559100
+
+PQ_GREEDY_EVAL tag=it29_b7_plus8 alloc=[64, 56, 40, 32, 24, 24, 24, 32] bytes=296 recall=88.564700
+
+PQ_GREEDY_EVAL tag=it30_b0_plus8 alloc=[72, 56, 48, 32, 24, 24, 24, 24] bytes=304 recall=88.889900
+
+PQ_GREEDY_EVAL tag=it30_b1_plus8 alloc=[64, 64, 48, 32, 24, 24, 24, 24] bytes=304 recall=88.901100
+
+PQ_GREEDY_EVAL tag=it30_b2_plus8 alloc=[64, 56, 56, 32, 24, 24, 24, 24] bytes=304 recall=88.826700
+
+PQ_GREEDY_EVAL tag=it30_b3_plus8 alloc=[64, 56, 48, 40, 24, 24, 24, 24] bytes=304 recall=88.882900
+
+PQ_GREEDY_EVAL tag=it30_b4_plus8 alloc=[64, 56, 48, 32, 32, 24, 24, 24] bytes=304 recall=88.860900
+
+PQ_GREEDY_EVAL tag=it30_b5_plus8 alloc=[64, 56, 48, 32, 24, 32, 24, 24] bytes=304 recall=88.819700
+
+PQ_GREEDY_EVAL tag=it30_b6_plus8 alloc=[64, 56, 48, 32, 24, 24, 32, 24] bytes=304 recall=88.812700
+
+PQ_GREEDY_EVAL tag=it30_b7_plus8 alloc=[64, 56, 48, 32, 24, 24, 24, 32] bytes=304 recall=88.868500
+
+PQ_GREEDY_EVAL tag=it31_b0_plus8 alloc=[72, 64, 48, 32, 24, 24, 24, 24] bytes=312 recall=89.119000
+
+PQ_GREEDY_EVAL tag=it31_b1_plus8 alloc=[64, 72, 48, 32, 24, 24, 24, 24] bytes=312 recall=89.056900
+
+PQ_GREEDY_EVAL tag=it31_b2_plus8 alloc=[64, 64, 56, 32, 24, 24, 24, 24] bytes=312 recall=89.097600
+
+PQ_GREEDY_EVAL tag=it31_b3_plus8 alloc=[64, 64, 48, 40, 24, 24, 24, 24] bytes=312 recall=89.148200
+
+PQ_GREEDY_EVAL tag=it31_b4_plus8 alloc=[64, 64, 48, 32, 32, 24, 24, 24] bytes=312 recall=89.079200
+
+PQ_GREEDY_EVAL tag=it31_b5_plus8 alloc=[64, 64, 48, 32, 24, 32, 24, 24] bytes=312 recall=89.101900
+
+PQ_GREEDY_EVAL tag=it31_b6_plus8 alloc=[64, 64, 48, 32, 24, 24, 32, 24] bytes=312 recall=89.125300
+
+PQ_GREEDY_EVAL tag=it31_b7_plus8 alloc=[64, 64, 48, 32, 24, 24, 24, 32] bytes=312 recall=89.078300
+
+PQ_GREEDY_EVAL tag=it32_b0_plus8 alloc=[72, 64, 48, 40, 24, 24, 24, 24] bytes=320 recall=89.367700
+
+PQ_GREEDY_EVAL tag=it32_b1_plus8 alloc=[64, 72, 48, 40, 24, 24, 24, 24] bytes=320 recall=89.276100
+
+PQ_GREEDY_EVAL tag=it32_b2_plus8 alloc=[64, 64, 56, 40, 24, 24, 24, 24] bytes=320 recall=89.385600
+
+PQ_GREEDY_EVAL tag=it32_b3_plus8 alloc=[64, 64, 48, 48, 24, 24, 24, 24] bytes=320 recall=89.351700
+
+PQ_GREEDY_EVAL tag=it32_b4_plus8 alloc=[64, 64, 48, 40, 32, 24, 24, 24] bytes=320 recall=89.348800
+
+PQ_GREEDY_EVAL tag=it32_b5_plus8 alloc=[64, 64, 48, 40, 24, 32, 24, 24] bytes=320 recall=89.316200
+
+PQ_GREEDY_EVAL tag=it32_b6_plus8 alloc=[64, 64, 48, 40, 24, 24, 32, 24] bytes=320 recall=89.309300
+
+PQ_GREEDY_EVAL tag=it32_b7_plus8 alloc=[64, 64, 48, 40, 24, 24, 24, 32] bytes=320 recall=89.335200
+
+PQ_GREEDY_EVAL tag=it33_b0_plus8 alloc=[72, 64, 56, 40, 24, 24, 24, 24] bytes=328 recall=89.618600
+
+PQ_GREEDY_EVAL tag=it33_b1_plus8 alloc=[64, 72, 56, 40, 24, 24, 24, 24] bytes=328 recall=89.477800
+
+PQ_GREEDY_EVAL tag=it33_b2_plus8 alloc=[64, 64, 64, 40, 24, 24, 24, 24] bytes=328 recall=89.489900
+
+PQ_GREEDY_EVAL tag=it33_b3_plus8 alloc=[64, 64, 56, 48, 24, 24, 24, 24] bytes=328 recall=89.559000
+
+PQ_GREEDY_EVAL tag=it33_b4_plus8 alloc=[64, 64, 56, 40, 32, 24, 24, 24] bytes=328 recall=89.520600
+
+PQ_GREEDY_EVAL tag=it33_b5_plus8 alloc=[64, 64, 56, 40, 24, 32, 24, 24] bytes=328 recall=89.507200
+
+PQ_GREEDY_EVAL tag=it33_b6_plus8 alloc=[64, 64, 56, 40, 24, 24, 32, 24] bytes=328 recall=89.520400
+
+PQ_GREEDY_EVAL tag=it33_b7_plus8 alloc=[64, 64, 56, 40, 24, 24, 24, 32] bytes=328 recall=89.524700
+
+PQ_GREEDY_EVAL tag=it34_b0_plus8 alloc=[80, 64, 56, 40, 24, 24, 24, 24] bytes=336 recall=89.774100
+
+PQ_GREEDY_EVAL tag=it34_b1_plus8 alloc=[72, 72, 56, 40, 24, 24, 24, 24] bytes=336 recall=89.710300
+
+PQ_GREEDY_EVAL tag=it34_b2_plus8 alloc=[72, 64, 64, 40, 24, 24, 24, 24] bytes=336 recall=89.745700
+
+PQ_GREEDY_EVAL tag=it34_b3_plus8 alloc=[72, 64, 56, 48, 24, 24, 24, 24] bytes=336 recall=89.748800
+
+PQ_GREEDY_EVAL tag=it34_b4_plus8 alloc=[72, 64, 56, 40, 32, 24, 24, 24] bytes=336 recall=89.749100
+
+PQ_GREEDY_EVAL tag=it34_b5_plus8 alloc=[72, 64, 56, 40, 24, 32, 24, 24] bytes=336 recall=89.764200
+
+PQ_GREEDY_EVAL tag=it34_b6_plus8 alloc=[72, 64, 56, 40, 24, 24, 32, 24] bytes=336 recall=89.783800
+
+PQ_GREEDY_EVAL tag=it34_b7_plus8 alloc=[72, 64, 56, 40, 24, 24, 24, 32] bytes=336 recall=89.764900
+
+PQ_GREEDY_EVAL tag=it35_b0_plus8 alloc=[80, 64, 56, 40, 24, 24, 32, 24] bytes=344 recall=89.924600
+
+PQ_GREEDY_EVAL tag=it35_b1_plus8 alloc=[72, 72, 56, 40, 24, 24, 32, 24] bytes=344 recall=89.886900
+
+PQ_GREEDY_EVAL tag=it35_b2_plus8 alloc=[72, 64, 64, 40, 24, 24, 32, 24] bytes=344 recall=89.944800
+
+PQ_GREEDY_EVAL tag=it35_b3_plus8 alloc=[72, 64, 56, 48, 24, 24, 32, 24] bytes=344 recall=89.935200
+
+PQ_GREEDY_EVAL tag=it35_b4_plus8 alloc=[72, 64, 56, 40, 32, 24, 32, 24] bytes=344 recall=89.939900
+
+PQ_GREEDY_EVAL tag=it35_b5_plus8 alloc=[72, 64, 56, 40, 24, 32, 32, 24] bytes=344 recall=89.919800
+
+PQ_GREEDY_EVAL tag=it35_b6_plus8 alloc=[72, 64, 56, 40, 24, 24, 40, 24] bytes=344 recall=89.917500
+
+PQ_GREEDY_EVAL tag=it35_b7_plus8 alloc=[72, 64, 56, 40, 24, 24, 32, 32] bytes=344 recall=89.938100
+
+PQ_GREEDY_EVAL tag=it36_b0_plus8 alloc=[80, 64, 64, 40, 24, 24, 32, 24] bytes=352 recall=90.123900
+
+PQ_GREEDY_EVAL tag=it36_b1_plus8 alloc=[72, 72, 64, 40, 24, 24, 32, 24] bytes=352 recall=90.094600
+
+PQ_GREEDY_EVAL tag=it36_b2_plus8 alloc=[72, 64, 72, 40, 24, 24, 32, 24] bytes=352 recall=90.052800
+
+PQ_GREEDY_EVAL tag=it36_b3_plus8 alloc=[72, 64, 64, 48, 24, 24, 32, 24] bytes=352 recall=90.100200
+
+PQ_GREEDY_EVAL tag=it36_b4_plus8 alloc=[72, 64, 64, 40, 32, 24, 32, 24] bytes=352 recall=90.108400
+
+PQ_GREEDY_EVAL tag=it36_b5_plus8 alloc=[72, 64, 64, 40, 24, 32, 32, 24] bytes=352 recall=90.128700
+
+PQ_GREEDY_EVAL tag=it36_b6_plus8 alloc=[72, 64, 64, 40, 24, 24, 40, 24] bytes=352 recall=90.109000
+
+PQ_GREEDY_EVAL tag=it36_b7_plus8 alloc=[72, 64, 64, 40, 24, 24, 32, 32] bytes=352 recall=90.092900
+
+PQ_GREEDY_EVAL tag=it37_b0_plus8 alloc=[80, 64, 64, 40, 24, 32, 32, 24] bytes=360 recall=90.296000
+
+PQ_GREEDY_EVAL tag=it37_b1_plus8 alloc=[72, 72, 64, 40, 24, 32, 32, 24] bytes=360 recall=90.269200
+
+PQ_GREEDY_EVAL tag=it37_b2_plus8 alloc=[72, 64, 72, 40, 24, 32, 32, 24] bytes=360 recall=90.223800
+
+PQ_GREEDY_EVAL tag=it37_b3_plus8 alloc=[72, 64, 64, 48, 24, 32, 32, 24] bytes=360 recall=90.292600
+
+PQ_GREEDY_EVAL tag=it37_b4_plus8 alloc=[72, 64, 64, 40, 32, 32, 32, 24] bytes=360 recall=90.254300
+
+PQ_GREEDY_EVAL tag=it37_b5_plus8 alloc=[72, 64, 64, 40, 24, 40, 32, 24] bytes=360 recall=90.240600
+
+PQ_GREEDY_EVAL tag=it37_b6_plus8 alloc=[72, 64, 64, 40, 24, 32, 40, 24] bytes=360 recall=90.237900
+
+PQ_GREEDY_EVAL tag=it37_b7_plus8 alloc=[72, 64, 64, 40, 24, 32, 32, 32] bytes=360 recall=90.315200
+
+PQ_GREEDY_EVAL tag=it38_b0_plus8 alloc=[80, 64, 64, 40, 24, 32, 32, 32] bytes=368 recall=90.474600
+
+PQ_GREEDY_EVAL tag=it38_b1_plus8 alloc=[72, 72, 64, 40, 24, 32, 32, 32] bytes=368 recall=90.454600
+
+PQ_GREEDY_EVAL tag=it38_b2_plus8 alloc=[72, 64, 72, 40, 24, 32, 32, 32] bytes=368 recall=90.366600
+
+PQ_GREEDY_EVAL tag=it38_b3_plus8 alloc=[72, 64, 64, 48, 24, 32, 32, 32] bytes=368 recall=90.438100
+
+PQ_GREEDY_EVAL tag=it38_b4_plus8 alloc=[72, 64, 64, 40, 32, 32, 32, 32] bytes=368 recall=90.419800
+
+PQ_GREEDY_EVAL tag=it38_b5_plus8 alloc=[72, 64, 64, 40, 24, 40, 32, 32] bytes=368 recall=90.442500
+
+PQ_GREEDY_EVAL tag=it38_b6_plus8 alloc=[72, 64, 64, 40, 24, 32, 40, 32] bytes=368 recall=90.449600
+
+PQ_GREEDY_EVAL tag=it38_b7_plus8 alloc=[72, 64, 64, 40, 24, 32, 32, 40] bytes=368 recall=90.414900
+
+PQ_GREEDY_EVAL tag=it39_b0_plus8 alloc=[88, 64, 64, 40, 24, 32, 32, 32] bytes=376 recall=90.636000
+
+PQ_GREEDY_EVAL tag=it39_b1_plus8 alloc=[80, 72, 64, 40, 24, 32, 32, 32] bytes=376 recall=90.614800
+
+PQ_GREEDY_EVAL tag=it39_b2_plus8 alloc=[80, 64, 72, 40, 24, 32, 32, 32] bytes=376 recall=90.589400
+
+PQ_GREEDY_EVAL tag=it39_b3_plus8 alloc=[80, 64, 64, 48, 24, 32, 32, 32] bytes=376 recall=90.624100
+
+PQ_GREEDY_EVAL tag=it39_b4_plus8 alloc=[80, 64, 64, 40, 32, 32, 32, 32] bytes=376 recall=90.660600
+
+PQ_GREEDY_EVAL tag=it39_b5_plus8 alloc=[80, 64, 64, 40, 24, 40, 32, 32] bytes=376 recall=90.595400
+
+PQ_GREEDY_EVAL tag=it39_b6_plus8 alloc=[80, 64, 64, 40, 24, 32, 40, 32] bytes=376 recall=90.597800
+
+PQ_GREEDY_EVAL tag=it39_b7_plus8 alloc=[80, 64, 64, 40, 24, 32, 32, 40] bytes=376 recall=90.613300
+
+PQ_GREEDY_EVAL tag=it40_b0_plus8 alloc=[88, 64, 64, 40, 32, 32, 32, 32] bytes=384 recall=90.770000
+
+PQ_GREEDY_EVAL tag=it40_b1_plus8 alloc=[80, 72, 64, 40, 32, 32, 32, 32] bytes=384 recall=90.773900
+
+PQ_GREEDY_EVAL tag=it40_b2_plus8 alloc=[80, 64, 72, 40, 32, 32, 32, 32] bytes=384 recall=90.781700
+
+PQ_GREEDY_EVAL tag=it40_b3_plus8 alloc=[80, 64, 64, 48, 32, 32, 32, 32] bytes=384 recall=90.813500
+
+PQ_GREEDY_EVAL tag=it40_b4_plus8 alloc=[80, 64, 64, 40, 40, 32, 32, 32] bytes=384 recall=90.749200
+
+PQ_GREEDY_EVAL tag=it40_b5_plus8 alloc=[80, 64, 64, 40, 32, 40, 32, 32] bytes=384 recall=90.766600
+
+PQ_GREEDY_EVAL tag=it40_b6_plus8 alloc=[80, 64, 64, 40, 32, 32, 40, 32] bytes=384 recall=90.737700
+
+PQ_GREEDY_EVAL tag=it40_b7_plus8 alloc=[80, 64, 64, 40, 32, 32, 32, 40] bytes=384 recall=90.739900
+
+
+### Quora cohere v4
+##### Uniform:
+PQ sweep completed!
+Results directory: /tmp/pq_sweep_1780574468
+
+Summary of recall results:
+Bytes,Recall
+64,66.4822
+96,74.536
+128,78.684
+160,81.2712
+192,83.5087
+224,85.3981
+256,87.2072
+288,88.545
+320,89.8942
+352,90.9085
+384,92.1349
+
+##### Variable
+PQ_GREEDY_EVAL tag=init alloc=[8, 8, 8, 8, 8, 8, 8, 8] bytes=64 recall=66.361100
+
+PQ_GREEDY_EVAL tag=it1_b0_plus8 alloc=[16, 8, 8, 8, 8, 8, 8, 8] bytes=72 recall=69.102500
+
+PQ_GREEDY_EVAL tag=it1_b1_plus8 alloc=[8, 16, 8, 8, 8, 8, 8, 8] bytes=72 recall=69.086800
+
+PQ_GREEDY_EVAL tag=it1_b2_plus8 alloc=[8, 8, 16, 8, 8, 8, 8, 8] bytes=72 recall=68.933900
+
+PQ_GREEDY_EVAL tag=it1_b3_plus8 alloc=[8, 8, 8, 16, 8, 8, 8, 8] bytes=72 recall=68.758000
+
+PQ_GREEDY_EVAL tag=it1_b4_plus8 alloc=[8, 8, 8, 8, 16, 8, 8, 8] bytes=72 recall=68.686100
+
+PQ_GREEDY_EVAL tag=it1_b5_plus8 alloc=[8, 8, 8, 8, 8, 16, 8, 8] bytes=72 recall=68.438500
+
+PQ_GREEDY_EVAL tag=it1_b6_plus8 alloc=[8, 8, 8, 8, 8, 8, 16, 8] bytes=72 recall=68.506100
+
+PQ_GREEDY_EVAL tag=it1_b7_plus8 alloc=[8, 8, 8, 8, 8, 8, 8, 16] bytes=72 recall=68.398500
+
+PQ_GREEDY_EVAL tag=it2_b0_plus8 alloc=[24, 8, 8, 8, 8, 8, 8, 8] bytes=80 recall=70.634400
+
+PQ_GREEDY_EVAL tag=it2_b1_plus8 alloc=[16, 16, 8, 8, 8, 8, 8, 8] bytes=80 recall=71.170800
+
+PQ_GREEDY_EVAL tag=it2_b2_plus8 alloc=[16, 8, 16, 8, 8, 8, 8, 8] bytes=80 recall=71.137000
+
+PQ_GREEDY_EVAL tag=it2_b3_plus8 alloc=[16, 8, 8, 16, 8, 8, 8, 8] bytes=80 recall=70.990300
+
+PQ_GREEDY_EVAL tag=it2_b4_plus8 alloc=[16, 8, 8, 8, 16, 8, 8, 8] bytes=80 recall=70.948200
+
+PQ_GREEDY_EVAL tag=it2_b5_plus8 alloc=[16, 8, 8, 8, 8, 16, 8, 8] bytes=80 recall=70.824200
+
+PQ_GREEDY_EVAL tag=it2_b6_plus8 alloc=[16, 8, 8, 8, 8, 8, 16, 8] bytes=80 recall=70.865300
+
+PQ_GREEDY_EVAL tag=it2_b7_plus8 alloc=[16, 8, 8, 8, 8, 8, 8, 16] bytes=80 recall=70.807600
+
+PQ_GREEDY_EVAL tag=it3_b0_plus8 alloc=[24, 16, 8, 8, 8, 8, 8, 8] bytes=88 recall=72.666100
+
+PQ_GREEDY_EVAL tag=it3_b1_plus8 alloc=[16, 24, 8, 8, 8, 8, 8, 8] bytes=88 recall=72.552300
+
+PQ_GREEDY_EVAL tag=it3_b2_plus8 alloc=[16, 16, 16, 8, 8, 8, 8, 8] bytes=88 recall=73.067800
+
+PQ_GREEDY_EVAL tag=it3_b3_plus8 alloc=[16, 16, 8, 16, 8, 8, 8, 8] bytes=88 recall=72.938700
+
+PQ_GREEDY_EVAL tag=it3_b4_plus8 alloc=[16, 16, 8, 8, 16, 8, 8, 8] bytes=88 recall=73.038200
+
+PQ_GREEDY_EVAL tag=it3_b5_plus8 alloc=[16, 16, 8, 8, 8, 16, 8, 8] bytes=88 recall=72.934500
+
+PQ_GREEDY_EVAL tag=it3_b6_plus8 alloc=[16, 16, 8, 8, 8, 8, 16, 8] bytes=88 recall=72.731600
+
+PQ_GREEDY_EVAL tag=it3_b7_plus8 alloc=[16, 16, 8, 8, 8, 8, 8, 16] bytes=88 recall=72.667900
+
+PQ_GREEDY_EVAL tag=it4_b0_plus8 alloc=[24, 16, 16, 8, 8, 8, 8, 8] bytes=96 recall=74.449400
+
+PQ_GREEDY_EVAL tag=it4_b1_plus8 alloc=[16, 24, 16, 8, 8, 8, 8, 8] bytes=96 recall=74.322600
+
+PQ_GREEDY_EVAL tag=it4_b2_plus8 alloc=[16, 16, 24, 8, 8, 8, 8, 8] bytes=96 recall=74.271300
+
+PQ_GREEDY_EVAL tag=it4_b3_plus8 alloc=[16, 16, 16, 16, 8, 8, 8, 8] bytes=96 recall=74.519300
+
+PQ_GREEDY_EVAL tag=it4_b4_plus8 alloc=[16, 16, 16, 8, 16, 8, 8, 8] bytes=96 recall=74.552400
+
+PQ_GREEDY_EVAL tag=it4_b5_plus8 alloc=[16, 16, 16, 8, 8, 16, 8, 8] bytes=96 recall=74.408000
+
+PQ_GREEDY_EVAL tag=it4_b6_plus8 alloc=[16, 16, 16, 8, 8, 8, 16, 8] bytes=96 recall=74.436700
+
+PQ_GREEDY_EVAL tag=it4_b7_plus8 alloc=[16, 16, 16, 8, 8, 8, 8, 16] bytes=96 recall=74.400400
+
+PQ_GREEDY_EVAL tag=it5_b0_plus8 alloc=[24, 16, 16, 8, 16, 8, 8, 8] bytes=104 recall=75.775300
+
+PQ_GREEDY_EVAL tag=it5_b1_plus8 alloc=[16, 24, 16, 8, 16, 8, 8, 8] bytes=104 recall=75.630400
+
+PQ_GREEDY_EVAL tag=it5_b2_plus8 alloc=[16, 16, 24, 8, 16, 8, 8, 8] bytes=104 recall=75.674000
+
+PQ_GREEDY_EVAL tag=it5_b3_plus8 alloc=[16, 16, 16, 16, 16, 8, 8, 8] bytes=104 recall=75.944300
+
+PQ_GREEDY_EVAL tag=it5_b4_plus8 alloc=[16, 16, 16, 8, 24, 8, 8, 8] bytes=104 recall=75.531500
+
+PQ_GREEDY_EVAL tag=it5_b5_plus8 alloc=[16, 16, 16, 8, 16, 16, 8, 8] bytes=104 recall=75.744600
+
+PQ_GREEDY_EVAL tag=it5_b6_plus8 alloc=[16, 16, 16, 8, 16, 8, 16, 8] bytes=104 recall=75.693900
+
+PQ_GREEDY_EVAL tag=it5_b7_plus8 alloc=[16, 16, 16, 8, 16, 8, 8, 16] bytes=104 recall=75.667600
+
+PQ_GREEDY_EVAL tag=it6_b0_plus8 alloc=[24, 16, 16, 16, 16, 8, 8, 8] bytes=112 recall=76.958700
+
+PQ_GREEDY_EVAL tag=it6_b1_plus8 alloc=[16, 24, 16, 16, 16, 8, 8, 8] bytes=112 recall=76.892800
+
+PQ_GREEDY_EVAL tag=it6_b2_plus8 alloc=[16, 16, 24, 16, 16, 8, 8, 8] bytes=112 recall=76.944900
+
+PQ_GREEDY_EVAL tag=it6_b3_plus8 alloc=[16, 16, 16, 24, 16, 8, 8, 8] bytes=112 recall=76.877000
+
+PQ_GREEDY_EVAL tag=it6_b4_plus8 alloc=[16, 16, 16, 16, 24, 8, 8, 8] bytes=112 recall=76.802400
+
+PQ_GREEDY_EVAL tag=it6_b5_plus8 alloc=[16, 16, 16, 16, 16, 16, 8, 8] bytes=112 recall=77.012700
+
+PQ_GREEDY_EVAL tag=it6_b6_plus8 alloc=[16, 16, 16, 16, 16, 8, 16, 8] bytes=112 recall=76.980600
+
+PQ_GREEDY_EVAL tag=it6_b7_plus8 alloc=[16, 16, 16, 16, 16, 8, 8, 16] bytes=112 recall=76.868400
+
+PQ_GREEDY_EVAL tag=it7_b0_plus8 alloc=[24, 16, 16, 16, 16, 16, 8, 8] bytes=120 recall=77.985900
+
+PQ_GREEDY_EVAL tag=it7_b1_plus8 alloc=[16, 24, 16, 16, 16, 16, 8, 8] bytes=120 recall=77.926000
+
+PQ_GREEDY_EVAL tag=it7_b2_plus8 alloc=[16, 16, 24, 16, 16, 16, 8, 8] bytes=120 recall=77.896200
+
+PQ_GREEDY_EVAL tag=it7_b3_plus8 alloc=[16, 16, 16, 24, 16, 16, 8, 8] bytes=120 recall=77.862500
+
+PQ_GREEDY_EVAL tag=it7_b4_plus8 alloc=[16, 16, 16, 16, 24, 16, 8, 8] bytes=120 recall=77.861300
+
+PQ_GREEDY_EVAL tag=it7_b5_plus8 alloc=[16, 16, 16, 16, 16, 24, 8, 8] bytes=120 recall=77.713900
+
+PQ_GREEDY_EVAL tag=it7_b6_plus8 alloc=[16, 16, 16, 16, 16, 16, 16, 8] bytes=120 recall=77.872600
+
+PQ_GREEDY_EVAL tag=it7_b7_plus8 alloc=[16, 16, 16, 16, 16, 16, 8, 16] bytes=120 recall=77.880100
+
+PQ_GREEDY_EVAL tag=it8_b0_plus8 alloc=[32, 16, 16, 16, 16, 16, 8, 8] bytes=128 recall=78.710000
+
+PQ_GREEDY_EVAL tag=it8_b1_plus8 alloc=[24, 24, 16, 16, 16, 16, 8, 8] bytes=128 recall=78.798000
+
+PQ_GREEDY_EVAL tag=it8_b2_plus8 alloc=[24, 16, 24, 16, 16, 16, 8, 8] bytes=128 recall=78.800700
+
+PQ_GREEDY_EVAL tag=it8_b3_plus8 alloc=[24, 16, 16, 24, 16, 16, 8, 8] bytes=128 recall=78.727800
+
+PQ_GREEDY_EVAL tag=it8_b4_plus8 alloc=[24, 16, 16, 16, 24, 16, 8, 8] bytes=128 recall=78.711200
+
+PQ_GREEDY_EVAL tag=it8_b5_plus8 alloc=[24, 16, 16, 16, 16, 24, 8, 8] bytes=128 recall=78.720300
+
+PQ_GREEDY_EVAL tag=it8_b6_plus8 alloc=[24, 16, 16, 16, 16, 16, 16, 8] bytes=128 recall=78.745700
+
+PQ_GREEDY_EVAL tag=it8_b7_plus8 alloc=[24, 16, 16, 16, 16, 16, 8, 16] bytes=128 recall=78.789200
+
+PQ_GREEDY_EVAL tag=it9_b0_plus8 alloc=[32, 16, 24, 16, 16, 16, 8, 8] bytes=136 recall=79.528300
+
+PQ_GREEDY_EVAL tag=it9_b1_plus8 alloc=[24, 24, 24, 16, 16, 16, 8, 8] bytes=136 recall=79.591700
+
+PQ_GREEDY_EVAL tag=it9_b2_plus8 alloc=[24, 16, 32, 16, 16, 16, 8, 8] bytes=136 recall=79.514300
+
+PQ_GREEDY_EVAL tag=it9_b3_plus8 alloc=[24, 16, 24, 24, 16, 16, 8, 8] bytes=136 recall=79.593200
+
+PQ_GREEDY_EVAL tag=it9_b4_plus8 alloc=[24, 16, 24, 16, 24, 16, 8, 8] bytes=136 recall=79.555700
+
+PQ_GREEDY_EVAL tag=it9_b5_plus8 alloc=[24, 16, 24, 16, 16, 24, 8, 8] bytes=136 recall=79.495500
+
+PQ_GREEDY_EVAL tag=it9_b6_plus8 alloc=[24, 16, 24, 16, 16, 16, 16, 8] bytes=136 recall=79.555900
+
+PQ_GREEDY_EVAL tag=it9_b7_plus8 alloc=[24, 16, 24, 16, 16, 16, 8, 16] bytes=136 recall=79.585300
+
+PQ_GREEDY_EVAL tag=it10_b0_plus8 alloc=[32, 16, 24, 24, 16, 16, 8, 8] bytes=144 recall=80.180900
+
+PQ_GREEDY_EVAL tag=it10_b1_plus8 alloc=[24, 24, 24, 24, 16, 16, 8, 8] bytes=144 recall=80.286500
+
+PQ_GREEDY_EVAL tag=it10_b2_plus8 alloc=[24, 16, 32, 24, 16, 16, 8, 8] bytes=144 recall=80.271800
+
+PQ_GREEDY_EVAL tag=it10_b3_plus8 alloc=[24, 16, 24, 32, 16, 16, 8, 8] bytes=144 recall=80.181300
+
+PQ_GREEDY_EVAL tag=it10_b4_plus8 alloc=[24, 16, 24, 24, 24, 16, 8, 8] bytes=144 recall=80.274700
+
+PQ_GREEDY_EVAL tag=it10_b5_plus8 alloc=[24, 16, 24, 24, 16, 24, 8, 8] bytes=144 recall=80.178400
+
+PQ_GREEDY_EVAL tag=it10_b6_plus8 alloc=[24, 16, 24, 24, 16, 16, 16, 8] bytes=144 recall=80.230600
+
+PQ_GREEDY_EVAL tag=it10_b7_plus8 alloc=[24, 16, 24, 24, 16, 16, 8, 16] bytes=144 recall=80.275200
+
+PQ_GREEDY_EVAL tag=it11_b0_plus8 alloc=[32, 24, 24, 24, 16, 16, 8, 8] bytes=152 recall=80.991500
+
+PQ_GREEDY_EVAL tag=it11_b1_plus8 alloc=[24, 32, 24, 24, 16, 16, 8, 8] bytes=152 recall=81.021500
+
+PQ_GREEDY_EVAL tag=it11_b2_plus8 alloc=[24, 24, 32, 24, 16, 16, 8, 8] bytes=152 recall=80.939900
+
+PQ_GREEDY_EVAL tag=it11_b3_plus8 alloc=[24, 24, 24, 32, 16, 16, 8, 8] bytes=152 recall=80.947400
+
+PQ_GREEDY_EVAL tag=it11_b4_plus8 alloc=[24, 24, 24, 24, 24, 16, 8, 8] bytes=152 recall=81.023900
+
+PQ_GREEDY_EVAL tag=it11_b5_plus8 alloc=[24, 24, 24, 24, 16, 24, 8, 8] bytes=152 recall=80.927600
+
+PQ_GREEDY_EVAL tag=it11_b6_plus8 alloc=[24, 24, 24, 24, 16, 16, 16, 8] bytes=152 recall=81.005800
+
+PQ_GREEDY_EVAL tag=it11_b7_plus8 alloc=[24, 24, 24, 24, 16, 16, 8, 16] bytes=152 recall=80.918600
+
+PQ_GREEDY_EVAL tag=it12_b0_plus8 alloc=[32, 24, 24, 24, 24, 16, 8, 8] bytes=160 recall=81.632300
+
+PQ_GREEDY_EVAL tag=it12_b1_plus8 alloc=[24, 32, 24, 24, 24, 16, 8, 8] bytes=160 recall=81.635500
+
+PQ_GREEDY_EVAL tag=it12_b2_plus8 alloc=[24, 24, 32, 24, 24, 16, 8, 8] bytes=160 recall=81.625600
+
+PQ_GREEDY_EVAL tag=it12_b3_plus8 alloc=[24, 24, 24, 32, 24, 16, 8, 8] bytes=160 recall=81.526100
+
+PQ_GREEDY_EVAL tag=it12_b4_plus8 alloc=[24, 24, 24, 24, 32, 16, 8, 8] bytes=160 recall=81.582700
+
+PQ_GREEDY_EVAL tag=it12_b5_plus8 alloc=[24, 24, 24, 24, 24, 24, 8, 8] bytes=160 recall=81.588400
+
+PQ_GREEDY_EVAL tag=it12_b6_plus8 alloc=[24, 24, 24, 24, 24, 16, 16, 8] bytes=160 recall=81.597900
+
+PQ_GREEDY_EVAL tag=it12_b7_plus8 alloc=[24, 24, 24, 24, 24, 16, 8, 16] bytes=160 recall=81.622800
+
+PQ_GREEDY_EVAL tag=it13_b0_plus8 alloc=[32, 32, 24, 24, 24, 16, 8, 8] bytes=168 recall=82.274800
+
+PQ_GREEDY_EVAL tag=it13_b1_plus8 alloc=[24, 40, 24, 24, 24, 16, 8, 8] bytes=168 recall=82.145800
+
+PQ_GREEDY_EVAL tag=it13_b2_plus8 alloc=[24, 32, 32, 24, 24, 16, 8, 8] bytes=168 recall=82.248300
+
+PQ_GREEDY_EVAL tag=it13_b3_plus8 alloc=[24, 32, 24, 32, 24, 16, 8, 8] bytes=168 recall=82.199400
+
+PQ_GREEDY_EVAL tag=it13_b4_plus8 alloc=[24, 32, 24, 24, 32, 16, 8, 8] bytes=168 recall=82.222100
+
+PQ_GREEDY_EVAL tag=it13_b5_plus8 alloc=[24, 32, 24, 24, 24, 24, 8, 8] bytes=168 recall=82.191000
+
+PQ_GREEDY_EVAL tag=it13_b6_plus8 alloc=[24, 32, 24, 24, 24, 16, 16, 8] bytes=168 recall=82.279600
+
+PQ_GREEDY_EVAL tag=it13_b7_plus8 alloc=[24, 32, 24, 24, 24, 16, 8, 16] bytes=168 recall=82.224500
+
+PQ_GREEDY_EVAL tag=it14_b0_plus8 alloc=[32, 32, 24, 24, 24, 16, 16, 8] bytes=176 recall=82.844700
+
+PQ_GREEDY_EVAL tag=it14_b1_plus8 alloc=[24, 40, 24, 24, 24, 16, 16, 8] bytes=176 recall=82.709800
+
+PQ_GREEDY_EVAL tag=it14_b2_plus8 alloc=[24, 32, 32, 24, 24, 16, 16, 8] bytes=176 recall=82.796400
+
+PQ_GREEDY_EVAL tag=it14_b3_plus8 alloc=[24, 32, 24, 32, 24, 16, 16, 8] bytes=176 recall=82.809600
+
+PQ_GREEDY_EVAL tag=it14_b4_plus8 alloc=[24, 32, 24, 24, 32, 16, 16, 8] bytes=176 recall=82.727800
+
+PQ_GREEDY_EVAL tag=it14_b5_plus8 alloc=[24, 32, 24, 24, 24, 24, 16, 8] bytes=176 recall=82.742000
+
+PQ_GREEDY_EVAL tag=it14_b6_plus8 alloc=[24, 32, 24, 24, 24, 16, 24, 8] bytes=176 recall=82.738300
+
+PQ_GREEDY_EVAL tag=it14_b7_plus8 alloc=[24, 32, 24, 24, 24, 16, 16, 16] bytes=176 recall=82.751500
+
+PQ_GREEDY_EVAL tag=it15_b0_plus8 alloc=[40, 32, 24, 24, 24, 16, 16, 8] bytes=184 recall=83.284100
+
+PQ_GREEDY_EVAL tag=it15_b1_plus8 alloc=[32, 40, 24, 24, 24, 16, 16, 8] bytes=184 recall=83.279000
+
+PQ_GREEDY_EVAL tag=it15_b2_plus8 alloc=[32, 32, 32, 24, 24, 16, 16, 8] bytes=184 recall=83.425300
+
+PQ_GREEDY_EVAL tag=it15_b3_plus8 alloc=[32, 32, 24, 32, 24, 16, 16, 8] bytes=184 recall=83.366000
+
+PQ_GREEDY_EVAL tag=it15_b4_plus8 alloc=[32, 32, 24, 24, 32, 16, 16, 8] bytes=184 recall=83.373900
+
+PQ_GREEDY_EVAL tag=it15_b5_plus8 alloc=[32, 32, 24, 24, 24, 24, 16, 8] bytes=184 recall=83.289900
+
+PQ_GREEDY_EVAL tag=it15_b6_plus8 alloc=[32, 32, 24, 24, 24, 16, 24, 8] bytes=184 recall=83.283900
+
+PQ_GREEDY_EVAL tag=it15_b7_plus8 alloc=[32, 32, 24, 24, 24, 16, 16, 16] bytes=184 recall=83.290300
+
+PQ_GREEDY_EVAL tag=it16_b0_plus8 alloc=[40, 32, 32, 24, 24, 16, 16, 8] bytes=192 recall=83.838900
+
+PQ_GREEDY_EVAL tag=it16_b1_plus8 alloc=[32, 40, 32, 24, 24, 16, 16, 8] bytes=192 recall=83.868900
+
+PQ_GREEDY_EVAL tag=it16_b2_plus8 alloc=[32, 32, 40, 24, 24, 16, 16, 8] bytes=192 recall=83.834800
+
+PQ_GREEDY_EVAL tag=it16_b3_plus8 alloc=[32, 32, 32, 32, 24, 16, 16, 8] bytes=192 recall=83.955900
+
+PQ_GREEDY_EVAL tag=it16_b4_plus8 alloc=[32, 32, 32, 24, 32, 16, 16, 8] bytes=192 recall=83.930300
+
+PQ_GREEDY_EVAL tag=it16_b5_plus8 alloc=[32, 32, 32, 24, 24, 24, 16, 8] bytes=192 recall=83.869300
+
+PQ_GREEDY_EVAL tag=it16_b6_plus8 alloc=[32, 32, 32, 24, 24, 16, 24, 8] bytes=192 recall=83.830900
+
+PQ_GREEDY_EVAL tag=it16_b7_plus8 alloc=[32, 32, 32, 24, 24, 16, 16, 16] bytes=192 recall=83.828900
+
+PQ_GREEDY_EVAL tag=it17_b0_plus8 alloc=[40, 32, 32, 32, 24, 16, 16, 8] bytes=200 recall=84.387900
+
+PQ_GREEDY_EVAL tag=it17_b1_plus8 alloc=[32, 40, 32, 32, 24, 16, 16, 8] bytes=200 recall=84.363000
+
+PQ_GREEDY_EVAL tag=it17_b2_plus8 alloc=[32, 32, 40, 32, 24, 16, 16, 8] bytes=200 recall=84.337900
+
+PQ_GREEDY_EVAL tag=it17_b3_plus8 alloc=[32, 32, 32, 40, 24, 16, 16, 8] bytes=200 recall=84.355900
+
+PQ_GREEDY_EVAL tag=it17_b4_plus8 alloc=[32, 32, 32, 32, 32, 16, 16, 8] bytes=200 recall=84.430100
+
+PQ_GREEDY_EVAL tag=it17_b5_plus8 alloc=[32, 32, 32, 32, 24, 24, 16, 8] bytes=200 recall=84.397600
+
+PQ_GREEDY_EVAL tag=it17_b6_plus8 alloc=[32, 32, 32, 32, 24, 16, 24, 8] bytes=200 recall=84.352700
+
+PQ_GREEDY_EVAL tag=it17_b7_plus8 alloc=[32, 32, 32, 32, 24, 16, 16, 16] bytes=200 recall=84.388600
+
+PQ_GREEDY_EVAL tag=it18_b0_plus8 alloc=[40, 32, 32, 32, 32, 16, 16, 8] bytes=208 recall=84.866200
+
+PQ_GREEDY_EVAL tag=it18_b1_plus8 alloc=[32, 40, 32, 32, 32, 16, 16, 8] bytes=208 recall=84.880900
+
+PQ_GREEDY_EVAL tag=it18_b2_plus8 alloc=[32, 32, 40, 32, 32, 16, 16, 8] bytes=208 recall=84.858300
+
+PQ_GREEDY_EVAL tag=it18_b3_plus8 alloc=[32, 32, 32, 40, 32, 16, 16, 8] bytes=208 recall=84.862500
+
+PQ_GREEDY_EVAL tag=it18_b4_plus8 alloc=[32, 32, 32, 32, 40, 16, 16, 8] bytes=208 recall=84.874600
+
+PQ_GREEDY_EVAL tag=it18_b5_plus8 alloc=[32, 32, 32, 32, 32, 24, 16, 8] bytes=208 recall=84.945100
+
+PQ_GREEDY_EVAL tag=it18_b6_plus8 alloc=[32, 32, 32, 32, 32, 16, 24, 8] bytes=208 recall=84.850900
+
+PQ_GREEDY_EVAL tag=it18_b7_plus8 alloc=[32, 32, 32, 32, 32, 16, 16, 16] bytes=208 recall=84.866500
+
+PQ_GREEDY_EVAL tag=it19_b0_plus8 alloc=[40, 32, 32, 32, 32, 24, 16, 8] bytes=216 recall=85.318300
+
+PQ_GREEDY_EVAL tag=it19_b1_plus8 alloc=[32, 40, 32, 32, 32, 24, 16, 8] bytes=216 recall=85.338200
+
+PQ_GREEDY_EVAL tag=it19_b2_plus8 alloc=[32, 32, 40, 32, 32, 24, 16, 8] bytes=216 recall=85.317600
+
+PQ_GREEDY_EVAL tag=it19_b3_plus8 alloc=[32, 32, 32, 40, 32, 24, 16, 8] bytes=216 recall=85.286300
+
+PQ_GREEDY_EVAL tag=it19_b4_plus8 alloc=[32, 32, 32, 32, 40, 24, 16, 8] bytes=216 recall=85.277100
+
+PQ_GREEDY_EVAL tag=it19_b5_plus8 alloc=[32, 32, 32, 32, 32, 32, 16, 8] bytes=216 recall=85.328000
+
+PQ_GREEDY_EVAL tag=it19_b6_plus8 alloc=[32, 32, 32, 32, 32, 24, 24, 8] bytes=216 recall=85.309500
+
+PQ_GREEDY_EVAL tag=it19_b7_plus8 alloc=[32, 32, 32, 32, 32, 24, 16, 16] bytes=216 recall=85.269900
+
+PQ_GREEDY_EVAL tag=it20_b0_plus8 alloc=[40, 40, 32, 32, 32, 24, 16, 8] bytes=224 recall=85.767100
+
+PQ_GREEDY_EVAL tag=it20_b1_plus8 alloc=[32, 48, 32, 32, 32, 24, 16, 8] bytes=224 recall=85.604100
+
+PQ_GREEDY_EVAL tag=it20_b2_plus8 alloc=[32, 40, 40, 32, 32, 24, 16, 8] bytes=224 recall=85.737900
+
+PQ_GREEDY_EVAL tag=it20_b3_plus8 alloc=[32, 40, 32, 40, 32, 24, 16, 8] bytes=224 recall=85.684900
+
+PQ_GREEDY_EVAL tag=it20_b4_plus8 alloc=[32, 40, 32, 32, 40, 24, 16, 8] bytes=224 recall=85.685200
+
+PQ_GREEDY_EVAL tag=it20_b5_plus8 alloc=[32, 40, 32, 32, 32, 32, 16, 8] bytes=224 recall=85.729400
+
+PQ_GREEDY_EVAL tag=it20_b6_plus8 alloc=[32, 40, 32, 32, 32, 24, 24, 8] bytes=224 recall=85.736300
+
+PQ_GREEDY_EVAL tag=it20_b7_plus8 alloc=[32, 40, 32, 32, 32, 24, 16, 16] bytes=224 recall=85.697700
+
+PQ_GREEDY_EVAL tag=it21_b0_plus8 alloc=[48, 40, 32, 32, 32, 24, 16, 8] bytes=232 recall=86.126700
+
+PQ_GREEDY_EVAL tag=it21_b1_plus8 alloc=[40, 48, 32, 32, 32, 24, 16, 8] bytes=232 recall=86.115700
+
+PQ_GREEDY_EVAL tag=it21_b2_plus8 alloc=[40, 40, 40, 32, 32, 24, 16, 8] bytes=232 recall=86.150600
+
+PQ_GREEDY_EVAL tag=it21_b3_plus8 alloc=[40, 40, 32, 40, 32, 24, 16, 8] bytes=232 recall=86.127600
+
+PQ_GREEDY_EVAL tag=it21_b4_plus8 alloc=[40, 40, 32, 32, 40, 24, 16, 8] bytes=232 recall=86.121800
+
+PQ_GREEDY_EVAL tag=it21_b5_plus8 alloc=[40, 40, 32, 32, 32, 32, 16, 8] bytes=232 recall=86.176900
+
+PQ_GREEDY_EVAL tag=it21_b6_plus8 alloc=[40, 40, 32, 32, 32, 24, 24, 8] bytes=232 recall=86.157800
+
+PQ_GREEDY_EVAL tag=it21_b7_plus8 alloc=[40, 40, 32, 32, 32, 24, 16, 16] bytes=232 recall=86.141500
+
+PQ_GREEDY_EVAL tag=it22_b0_plus8 alloc=[48, 40, 32, 32, 32, 32, 16, 8] bytes=240 recall=86.487100
+
+PQ_GREEDY_EVAL tag=it22_b1_plus8 alloc=[40, 48, 32, 32, 32, 32, 16, 8] bytes=240 recall=86.490600
+
+PQ_GREEDY_EVAL tag=it22_b2_plus8 alloc=[40, 40, 40, 32, 32, 32, 16, 8] bytes=240 recall=86.588500
+
+PQ_GREEDY_EVAL tag=it22_b3_plus8 alloc=[40, 40, 32, 40, 32, 32, 16, 8] bytes=240 recall=86.552100
+
+PQ_GREEDY_EVAL tag=it22_b4_plus8 alloc=[40, 40, 32, 32, 40, 32, 16, 8] bytes=240 recall=86.561000
+
+PQ_GREEDY_EVAL tag=it22_b5_plus8 alloc=[40, 40, 32, 32, 32, 40, 16, 8] bytes=240 recall=86.490800
+
+PQ_GREEDY_EVAL tag=it22_b6_plus8 alloc=[40, 40, 32, 32, 32, 32, 24, 8] bytes=240 recall=86.552800
+
+PQ_GREEDY_EVAL tag=it22_b7_plus8 alloc=[40, 40, 32, 32, 32, 32, 16, 16] bytes=240 recall=86.565800
+
+PQ_GREEDY_EVAL tag=it23_b0_plus8 alloc=[48, 40, 40, 32, 32, 32, 16, 8] bytes=248 recall=86.889700
+
+PQ_GREEDY_EVAL tag=it23_b1_plus8 alloc=[40, 48, 40, 32, 32, 32, 16, 8] bytes=248 recall=86.881000
+
+PQ_GREEDY_EVAL tag=it23_b2_plus8 alloc=[40, 40, 48, 32, 32, 32, 16, 8] bytes=248 recall=86.907800
+
+PQ_GREEDY_EVAL tag=it23_b3_plus8 alloc=[40, 40, 40, 40, 32, 32, 16, 8] bytes=248 recall=86.932200
+
+PQ_GREEDY_EVAL tag=it23_b4_plus8 alloc=[40, 40, 40, 32, 40, 32, 16, 8] bytes=248 recall=86.938200
+
+PQ_GREEDY_EVAL tag=it23_b5_plus8 alloc=[40, 40, 40, 32, 32, 40, 16, 8] bytes=248 recall=86.867900
+
+PQ_GREEDY_EVAL tag=it23_b6_plus8 alloc=[40, 40, 40, 32, 32, 32, 24, 8] bytes=248 recall=86.913400
+
+PQ_GREEDY_EVAL tag=it23_b7_plus8 alloc=[40, 40, 40, 32, 32, 32, 16, 16] bytes=248 recall=86.933300
+
+PQ_GREEDY_EVAL tag=it24_b0_plus8 alloc=[48, 40, 40, 32, 40, 32, 16, 8] bytes=256 recall=87.313400
+
+PQ_GREEDY_EVAL tag=it24_b1_plus8 alloc=[40, 48, 40, 32, 40, 32, 16, 8] bytes=256 recall=87.273800
+
+PQ_GREEDY_EVAL tag=it24_b2_plus8 alloc=[40, 40, 48, 32, 40, 32, 16, 8] bytes=256 recall=87.272200
+
+PQ_GREEDY_EVAL tag=it24_b3_plus8 alloc=[40, 40, 40, 40, 40, 32, 16, 8] bytes=256 recall=87.311200
+
+PQ_GREEDY_EVAL tag=it24_b4_plus8 alloc=[40, 40, 40, 32, 48, 32, 16, 8] bytes=256 recall=87.257200
+
+PQ_GREEDY_EVAL tag=it24_b5_plus8 alloc=[40, 40, 40, 32, 40, 40, 16, 8] bytes=256 recall=87.258100
+
+PQ_GREEDY_EVAL tag=it24_b6_plus8 alloc=[40, 40, 40, 32, 40, 32, 24, 8] bytes=256 recall=87.304400
+
+PQ_GREEDY_EVAL tag=it24_b7_plus8 alloc=[40, 40, 40, 32, 40, 32, 16, 16] bytes=256 recall=87.320600
+
+PQ_GREEDY_EVAL tag=it25_b0_plus8 alloc=[48, 40, 40, 32, 40, 32, 16, 16] bytes=264 recall=87.672500
+
+PQ_GREEDY_EVAL tag=it25_b1_plus8 alloc=[40, 48, 40, 32, 40, 32, 16, 16] bytes=264 recall=87.600800
+
+PQ_GREEDY_EVAL tag=it25_b2_plus8 alloc=[40, 40, 48, 32, 40, 32, 16, 16] bytes=264 recall=87.634900
+
+PQ_GREEDY_EVAL tag=it25_b3_plus8 alloc=[40, 40, 40, 40, 40, 32, 16, 16] bytes=264 recall=87.671000
+
+PQ_GREEDY_EVAL tag=it25_b4_plus8 alloc=[40, 40, 40, 32, 48, 32, 16, 16] bytes=264 recall=87.635500
+
+PQ_GREEDY_EVAL tag=it25_b5_plus8 alloc=[40, 40, 40, 32, 40, 40, 16, 16] bytes=264 recall=87.637600
+
+PQ_GREEDY_EVAL tag=it25_b6_plus8 alloc=[40, 40, 40, 32, 40, 32, 24, 16] bytes=264 recall=87.668200
+
+PQ_GREEDY_EVAL tag=it25_b7_plus8 alloc=[40, 40, 40, 32, 40, 32, 16, 24] bytes=264 recall=87.680400
+
+PQ_GREEDY_EVAL tag=it26_b0_plus8 alloc=[48, 40, 40, 32, 40, 32, 16, 24] bytes=272 recall=88.050600
+
+PQ_GREEDY_EVAL tag=it26_b1_plus8 alloc=[40, 48, 40, 32, 40, 32, 16, 24] bytes=272 recall=87.991700
+
+PQ_GREEDY_EVAL tag=it26_b2_plus8 alloc=[40, 40, 48, 32, 40, 32, 16, 24] bytes=272 recall=88.028100
+
+PQ_GREEDY_EVAL tag=it26_b3_plus8 alloc=[40, 40, 40, 40, 40, 32, 16, 24] bytes=272 recall=88.022200
+
+PQ_GREEDY_EVAL tag=it26_b4_plus8 alloc=[40, 40, 40, 32, 48, 32, 16, 24] bytes=272 recall=87.950400
+
+PQ_GREEDY_EVAL tag=it26_b5_plus8 alloc=[40, 40, 40, 32, 40, 40, 16, 24] bytes=272 recall=87.987700
+
+PQ_GREEDY_EVAL tag=it26_b6_plus8 alloc=[40, 40, 40, 32, 40, 32, 24, 24] bytes=272 recall=88.040100
+
+PQ_GREEDY_EVAL tag=it26_b7_plus8 alloc=[40, 40, 40, 32, 40, 32, 16, 32] bytes=272 recall=88.076200
+
+PQ_GREEDY_EVAL tag=it27_b0_plus8 alloc=[48, 40, 40, 32, 40, 32, 16, 32] bytes=280 recall=88.403000
+
+PQ_GREEDY_EVAL tag=it27_b1_plus8 alloc=[40, 48, 40, 32, 40, 32, 16, 32] bytes=280 recall=88.331500
+
+PQ_GREEDY_EVAL tag=it27_b2_plus8 alloc=[40, 40, 48, 32, 40, 32, 16, 32] bytes=280 recall=88.388100
+
+PQ_GREEDY_EVAL tag=it27_b3_plus8 alloc=[40, 40, 40, 40, 40, 32, 16, 32] bytes=280 recall=88.373300
+
+PQ_GREEDY_EVAL tag=it27_b4_plus8 alloc=[40, 40, 40, 32, 48, 32, 16, 32] bytes=280 recall=88.349900
+
+PQ_GREEDY_EVAL tag=it27_b5_plus8 alloc=[40, 40, 40, 32, 40, 40, 16, 32] bytes=280 recall=88.342600
+
+PQ_GREEDY_EVAL tag=it27_b6_plus8 alloc=[40, 40, 40, 32, 40, 32, 24, 32] bytes=280 recall=88.359900
+
+PQ_GREEDY_EVAL tag=it27_b7_plus8 alloc=[40, 40, 40, 32, 40, 32, 16, 40] bytes=280 recall=88.342000
+
+PQ_GREEDY_EVAL tag=it28_b0_plus8 alloc=[56, 40, 40, 32, 40, 32, 16, 32] bytes=288 recall=88.581900
+
+PQ_GREEDY_EVAL tag=it28_b1_plus8 alloc=[48, 48, 40, 32, 40, 32, 16, 32] bytes=288 recall=88.665900
+
+PQ_GREEDY_EVAL tag=it28_b2_plus8 alloc=[48, 40, 48, 32, 40, 32, 16, 32] bytes=288 recall=88.661200
+
+PQ_GREEDY_EVAL tag=it28_b3_plus8 alloc=[48, 40, 40, 40, 40, 32, 16, 32] bytes=288 recall=88.683600
+
+PQ_GREEDY_EVAL tag=it28_b4_plus8 alloc=[48, 40, 40, 32, 48, 32, 16, 32] bytes=288 recall=88.657100
+
+PQ_GREEDY_EVAL tag=it28_b5_plus8 alloc=[48, 40, 40, 32, 40, 40, 16, 32] bytes=288 recall=88.670700
+
+PQ_GREEDY_EVAL tag=it28_b6_plus8 alloc=[48, 40, 40, 32, 40, 32, 24, 32] bytes=288 recall=88.714900
+
+PQ_GREEDY_EVAL tag=it28_b7_plus8 alloc=[48, 40, 40, 32, 40, 32, 16, 40] bytes=288 recall=88.692900
+
+PQ_GREEDY_EVAL tag=it29_b0_plus8 alloc=[56, 40, 40, 32, 40, 32, 24, 32] bytes=296 recall=88.859500
+
+PQ_GREEDY_EVAL tag=it29_b1_plus8 alloc=[48, 48, 40, 32, 40, 32, 24, 32] bytes=296 recall=89.003700
+
+PQ_GREEDY_EVAL tag=it29_b2_plus8 alloc=[48, 40, 48, 32, 40, 32, 24, 32] bytes=296 recall=89.008900
+
+PQ_GREEDY_EVAL tag=it29_b3_plus8 alloc=[48, 40, 40, 40, 40, 32, 24, 32] bytes=296 recall=89.046000
+
+PQ_GREEDY_EVAL tag=it29_b4_plus8 alloc=[48, 40, 40, 32, 48, 32, 24, 32] bytes=296 recall=89.009400
+
+PQ_GREEDY_EVAL tag=it29_b5_plus8 alloc=[48, 40, 40, 32, 40, 40, 24, 32] bytes=296 recall=88.994300
+
+PQ_GREEDY_EVAL tag=it29_b6_plus8 alloc=[48, 40, 40, 32, 40, 32, 32, 32] bytes=296 recall=89.072000
+
+PQ_GREEDY_EVAL tag=it29_b7_plus8 alloc=[48, 40, 40, 32, 40, 32, 24, 40] bytes=296 recall=89.012900
+
+PQ_GREEDY_EVAL tag=it30_b0_plus8 alloc=[56, 40, 40, 32, 40, 32, 32, 32] bytes=304 recall=89.269400
+
+PQ_GREEDY_EVAL tag=it30_b1_plus8 alloc=[48, 48, 40, 32, 40, 32, 32, 32] bytes=304 recall=89.367100
+
+PQ_GREEDY_EVAL tag=it30_b2_plus8 alloc=[48, 40, 48, 32, 40, 32, 32, 32] bytes=304 recall=89.390300
+
+PQ_GREEDY_EVAL tag=it30_b3_plus8 alloc=[48, 40, 40, 40, 40, 32, 32, 32] bytes=304 recall=89.393900
+
+PQ_GREEDY_EVAL tag=it30_b4_plus8 alloc=[48, 40, 40, 32, 48, 32, 32, 32] bytes=304 recall=89.339400
+
+PQ_GREEDY_EVAL tag=it30_b5_plus8 alloc=[48, 40, 40, 32, 40, 40, 32, 32] bytes=304 recall=89.384800
+
+PQ_GREEDY_EVAL tag=it30_b6_plus8 alloc=[48, 40, 40, 32, 40, 32, 40, 32] bytes=304 recall=89.385900
+
+PQ_GREEDY_EVAL tag=it30_b7_plus8 alloc=[48, 40, 40, 32, 40, 32, 32, 40] bytes=304 recall=89.357600
+
+PQ_GREEDY_EVAL tag=it31_b0_plus8 alloc=[56, 40, 40, 40, 40, 32, 32, 32] bytes=312 recall=89.562100
+
+PQ_GREEDY_EVAL tag=it31_b1_plus8 alloc=[48, 48, 40, 40, 40, 32, 32, 32] bytes=312 recall=89.702400
+
+PQ_GREEDY_EVAL tag=it31_b2_plus8 alloc=[48, 40, 48, 40, 40, 32, 32, 32] bytes=312 recall=89.712200
+
+PQ_GREEDY_EVAL tag=it31_b3_plus8 alloc=[48, 40, 40, 48, 40, 32, 32, 32] bytes=312 recall=89.663200
+
+PQ_GREEDY_EVAL tag=it31_b4_plus8 alloc=[48, 40, 40, 40, 48, 32, 32, 32] bytes=312 recall=89.692300
+
+PQ_GREEDY_EVAL tag=it31_b5_plus8 alloc=[48, 40, 40, 40, 40, 40, 32, 32] bytes=312 recall=89.697700
+
+PQ_GREEDY_EVAL tag=it31_b6_plus8 alloc=[48, 40, 40, 40, 40, 32, 40, 32] bytes=312 recall=89.699500
+
+PQ_GREEDY_EVAL tag=it31_b7_plus8 alloc=[48, 40, 40, 40, 40, 32, 32, 40] bytes=312 recall=89.716300
+
+PQ_GREEDY_EVAL tag=it32_b0_plus8 alloc=[56, 40, 40, 40, 40, 32, 32, 40] bytes=320 recall=89.839800
+
+PQ_GREEDY_EVAL tag=it32_b1_plus8 alloc=[48, 48, 40, 40, 40, 32, 32, 40] bytes=320 recall=89.980900
+
+PQ_GREEDY_EVAL tag=it32_b2_plus8 alloc=[48, 40, 48, 40, 40, 32, 32, 40] bytes=320 recall=90.014800
+
+PQ_GREEDY_EVAL tag=it32_b3_plus8 alloc=[48, 40, 40, 48, 40, 32, 32, 40] bytes=320 recall=89.993000
+
+PQ_GREEDY_EVAL tag=it32_b4_plus8 alloc=[48, 40, 40, 40, 48, 32, 32, 40] bytes=320 recall=89.973600
+
+PQ_GREEDY_EVAL tag=it32_b5_plus8 alloc=[48, 40, 40, 40, 40, 40, 32, 40] bytes=320 recall=89.947900
+
+PQ_GREEDY_EVAL tag=it32_b6_plus8 alloc=[48, 40, 40, 40, 40, 32, 40, 40] bytes=320 recall=89.984800
+
+PQ_GREEDY_EVAL tag=it32_b7_plus8 alloc=[48, 40, 40, 40, 40, 32, 32, 48] bytes=320 recall=89.900800
+
+PQ_GREEDY_EVAL tag=it33_b0_plus8 alloc=[56, 40, 48, 40, 40, 32, 32, 40] bytes=328 recall=90.149500
+
+PQ_GREEDY_EVAL tag=it33_b1_plus8 alloc=[48, 48, 48, 40, 40, 32, 32, 40] bytes=328 recall=90.306900
+
+PQ_GREEDY_EVAL tag=it33_b2_plus8 alloc=[48, 40, 56, 40, 40, 32, 32, 40] bytes=328 recall=90.190700
+
+PQ_GREEDY_EVAL tag=it33_b3_plus8 alloc=[48, 40, 48, 48, 40, 32, 32, 40] bytes=328 recall=90.248500
+
+PQ_GREEDY_EVAL tag=it33_b4_plus8 alloc=[48, 40, 48, 40, 48, 32, 32, 40] bytes=328 recall=90.283100
+
+PQ_GREEDY_EVAL tag=it33_b5_plus8 alloc=[48, 40, 48, 40, 40, 40, 32, 40] bytes=328 recall=90.262200
+
+PQ_GREEDY_EVAL tag=it33_b6_plus8 alloc=[48, 40, 48, 40, 40, 32, 40, 40] bytes=328 recall=90.283600
+
+PQ_GREEDY_EVAL tag=it33_b7_plus8 alloc=[48, 40, 48, 40, 40, 32, 32, 48] bytes=328 recall=90.247900
+
+PQ_GREEDY_EVAL tag=it34_b0_plus8 alloc=[56, 48, 48, 40, 40, 32, 32, 40] bytes=336 recall=90.512300
+
+PQ_GREEDY_EVAL tag=it34_b1_plus8 alloc=[48, 56, 48, 40, 40, 32, 32, 40] bytes=336 recall=90.476300
+
+PQ_GREEDY_EVAL tag=it34_b2_plus8 alloc=[48, 48, 56, 40, 40, 32, 32, 40] bytes=336 recall=90.482300
+
+PQ_GREEDY_EVAL tag=it34_b3_plus8 alloc=[48, 48, 48, 48, 40, 32, 32, 40] bytes=336 recall=90.612600
+
+PQ_GREEDY_EVAL tag=it34_b4_plus8 alloc=[48, 48, 48, 40, 48, 32, 32, 40] bytes=336 recall=90.597700
+
+PQ_GREEDY_EVAL tag=it34_b5_plus8 alloc=[48, 48, 48, 40, 40, 40, 32, 40] bytes=336 recall=90.599200
+
+PQ_GREEDY_EVAL tag=it34_b6_plus8 alloc=[48, 48, 48, 40, 40, 32, 40, 40] bytes=336 recall=90.594500
+
+PQ_GREEDY_EVAL tag=it34_b7_plus8 alloc=[48, 48, 48, 40, 40, 32, 32, 48] bytes=336 recall=90.509000
+
+PQ_GREEDY_EVAL tag=it35_b0_plus8 alloc=[56, 48, 48, 48, 40, 32, 32, 40] bytes=344 recall=90.766200
+
+PQ_GREEDY_EVAL tag=it35_b1_plus8 alloc=[48, 56, 48, 48, 40, 32, 32, 40] bytes=344 recall=90.774900
+
+PQ_GREEDY_EVAL tag=it35_b2_plus8 alloc=[48, 48, 56, 48, 40, 32, 32, 40] bytes=344 recall=90.724300
+
+PQ_GREEDY_EVAL tag=it35_b3_plus8 alloc=[48, 48, 48, 56, 40, 32, 32, 40] bytes=344 recall=90.758100
+
+PQ_GREEDY_EVAL tag=it35_b4_plus8 alloc=[48, 48, 48, 48, 48, 32, 32, 40] bytes=344 recall=90.826500
+
+PQ_GREEDY_EVAL tag=it35_b5_plus8 alloc=[48, 48, 48, 48, 40, 40, 32, 40] bytes=344 recall=90.866100
+
+PQ_GREEDY_EVAL tag=it35_b6_plus8 alloc=[48, 48, 48, 48, 40, 32, 40, 40] bytes=344 recall=90.857600
+
+PQ_GREEDY_EVAL tag=it35_b7_plus8 alloc=[48, 48, 48, 48, 40, 32, 32, 48] bytes=344 recall=90.812400
+
+PQ_GREEDY_EVAL tag=it36_b0_plus8 alloc=[56, 48, 48, 48, 40, 40, 32, 40] bytes=352 recall=91.051800
+
+PQ_GREEDY_EVAL tag=it36_b1_plus8 alloc=[48, 56, 48, 48, 40, 40, 32, 40] bytes=352 recall=91.041400
+
+PQ_GREEDY_EVAL tag=it36_b2_plus8 alloc=[48, 48, 56, 48, 40, 40, 32, 40] bytes=352 recall=91.063200
+
+PQ_GREEDY_EVAL tag=it36_b3_plus8 alloc=[48, 48, 48, 56, 40, 40, 32, 40] bytes=352 recall=91.040900
+
+PQ_GREEDY_EVAL tag=it36_b4_plus8 alloc=[48, 48, 48, 48, 48, 40, 32, 40] bytes=352 recall=91.144900
+
+PQ_GREEDY_EVAL tag=it36_b5_plus8 alloc=[48, 48, 48, 48, 40, 48, 32, 40] bytes=352 recall=91.100800
+
+PQ_GREEDY_EVAL tag=it36_b6_plus8 alloc=[48, 48, 48, 48, 40, 40, 40, 40] bytes=352 recall=91.149700
+
+PQ_GREEDY_EVAL tag=it36_b7_plus8 alloc=[48, 48, 48, 48, 40, 40, 32, 48] bytes=352 recall=91.102100
+
+PQ_GREEDY_EVAL tag=it37_b0_plus8 alloc=[56, 48, 48, 48, 40, 40, 40, 40] bytes=360 recall=91.328700
+
+PQ_GREEDY_EVAL tag=it37_b1_plus8 alloc=[48, 56, 48, 48, 40, 40, 40, 40] bytes=360 recall=91.331100
+
+PQ_GREEDY_EVAL tag=it37_b2_plus8 alloc=[48, 48, 56, 48, 40, 40, 40, 40] bytes=360 recall=91.347300
+
+PQ_GREEDY_EVAL tag=it37_b3_plus8 alloc=[48, 48, 48, 56, 40, 40, 40, 40] bytes=360 recall=91.307200
+
+PQ_GREEDY_EVAL tag=it37_b4_plus8 alloc=[48, 48, 48, 48, 48, 40, 40, 40] bytes=360 recall=91.401300
+
+PQ_GREEDY_EVAL tag=it37_b5_plus8 alloc=[48, 48, 48, 48, 40, 48, 40, 40] bytes=360 recall=91.384000
+
+PQ_GREEDY_EVAL tag=it37_b6_plus8 alloc=[48, 48, 48, 48, 40, 40, 48, 40] bytes=360 recall=91.378200
+
+PQ_GREEDY_EVAL tag=it37_b7_plus8 alloc=[48, 48, 48, 48, 40, 40, 40, 48] bytes=360 recall=91.340800
+
+PQ_GREEDY_EVAL tag=it38_b0_plus8 alloc=[56, 48, 48, 48, 48, 40, 40, 40] bytes=368 recall=91.626800
+
+PQ_GREEDY_EVAL tag=it38_b1_plus8 alloc=[48, 56, 48, 48, 48, 40, 40, 40] bytes=368 recall=91.630700
+
+PQ_GREEDY_EVAL tag=it38_b2_plus8 alloc=[48, 48, 56, 48, 48, 40, 40, 40] bytes=368 recall=91.598600
+
+PQ_GREEDY_EVAL tag=it38_b3_plus8 alloc=[48, 48, 48, 56, 48, 40, 40, 40] bytes=368 recall=91.562200
+
+PQ_GREEDY_EVAL tag=it38_b4_plus8 alloc=[48, 48, 48, 48, 56, 40, 40, 40] bytes=368 recall=91.601900
+
+PQ_GREEDY_EVAL tag=it38_b5_plus8 alloc=[48, 48, 48, 48, 48, 48, 40, 40] bytes=368 recall=91.653100
+
+PQ_GREEDY_EVAL tag=it38_b6_plus8 alloc=[48, 48, 48, 48, 48, 40, 48, 40] bytes=368 recall=91.673200
+
+PQ_GREEDY_EVAL tag=it38_b7_plus8 alloc=[48, 48, 48, 48, 48, 40, 40, 48] bytes=368 recall=91.643200
+
+PQ_GREEDY_EVAL tag=it39_b0_plus8 alloc=[56, 48, 48, 48, 48, 40, 48, 40] bytes=376 recall=91.846400
+
+PQ_GREEDY_EVAL tag=it39_b1_plus8 alloc=[48, 56, 48, 48, 48, 40, 48, 40] bytes=376 recall=91.820200
+
+PQ_GREEDY_EVAL tag=it39_b2_plus8 alloc=[48, 48, 56, 48, 48, 40, 48, 40] bytes=376 recall=91.833900
+
+PQ_GREEDY_EVAL tag=it39_b3_plus8 alloc=[48, 48, 48, 56, 48, 40, 48, 40] bytes=376 recall=91.843200
+
+PQ_GREEDY_EVAL tag=it39_b4_plus8 alloc=[48, 48, 48, 48, 56, 40, 48, 40] bytes=376 recall=91.831300
+
+PQ_GREEDY_EVAL tag=it39_b5_plus8 alloc=[48, 48, 48, 48, 48, 48, 48, 40] bytes=376 recall=91.869200
+
+PQ_GREEDY_EVAL tag=it39_b6_plus8 alloc=[48, 48, 48, 48, 48, 40, 56, 40] bytes=376 recall=91.810100
+
+PQ_GREEDY_EVAL tag=it39_b7_plus8 alloc=[48, 48, 48, 48, 48, 40, 48, 48] bytes=376 recall=91.868500
+
+PQ_GREEDY_EVAL tag=it40_b0_plus8 alloc=[56, 48, 48, 48, 48, 48, 48, 40] bytes=384 recall=92.074000
+
+PQ_GREEDY_EVAL tag=it40_b1_plus8 alloc=[48, 56, 48, 48, 48, 48, 48, 40] bytes=384 recall=92.120200
+
+PQ_GREEDY_EVAL tag=it40_b2_plus8 alloc=[48, 48, 56, 48, 48, 48, 48, 40] bytes=384 recall=92.047500
+
+PQ_GREEDY_EVAL tag=it40_b3_plus8 alloc=[48, 48, 48, 56, 48, 48, 48, 40] bytes=384 recall=92.061400
+
+PQ_GREEDY_EVAL tag=it40_b4_plus8 alloc=[48, 48, 48, 48, 56, 48, 48, 40] bytes=384 recall=92.074000
+
+PQ_GREEDY_EVAL tag=it40_b5_plus8 alloc=[48, 48, 48, 48, 48, 56, 48, 40] bytes=384 recall=92.030600
+
+PQ_GREEDY_EVAL tag=it40_b6_plus8 alloc=[48, 48, 48, 48, 48, 48, 56, 40] bytes=384 recall=92.027700
+
+PQ_GREEDY_EVAL tag=it40_b7_plus8 alloc=[48, 48, 48, 48, 48, 48, 48, 48] bytes=384 recall=92.088700
+
+
+---
+
+### Fiqa openai text large 3
+
+#### Uniform
+PQ sweep completed!
+Results directory: /tmp/pq_sweep_1780768377
+
+Summary of recall results:
+Bytes,Recall
+64,53.6127
+96,61.4352
+128,67.4645
+160,71.6944
+192,75.1667
+224,77.4074
+256,79.4167
+288,80.4707
+320,81.6142
+352,82.8194
+384,83.838
+#### Variable
+PQ_GREEDY_EVAL tag=init alloc=[8, 8, 8, 8, 8, 8, 8, 8] bytes=64 recall=53.648100
+PQ_GREEDY_EVAL tag=it1_b0_plus8 alloc=[16, 8, 8, 8, 8, 8, 8, 8] bytes=72 recall=57.197500
+PQ_GREEDY_EVAL tag=it1_b1_plus8 alloc=[8, 16, 8, 8, 8, 8, 8, 8] bytes=72 recall=56.509300
+PQ_GREEDY_EVAL tag=it1_b2_plus8 alloc=[8, 8, 16, 8, 8, 8, 8, 8] bytes=72 recall=55.888900
+PQ_GREEDY_EVAL tag=it1_b3_plus8 alloc=[8, 8, 8, 16, 8, 8, 8, 8] bytes=72 recall=55.180600
+PQ_GREEDY_EVAL tag=it1_b4_plus8 alloc=[8, 8, 8, 8, 16, 8, 8, 8] bytes=72 recall=55.182100
+PQ_GREEDY_EVAL tag=it1_b5_plus8 alloc=[8, 8, 8, 8, 8, 16, 8, 8] bytes=72 recall=54.324100
+PQ_GREEDY_EVAL tag=it1_b6_plus8 alloc=[8, 8, 8, 8, 8, 8, 16, 8] bytes=72 recall=55.000000
+PQ_GREEDY_EVAL tag=it1_b7_plus8 alloc=[8, 8, 8, 8, 8, 8, 8, 16] bytes=72 recall=54.638900
+PQ_GREEDY_EVAL tag=it2_b0_plus8 alloc=[24, 8, 8, 8, 8, 8, 8, 8] bytes=80 recall=59.717600
+PQ_GREEDY_EVAL tag=it2_b1_plus8 alloc=[16, 16, 8, 8, 8, 8, 8, 8] bytes=80 recall=59.813300
+PQ_GREEDY_EVAL tag=it2_b2_plus8 alloc=[16, 8, 16, 8, 8, 8, 8, 8] bytes=80 recall=58.890400
+PQ_GREEDY_EVAL tag=it2_b3_plus8 alloc=[16, 8, 8, 16, 8, 8, 8, 8] bytes=80 recall=58.729900
+PQ_GREEDY_EVAL tag=it2_b4_plus8 alloc=[16, 8, 8, 8, 16, 8, 8, 8] bytes=80 recall=58.376500
+PQ_GREEDY_EVAL tag=it2_b5_plus8 alloc=[16, 8, 8, 8, 8, 16, 8, 8] bytes=80 recall=58.603400
+PQ_GREEDY_EVAL tag=it2_b6_plus8 alloc=[16, 8, 8, 8, 8, 8, 16, 8] bytes=80 recall=58.364200
+PQ_GREEDY_EVAL tag=it2_b7_plus8 alloc=[16, 8, 8, 8, 8, 8, 8, 16] bytes=80 recall=58.060200
+PQ_GREEDY_EVAL tag=it3_b0_plus8 alloc=[24, 16, 8, 8, 8, 8, 8, 8] bytes=88 recall=62.970700
+PQ_GREEDY_EVAL tag=it3_b1_plus8 alloc=[16, 24, 8, 8, 8, 8, 8, 8] bytes=88 recall=61.669800
+PQ_GREEDY_EVAL tag=it3_b2_plus8 alloc=[16, 16, 16, 8, 8, 8, 8, 8] bytes=88 recall=62.166700
+PQ_GREEDY_EVAL tag=it3_b3_plus8 alloc=[16, 16, 8, 16, 8, 8, 8, 8] bytes=88 recall=61.449100
+PQ_GREEDY_EVAL tag=it3_b4_plus8 alloc=[16, 16, 8, 8, 16, 8, 8, 8] bytes=88 recall=61.183600
+PQ_GREEDY_EVAL tag=it3_b5_plus8 alloc=[16, 16, 8, 8, 8, 16, 8, 8] bytes=88 recall=60.973800
+PQ_GREEDY_EVAL tag=it3_b6_plus8 alloc=[16, 16, 8, 8, 8, 8, 16, 8] bytes=88 recall=61.086400
+PQ_GREEDY_EVAL tag=it3_b7_plus8 alloc=[16, 16, 8, 8, 8, 8, 8, 16] bytes=88 recall=61.379600
+PQ_GREEDY_EVAL tag=it4_b0_plus8 alloc=[32, 16, 8, 8, 8, 8, 8, 8] bytes=96 recall=64.842600
+PQ_GREEDY_EVAL tag=it4_b1_plus8 alloc=[24, 24, 8, 8, 8, 8, 8, 8] bytes=96 recall=64.476900
+PQ_GREEDY_EVAL tag=it4_b2_plus8 alloc=[24, 16, 16, 8, 8, 8, 8, 8] bytes=96 recall=64.606500
+PQ_GREEDY_EVAL tag=it4_b3_plus8 alloc=[24, 16, 8, 16, 8, 8, 8, 8] bytes=96 recall=64.422800
+PQ_GREEDY_EVAL tag=it4_b4_plus8 alloc=[24, 16, 8, 8, 16, 8, 8, 8] bytes=96 recall=63.274700
+PQ_GREEDY_EVAL tag=it4_b5_plus8 alloc=[24, 16, 8, 8, 8, 16, 8, 8] bytes=96 recall=64.486100
+PQ_GREEDY_EVAL tag=it4_b6_plus8 alloc=[24, 16, 8, 8, 8, 8, 16, 8] bytes=96 recall=64.135800
+PQ_GREEDY_EVAL tag=it4_b7_plus8 alloc=[24, 16, 8, 8, 8, 8, 8, 16] bytes=96 recall=63.842600
+PQ_GREEDY_EVAL tag=it5_b0_plus8 alloc=[40, 16, 8, 8, 8, 8, 8, 8] bytes=104 recall=65.905900
+PQ_GREEDY_EVAL tag=it5_b1_plus8 alloc=[32, 24, 8, 8, 8, 8, 8, 8] bytes=104 recall=66.683600
+PQ_GREEDY_EVAL tag=it5_b2_plus8 alloc=[32, 16, 16, 8, 8, 8, 8, 8] bytes=104 recall=66.589500
+PQ_GREEDY_EVAL tag=it5_b3_plus8 alloc=[32, 16, 8, 16, 8, 8, 8, 8] bytes=104 recall=66.104900
+PQ_GREEDY_EVAL tag=it5_b4_plus8 alloc=[32, 16, 8, 8, 16, 8, 8, 8] bytes=104 recall=65.734600
+PQ_GREEDY_EVAL tag=it5_b5_plus8 alloc=[32, 16, 8, 8, 8, 16, 8, 8] bytes=104 recall=66.072500
+PQ_GREEDY_EVAL tag=it5_b6_plus8 alloc=[32, 16, 8, 8, 8, 8, 16, 8] bytes=104 recall=65.529300
+PQ_GREEDY_EVAL tag=it5_b7_plus8 alloc=[32, 16, 8, 8, 8, 8, 8, 16] bytes=104 recall=65.850300
+PQ_GREEDY_EVAL tag=it6_b0_plus8 alloc=[40, 24, 8, 8, 8, 8, 8, 8] bytes=112 recall=67.615700
+PQ_GREEDY_EVAL tag=it6_b1_plus8 alloc=[32, 32, 8, 8, 8, 8, 8, 8] bytes=112 recall=67.523100
+PQ_GREEDY_EVAL tag=it6_b2_plus8 alloc=[32, 24, 16, 8, 8, 8, 8, 8] bytes=112 recall=68.060200
+PQ_GREEDY_EVAL tag=it6_b3_plus8 alloc=[32, 24, 8, 16, 8, 8, 8, 8] bytes=112 recall=68.125000
+PQ_GREEDY_EVAL tag=it6_b4_plus8 alloc=[32, 24, 8, 8, 16, 8, 8, 8] bytes=112 recall=67.101900
+PQ_GREEDY_EVAL tag=it6_b5_plus8 alloc=[32, 24, 8, 8, 8, 16, 8, 8] bytes=112 recall=67.117300
+PQ_GREEDY_EVAL tag=it6_b6_plus8 alloc=[32, 24, 8, 8, 8, 8, 16, 8] bytes=112 recall=67.362700
+PQ_GREEDY_EVAL tag=it6_b7_plus8 alloc=[32, 24, 8, 8, 8, 8, 8, 16] bytes=112 recall=67.478400
+PQ_GREEDY_EVAL tag=it7_b0_plus8 alloc=[40, 24, 8, 16, 8, 8, 8, 8] bytes=120 recall=69.162000
+PQ_GREEDY_EVAL tag=it7_b1_plus8 alloc=[32, 32, 8, 16, 8, 8, 8, 8] bytes=120 recall=69.253100
+PQ_GREEDY_EVAL tag=it7_b2_plus8 alloc=[32, 24, 16, 16, 8, 8, 8, 8] bytes=120 recall=69.268500
+PQ_GREEDY_EVAL tag=it7_b3_plus8 alloc=[32, 24, 8, 24, 8, 8, 8, 8] bytes=120 recall=68.932100
+PQ_GREEDY_EVAL tag=it7_b4_plus8 alloc=[32, 24, 8, 16, 16, 8, 8, 8] bytes=120 recall=68.848800
+PQ_GREEDY_EVAL tag=it7_b5_plus8 alloc=[32, 24, 8, 16, 8, 16, 8, 8] bytes=120 recall=68.651200
+PQ_GREEDY_EVAL tag=it7_b6_plus8 alloc=[32, 24, 8, 16, 8, 8, 16, 8] bytes=120 recall=68.625000
+PQ_GREEDY_EVAL tag=it7_b7_plus8 alloc=[32, 24, 8, 16, 8, 8, 8, 16] bytes=120 recall=69.049400
+PQ_GREEDY_EVAL tag=it8_b0_plus8 alloc=[40, 24, 16, 16, 8, 8, 8, 8] bytes=128 recall=70.733000
+PQ_GREEDY_EVAL tag=it8_b1_plus8 alloc=[32, 32, 16, 16, 8, 8, 8, 8] bytes=128 recall=70.634300
+PQ_GREEDY_EVAL tag=it8_b2_plus8 alloc=[32, 24, 24, 16, 8, 8, 8, 8] bytes=128 recall=70.495400
+PQ_GREEDY_EVAL tag=it8_b3_plus8 alloc=[32, 24, 16, 24, 8, 8, 8, 8] bytes=128 recall=70.566400
+PQ_GREEDY_EVAL tag=it8_b4_plus8 alloc=[32, 24, 16, 16, 16, 8, 8, 8] bytes=128 recall=70.108000
+PQ_GREEDY_EVAL tag=it8_b5_plus8 alloc=[32, 24, 16, 16, 8, 16, 8, 8] bytes=128 recall=70.072500
+PQ_GREEDY_EVAL tag=it8_b6_plus8 alloc=[32, 24, 16, 16, 8, 8, 16, 8] bytes=128 recall=70.378100
+PQ_GREEDY_EVAL tag=it8_b7_plus8 alloc=[32, 24, 16, 16, 8, 8, 8, 16] bytes=128 recall=70.358000
+PQ_GREEDY_EVAL tag=it9_b0_plus8 alloc=[48, 24, 16, 16, 8, 8, 8, 8] bytes=136 recall=71.566400
+PQ_GREEDY_EVAL tag=it9_b1_plus8 alloc=[40, 32, 16, 16, 8, 8, 8, 8] bytes=136 recall=71.328700
+PQ_GREEDY_EVAL tag=it9_b2_plus8 alloc=[40, 24, 24, 16, 8, 8, 8, 8] bytes=136 recall=71.816400
+PQ_GREEDY_EVAL tag=it9_b3_plus8 alloc=[40, 24, 16, 24, 8, 8, 8, 8] bytes=136 recall=71.794800
+PQ_GREEDY_EVAL tag=it9_b4_plus8 alloc=[40, 24, 16, 16, 16, 8, 8, 8] bytes=136 recall=71.310200
+PQ_GREEDY_EVAL tag=it9_b5_plus8 alloc=[40, 24, 16, 16, 8, 16, 8, 8] bytes=136 recall=71.009300
+PQ_GREEDY_EVAL tag=it9_b6_plus8 alloc=[40, 24, 16, 16, 8, 8, 16, 8] bytes=136 recall=71.331800
+PQ_GREEDY_EVAL tag=it9_b7_plus8 alloc=[40, 24, 16, 16, 8, 8, 8, 16] bytes=136 recall=71.368800
+PQ_GREEDY_EVAL tag=it10_b0_plus8 alloc=[48, 24, 24, 16, 8, 8, 8, 8] bytes=144 recall=72.685200
+PQ_GREEDY_EVAL tag=it10_b1_plus8 alloc=[40, 32, 24, 16, 8, 8, 8, 8] bytes=144 recall=72.935200
+PQ_GREEDY_EVAL tag=it10_b2_plus8 alloc=[40, 24, 32, 16, 8, 8, 8, 8] bytes=144 recall=72.836400
+PQ_GREEDY_EVAL tag=it10_b3_plus8 alloc=[40, 24, 24, 24, 8, 8, 8, 8] bytes=144 recall=72.476900
+PQ_GREEDY_EVAL tag=it10_b4_plus8 alloc=[40, 24, 24, 16, 16, 8, 8, 8] bytes=144 recall=72.344100
+PQ_GREEDY_EVAL tag=it10_b5_plus8 alloc=[40, 24, 24, 16, 8, 16, 8, 8] bytes=144 recall=72.666700
+PQ_GREEDY_EVAL tag=it10_b6_plus8 alloc=[40, 24, 24, 16, 8, 8, 16, 8] bytes=144 recall=72.188300
+PQ_GREEDY_EVAL tag=it10_b7_plus8 alloc=[40, 24, 24, 16, 8, 8, 8, 16] bytes=144 recall=72.387300
+PQ_GREEDY_EVAL tag=it11_b0_plus8 alloc=[48, 32, 24, 16, 8, 8, 8, 8] bytes=152 recall=73.870400
+PQ_GREEDY_EVAL tag=it11_b1_plus8 alloc=[40, 40, 24, 16, 8, 8, 8, 8] bytes=152 recall=73.762300
+PQ_GREEDY_EVAL tag=it11_b2_plus8 alloc=[40, 32, 32, 16, 8, 8, 8, 8] bytes=152 recall=73.359600
+PQ_GREEDY_EVAL tag=it11_b3_plus8 alloc=[40, 32, 24, 24, 8, 8, 8, 8] bytes=152 recall=73.660500
+PQ_GREEDY_EVAL tag=it11_b4_plus8 alloc=[40, 32, 24, 16, 16, 8, 8, 8] bytes=152 recall=73.486100
+PQ_GREEDY_EVAL tag=it11_b5_plus8 alloc=[40, 32, 24, 16, 8, 16, 8, 8] bytes=152 recall=73.424400
+PQ_GREEDY_EVAL tag=it11_b6_plus8 alloc=[40, 32, 24, 16, 8, 8, 16, 8] bytes=152 recall=73.571000
+PQ_GREEDY_EVAL tag=it11_b7_plus8 alloc=[40, 32, 24, 16, 8, 8, 8, 16] bytes=152 recall=73.621900
+PQ_GREEDY_EVAL tag=it12_b0_plus8 alloc=[56, 32, 24, 16, 8, 8, 8, 8] bytes=160 recall=74.410500
+PQ_GREEDY_EVAL tag=it12_b1_plus8 alloc=[48, 40, 24, 16, 8, 8, 8, 8] bytes=160 recall=74.555600
+PQ_GREEDY_EVAL tag=it12_b2_plus8 alloc=[48, 32, 32, 16, 8, 8, 8, 8] bytes=160 recall=74.410500
+PQ_GREEDY_EVAL tag=it12_b3_plus8 alloc=[48, 32, 24, 24, 8, 8, 8, 8] bytes=160 recall=74.603400
+PQ_GREEDY_EVAL tag=it12_b4_plus8 alloc=[48, 32, 24, 16, 16, 8, 8, 8] bytes=160 recall=74.330200
+PQ_GREEDY_EVAL tag=it12_b5_plus8 alloc=[48, 32, 24, 16, 8, 16, 8, 8] bytes=160 recall=74.353400
+PQ_GREEDY_EVAL tag=it12_b6_plus8 alloc=[48, 32, 24, 16, 8, 8, 16, 8] bytes=160 recall=74.444400
+PQ_GREEDY_EVAL tag=it12_b7_plus8 alloc=[48, 32, 24, 16, 8, 8, 8, 16] bytes=160 recall=74.529300
+PQ_GREEDY_EVAL tag=it13_b0_plus8 alloc=[56, 32, 24, 24, 8, 8, 8, 8] bytes=168 recall=75.237700
+PQ_GREEDY_EVAL tag=it13_b1_plus8 alloc=[48, 40, 24, 24, 8, 8, 8, 8] bytes=168 recall=75.287000
+PQ_GREEDY_EVAL tag=it13_b2_plus8 alloc=[48, 32, 32, 24, 8, 8, 8, 8] bytes=168 recall=75.342600
+PQ_GREEDY_EVAL tag=it13_b3_plus8 alloc=[48, 32, 24, 32, 8, 8, 8, 8] bytes=168 recall=75.300900
+PQ_GREEDY_EVAL tag=it13_b4_plus8 alloc=[48, 32, 24, 24, 16, 8, 8, 8] bytes=168 recall=75.375000
+PQ_GREEDY_EVAL tag=it13_b5_plus8 alloc=[48, 32, 24, 24, 8, 16, 8, 8] bytes=168 recall=74.966000
+PQ_GREEDY_EVAL tag=it13_b6_plus8 alloc=[48, 32, 24, 24, 8, 8, 16, 8] bytes=168 recall=75.237700
+PQ_GREEDY_EVAL tag=it13_b7_plus8 alloc=[48, 32, 24, 24, 8, 8, 8, 16] bytes=168 recall=75.282400
+PQ_GREEDY_EVAL tag=it14_b0_plus8 alloc=[56, 32, 24, 24, 16, 8, 8, 8] bytes=176 recall=75.683600
+PQ_GREEDY_EVAL tag=it14_b1_plus8 alloc=[48, 40, 24, 24, 16, 8, 8, 8] bytes=176 recall=75.870400
+PQ_GREEDY_EVAL tag=it14_b2_plus8 alloc=[48, 32, 32, 24, 16, 8, 8, 8] bytes=176 recall=75.899700
+PQ_GREEDY_EVAL tag=it14_b3_plus8 alloc=[48, 32, 24, 32, 16, 8, 8, 8] bytes=176 recall=75.802500
+PQ_GREEDY_EVAL tag=it14_b4_plus8 alloc=[48, 32, 24, 24, 24, 8, 8, 8] bytes=176 recall=76.007700
+PQ_GREEDY_EVAL tag=it14_b5_plus8 alloc=[48, 32, 24, 24, 16, 16, 8, 8] bytes=176 recall=75.887300
+PQ_GREEDY_EVAL tag=it14_b6_plus8 alloc=[48, 32, 24, 24, 16, 8, 16, 8] bytes=176 recall=75.779300
+PQ_GREEDY_EVAL tag=it14_b7_plus8 alloc=[48, 32, 24, 24, 16, 8, 8, 16] bytes=176 recall=75.785500
+PQ_GREEDY_EVAL tag=it15_b0_plus8 alloc=[56, 32, 24, 24, 24, 8, 8, 8] bytes=184 recall=76.424400
+PQ_GREEDY_EVAL tag=it15_b1_plus8 alloc=[48, 40, 24, 24, 24, 8, 8, 8] bytes=184 recall=76.404300
+PQ_GREEDY_EVAL tag=it15_b2_plus8 alloc=[48, 32, 32, 24, 24, 8, 8, 8] bytes=184 recall=76.586400
+PQ_GREEDY_EVAL tag=it15_b3_plus8 alloc=[48, 32, 24, 32, 24, 8, 8, 8] bytes=184 recall=76.347200
+PQ_GREEDY_EVAL tag=it15_b4_plus8 alloc=[48, 32, 24, 24, 32, 8, 8, 8] bytes=184 recall=75.952200
+PQ_GREEDY_EVAL tag=it15_b5_plus8 alloc=[48, 32, 24, 24, 24, 16, 8, 8] bytes=184 recall=76.342600
+PQ_GREEDY_EVAL tag=it15_b6_plus8 alloc=[48, 32, 24, 24, 24, 8, 16, 8] bytes=184 recall=76.310200
+PQ_GREEDY_EVAL tag=it15_b7_plus8 alloc=[48, 32, 24, 24, 24, 8, 8, 16] bytes=184 recall=76.481500
+PQ_GREEDY_EVAL tag=it16_b0_plus8 alloc=[56, 32, 32, 24, 24, 8, 8, 8] bytes=192 recall=76.895100
+PQ_GREEDY_EVAL tag=it16_b1_plus8 alloc=[48, 40, 32, 24, 24, 8, 8, 8] bytes=192 recall=77.034000
+PQ_GREEDY_EVAL tag=it16_b2_plus8 alloc=[48, 32, 40, 24, 24, 8, 8, 8] bytes=192 recall=76.910500
+PQ_GREEDY_EVAL tag=it16_b3_plus8 alloc=[48, 32, 32, 32, 24, 8, 8, 8] bytes=192 recall=76.674400
+PQ_GREEDY_EVAL tag=it16_b4_plus8 alloc=[48, 32, 32, 24, 32, 8, 8, 8] bytes=192 recall=76.493800
+PQ_GREEDY_EVAL tag=it16_b5_plus8 alloc=[48, 32, 32, 24, 24, 16, 8, 8] bytes=192 recall=76.961400
+PQ_GREEDY_EVAL tag=it16_b6_plus8 alloc=[48, 32, 32, 24, 24, 8, 16, 8] bytes=192 recall=77.083300
+PQ_GREEDY_EVAL tag=it16_b7_plus8 alloc=[48, 32, 32, 24, 24, 8, 8, 16] bytes=192 recall=76.918200
+PQ_GREEDY_EVAL tag=it17_b0_plus8 alloc=[56, 32, 32, 24, 24, 8, 16, 8] bytes=200 recall=77.523100
+PQ_GREEDY_EVAL tag=it17_b1_plus8 alloc=[48, 40, 32, 24, 24, 8, 16, 8] bytes=200 recall=77.493800
+PQ_GREEDY_EVAL tag=it17_b2_plus8 alloc=[48, 32, 40, 24, 24, 8, 16, 8] bytes=200 recall=77.313300
+PQ_GREEDY_EVAL tag=it17_b3_plus8 alloc=[48, 32, 32, 32, 24, 8, 16, 8] bytes=200 recall=77.392000
+PQ_GREEDY_EVAL tag=it17_b4_plus8 alloc=[48, 32, 32, 24, 32, 8, 16, 8] bytes=200 recall=77.308600
+PQ_GREEDY_EVAL tag=it17_b5_plus8 alloc=[48, 32, 32, 24, 24, 16, 16, 8] bytes=200 recall=77.517000
+PQ_GREEDY_EVAL tag=it17_b6_plus8 alloc=[48, 32, 32, 24, 24, 8, 24, 8] bytes=200 recall=77.467600
+PQ_GREEDY_EVAL tag=it17_b7_plus8 alloc=[48, 32, 32, 24, 24, 8, 16, 16] bytes=200 recall=77.379600
+PQ_GREEDY_EVAL tag=it18_b0_plus8 alloc=[64, 32, 32, 24, 24, 8, 16, 8] bytes=208 recall=78.061700
+PQ_GREEDY_EVAL tag=it18_b1_plus8 alloc=[56, 40, 32, 24, 24, 8, 16, 8] bytes=208 recall=78.129600
+PQ_GREEDY_EVAL tag=it18_b2_plus8 alloc=[56, 32, 40, 24, 24, 8, 16, 8] bytes=208 recall=78.006200
+PQ_GREEDY_EVAL tag=it18_b3_plus8 alloc=[56, 32, 32, 32, 24, 8, 16, 8] bytes=208 recall=77.978400
+PQ_GREEDY_EVAL tag=it18_b4_plus8 alloc=[56, 32, 32, 24, 32, 8, 16, 8] bytes=208 recall=77.804000
+PQ_GREEDY_EVAL tag=it18_b5_plus8 alloc=[56, 32, 32, 24, 24, 16, 16, 8] bytes=208 recall=78.185200
+PQ_GREEDY_EVAL tag=it18_b6_plus8 alloc=[56, 32, 32, 24, 24, 8, 24, 8] bytes=208 recall=77.936700
+PQ_GREEDY_EVAL tag=it18_b7_plus8 alloc=[56, 32, 32, 24, 24, 8, 16, 16] bytes=208 recall=78.089500
+PQ_GREEDY_EVAL tag=it19_b0_plus8 alloc=[64, 32, 32, 24, 24, 16, 16, 8] bytes=216 recall=78.669800
+PQ_GREEDY_EVAL tag=it19_b1_plus8 alloc=[56, 40, 32, 24, 24, 16, 16, 8] bytes=216 recall=78.759300
+PQ_GREEDY_EVAL tag=it19_b2_plus8 alloc=[56, 32, 40, 24, 24, 16, 16, 8] bytes=216 recall=78.719100
+PQ_GREEDY_EVAL tag=it19_b3_plus8 alloc=[56, 32, 32, 32, 24, 16, 16, 8] bytes=216 recall=78.314800
+PQ_GREEDY_EVAL tag=it19_b4_plus8 alloc=[56, 32, 32, 24, 32, 16, 16, 8] bytes=216 recall=78.322500
+PQ_GREEDY_EVAL tag=it19_b5_plus8 alloc=[56, 32, 32, 24, 24, 24, 16, 8] bytes=216 recall=78.583300
+PQ_GREEDY_EVAL tag=it19_b6_plus8 alloc=[56, 32, 32, 24, 24, 16, 24, 8] bytes=216 recall=78.325600
+PQ_GREEDY_EVAL tag=it19_b7_plus8 alloc=[56, 32, 32, 24, 24, 16, 16, 16] bytes=216 recall=78.910500
+PQ_GREEDY_EVAL tag=it20_b0_plus8 alloc=[64, 32, 32, 24, 24, 16, 16, 16] bytes=224 recall=79.344100
+PQ_GREEDY_EVAL tag=it20_b1_plus8 alloc=[56, 40, 32, 24, 24, 16, 16, 16] bytes=224 recall=79.524700
+PQ_GREEDY_EVAL tag=it20_b2_plus8 alloc=[56, 32, 40, 24, 24, 16, 16, 16] bytes=224 recall=79.338000
+PQ_GREEDY_EVAL tag=it20_b3_plus8 alloc=[56, 32, 32, 32, 24, 16, 16, 16] bytes=224 recall=79.104900
+PQ_GREEDY_EVAL tag=it20_b4_plus8 alloc=[56, 32, 32, 24, 32, 16, 16, 16] bytes=224 recall=79.089500
+PQ_GREEDY_EVAL tag=it20_b5_plus8 alloc=[56, 32, 32, 24, 24, 24, 16, 16] bytes=224 recall=78.953700
+PQ_GREEDY_EVAL tag=it20_b6_plus8 alloc=[56, 32, 32, 24, 24, 16, 24, 16] bytes=224 recall=79.058600
+PQ_GREEDY_EVAL tag=it20_b7_plus8 alloc=[56, 32, 32, 24, 24, 16, 16, 24] bytes=224 recall=78.854900
+PQ_GREEDY_EVAL tag=it21_b0_plus8 alloc=[64, 40, 32, 24, 24, 16, 16, 16] bytes=232 recall=79.659000
+PQ_GREEDY_EVAL tag=it21_b1_plus8 alloc=[56, 48, 32, 24, 24, 16, 16, 16] bytes=232 recall=79.882700
+PQ_GREEDY_EVAL tag=it21_b2_plus8 alloc=[56, 40, 40, 24, 24, 16, 16, 16] bytes=232 recall=79.759300
+PQ_GREEDY_EVAL tag=it21_b3_plus8 alloc=[56, 40, 32, 32, 24, 16, 16, 16] bytes=232 recall=79.501500
+PQ_GREEDY_EVAL tag=it21_b4_plus8 alloc=[56, 40, 32, 24, 32, 16, 16, 16] bytes=232 recall=79.382700
+PQ_GREEDY_EVAL tag=it21_b5_plus8 alloc=[56, 40, 32, 24, 24, 24, 16, 16] bytes=232 recall=79.793200
+PQ_GREEDY_EVAL tag=it21_b6_plus8 alloc=[56, 40, 32, 24, 24, 16, 24, 16] bytes=232 recall=79.449100
+PQ_GREEDY_EVAL tag=it21_b7_plus8 alloc=[56, 40, 32, 24, 24, 16, 16, 24] bytes=232 recall=79.580200
+PQ_GREEDY_EVAL tag=it22_b0_plus8 alloc=[64, 48, 32, 24, 24, 16, 16, 16] bytes=240 recall=80.268500
+PQ_GREEDY_EVAL tag=it22_b1_plus8 alloc=[56, 56, 32, 24, 24, 16, 16, 16] bytes=240 recall=80.242300
+PQ_GREEDY_EVAL tag=it22_b2_plus8 alloc=[56, 48, 40, 24, 24, 16, 16, 16] bytes=240 recall=80.242300
+PQ_GREEDY_EVAL tag=it22_b3_plus8 alloc=[56, 48, 32, 32, 24, 16, 16, 16] bytes=240 recall=80.148100
+PQ_GREEDY_EVAL tag=it22_b4_plus8 alloc=[56, 48, 32, 24, 32, 16, 16, 16] bytes=240 recall=79.935200
+PQ_GREEDY_EVAL tag=it22_b5_plus8 alloc=[56, 48, 32, 24, 24, 24, 16, 16] bytes=240 recall=79.904300
+PQ_GREEDY_EVAL tag=it22_b6_plus8 alloc=[56, 48, 32, 24, 24, 16, 24, 16] bytes=240 recall=80.182100
+PQ_GREEDY_EVAL tag=it22_b7_plus8 alloc=[56, 48, 32, 24, 24, 16, 16, 24] bytes=240 recall=80.026200
+PQ_GREEDY_EVAL tag=it23_b0_plus8 alloc=[72, 48, 32, 24, 24, 16, 16, 16] bytes=248 recall=80.713000
+PQ_GREEDY_EVAL tag=it23_b1_plus8 alloc=[64, 56, 32, 24, 24, 16, 16, 16] bytes=248 recall=80.794800
+PQ_GREEDY_EVAL tag=it23_b2_plus8 alloc=[64, 48, 40, 24, 24, 16, 16, 16] bytes=248 recall=80.692900
+PQ_GREEDY_EVAL tag=it23_b3_plus8 alloc=[64, 48, 32, 32, 24, 16, 16, 16] bytes=248 recall=80.552500
+PQ_GREEDY_EVAL tag=it23_b4_plus8 alloc=[64, 48, 32, 24, 32, 16, 16, 16] bytes=248 recall=80.478400
+PQ_GREEDY_EVAL tag=it23_b5_plus8 alloc=[64, 48, 32, 24, 24, 24, 16, 16] bytes=248 recall=80.648100
+PQ_GREEDY_EVAL tag=it23_b6_plus8 alloc=[64, 48, 32, 24, 24, 16, 24, 16] bytes=248 recall=80.540100
+PQ_GREEDY_EVAL tag=it23_b7_plus8 alloc=[64, 48, 32, 24, 24, 16, 16, 24] bytes=248 recall=80.771600
+PQ_GREEDY_EVAL tag=it24_b0_plus8 alloc=[72, 56, 32, 24, 24, 16, 16, 16] bytes=256 recall=81.103400
+PQ_GREEDY_EVAL tag=it24_b1_plus8 alloc=[64, 64, 32, 24, 24, 16, 16, 16] bytes=256 recall=81.114200
+PQ_GREEDY_EVAL tag=it24_b2_plus8 alloc=[64, 56, 40, 24, 24, 16, 16, 16] bytes=256 recall=81.103400
+PQ_GREEDY_EVAL tag=it24_b3_plus8 alloc=[64, 56, 32, 32, 24, 16, 16, 16] bytes=256 recall=81.114200
+PQ_GREEDY_EVAL tag=it24_b4_plus8 alloc=[64, 56, 32, 24, 32, 16, 16, 16] bytes=256 recall=80.946000
+PQ_GREEDY_EVAL tag=it24_b5_plus8 alloc=[64, 56, 32, 24, 24, 24, 16, 16] bytes=256 recall=81.328700
+PQ_GREEDY_EVAL tag=it24_b6_plus8 alloc=[64, 56, 32, 24, 24, 16, 24, 16] bytes=256 recall=81.214500
+PQ_GREEDY_EVAL tag=it24_b7_plus8 alloc=[64, 56, 32, 24, 24, 16, 16, 24] bytes=256 recall=81.129600
+PQ_GREEDY_EVAL tag=it25_b0_plus8 alloc=[72, 56, 32, 24, 24, 24, 16, 16] bytes=264 recall=81.637300
+PQ_GREEDY_EVAL tag=it25_b1_plus8 alloc=[64, 64, 32, 24, 24, 24, 16, 16] bytes=264 recall=81.409000
+PQ_GREEDY_EVAL tag=it25_b2_plus8 alloc=[64, 56, 40, 24, 24, 24, 16, 16] bytes=264 recall=81.409000
+PQ_GREEDY_EVAL tag=it25_b3_plus8 alloc=[64, 56, 32, 32, 24, 24, 16, 16] bytes=264 recall=81.285500
+PQ_GREEDY_EVAL tag=it25_b4_plus8 alloc=[64, 56, 32, 24, 32, 24, 16, 16] bytes=264 recall=81.433600
+PQ_GREEDY_EVAL tag=it25_b5_plus8 alloc=[64, 56, 32, 24, 24, 32, 16, 16] bytes=264 recall=81.321000
+PQ_GREEDY_EVAL tag=it25_b6_plus8 alloc=[64, 56, 32, 24, 24, 24, 24, 16] bytes=264 recall=81.575600
+PQ_GREEDY_EVAL tag=it25_b7_plus8 alloc=[64, 56, 32, 24, 24, 24, 16, 24] bytes=264 recall=81.473800
+PQ_GREEDY_EVAL tag=it26_b0_plus8 alloc=[80, 56, 32, 24, 24, 24, 16, 16] bytes=272 recall=81.830200
+PQ_GREEDY_EVAL tag=it26_b1_plus8 alloc=[72, 64, 32, 24, 24, 24, 16, 16] bytes=272 recall=81.842600
+PQ_GREEDY_EVAL tag=it26_b2_plus8 alloc=[72, 56, 40, 24, 24, 24, 16, 16] bytes=272 recall=81.930600
+PQ_GREEDY_EVAL tag=it26_b3_plus8 alloc=[72, 56, 32, 32, 24, 24, 16, 16] bytes=272 recall=81.929000
+PQ_GREEDY_EVAL tag=it26_b4_plus8 alloc=[72, 56, 32, 24, 32, 24, 16, 16] bytes=272 recall=81.927500
+PQ_GREEDY_EVAL tag=it26_b5_plus8 alloc=[72, 56, 32, 24, 24, 32, 16, 16] bytes=272 recall=81.739200
+PQ_GREEDY_EVAL tag=it26_b6_plus8 alloc=[72, 56, 32, 24, 24, 24, 24, 16] bytes=272 recall=81.756200
+PQ_GREEDY_EVAL tag=it26_b7_plus8 alloc=[72, 56, 32, 24, 24, 24, 16, 24] bytes=272 recall=81.890400
+PQ_GREEDY_EVAL tag=it27_b0_plus8 alloc=[80, 56, 40, 24, 24, 24, 16, 16] bytes=280 recall=82.137300
+PQ_GREEDY_EVAL tag=it27_b1_plus8 alloc=[72, 64, 40, 24, 24, 24, 16, 16] bytes=280 recall=82.294800
+PQ_GREEDY_EVAL tag=it27_b2_plus8 alloc=[72, 56, 48, 24, 24, 24, 16, 16] bytes=280 recall=82.191400
+PQ_GREEDY_EVAL tag=it27_b3_plus8 alloc=[72, 56, 40, 32, 24, 24, 16, 16] bytes=280 recall=82.265400
+PQ_GREEDY_EVAL tag=it27_b4_plus8 alloc=[72, 56, 40, 24, 32, 24, 16, 16] bytes=280 recall=82.044800
+PQ_GREEDY_EVAL tag=it27_b5_plus8 alloc=[72, 56, 40, 24, 24, 32, 16, 16] bytes=280 recall=82.185200
+PQ_GREEDY_EVAL tag=it27_b6_plus8 alloc=[72, 56, 40, 24, 24, 24, 24, 16] bytes=280 recall=82.072500
+PQ_GREEDY_EVAL tag=it27_b7_plus8 alloc=[72, 56, 40, 24, 24, 24, 16, 24] bytes=280 recall=82.217600
+PQ_GREEDY_EVAL tag=it28_b0_plus8 alloc=[80, 64, 40, 24, 24, 24, 16, 16] bytes=288 recall=82.563300
+PQ_GREEDY_EVAL tag=it28_b1_plus8 alloc=[72, 72, 40, 24, 24, 24, 16, 16] bytes=288 recall=82.626500
+PQ_GREEDY_EVAL tag=it28_b2_plus8 alloc=[72, 64, 48, 24, 24, 24, 16, 16] bytes=288 recall=82.640400
+PQ_GREEDY_EVAL tag=it28_b3_plus8 alloc=[72, 64, 40, 32, 24, 24, 16, 16] bytes=288 recall=82.649700
+PQ_GREEDY_EVAL tag=it28_b4_plus8 alloc=[72, 64, 40, 24, 32, 24, 16, 16] bytes=288 recall=82.475300
+PQ_GREEDY_EVAL tag=it28_b5_plus8 alloc=[72, 64, 40, 24, 24, 32, 16, 16] bytes=288 recall=82.526200
+PQ_GREEDY_EVAL tag=it28_b6_plus8 alloc=[72, 64, 40, 24, 24, 24, 24, 16] bytes=288 recall=82.669800
+PQ_GREEDY_EVAL tag=it28_b7_plus8 alloc=[72, 64, 40, 24, 24, 24, 16, 24] bytes=288 recall=82.541700
+PQ_GREEDY_EVAL tag=it29_b0_plus8 alloc=[80, 64, 40, 24, 24, 24, 24, 16] bytes=296 recall=82.916700
+PQ_GREEDY_EVAL tag=it29_b1_plus8 alloc=[72, 72, 40, 24, 24, 24, 24, 16] bytes=296 recall=82.847200
+PQ_GREEDY_EVAL tag=it29_b2_plus8 alloc=[72, 64, 48, 24, 24, 24, 24, 16] bytes=296 recall=83.023100
+PQ_GREEDY_EVAL tag=it29_b3_plus8 alloc=[72, 64, 40, 32, 24, 24, 24, 16] bytes=296 recall=82.821000
+PQ_GREEDY_EVAL tag=it29_b4_plus8 alloc=[72, 64, 40, 24, 32, 24, 24, 16] bytes=296 recall=82.831800
+PQ_GREEDY_EVAL tag=it29_b5_plus8 alloc=[72, 64, 40, 24, 24, 32, 24, 16] bytes=296 recall=82.827200
+PQ_GREEDY_EVAL tag=it29_b6_plus8 alloc=[72, 64, 40, 24, 24, 24, 32, 16] bytes=296 recall=82.856500
+PQ_GREEDY_EVAL tag=it29_b7_plus8 alloc=[72, 64, 40, 24, 24, 24, 24, 24] bytes=296 recall=82.851900
+PQ_GREEDY_EVAL tag=it30_b0_plus8 alloc=[80, 64, 48, 24, 24, 24, 24, 16] bytes=304 recall=83.192900
+PQ_GREEDY_EVAL tag=it30_b1_plus8 alloc=[72, 72, 48, 24, 24, 24, 24, 16] bytes=304 recall=83.206800
+PQ_GREEDY_EVAL tag=it30_b2_plus8 alloc=[72, 64, 56, 24, 24, 24, 24, 16] bytes=304 recall=83.081800
+PQ_GREEDY_EVAL tag=it30_b3_plus8 alloc=[72, 64, 48, 32, 24, 24, 24, 16] bytes=304 recall=83.405900
+PQ_GREEDY_EVAL tag=it30_b4_plus8 alloc=[72, 64, 48, 24, 32, 24, 24, 16] bytes=304 recall=83.084900
+PQ_GREEDY_EVAL tag=it30_b5_plus8 alloc=[72, 64, 48, 24, 24, 32, 24, 16] bytes=304 recall=83.043200
+PQ_GREEDY_EVAL tag=it30_b6_plus8 alloc=[72, 64, 48, 24, 24, 24, 32, 16] bytes=304 recall=83.115700
+PQ_GREEDY_EVAL tag=it30_b7_plus8 alloc=[72, 64, 48, 24, 24, 24, 24, 24] bytes=304 recall=83.063300
+PQ_GREEDY_EVAL tag=it31_b0_plus8 alloc=[80, 64, 48, 32, 24, 24, 24, 16] bytes=312 recall=83.498500
+PQ_GREEDY_EVAL tag=it31_b1_plus8 alloc=[72, 72, 48, 32, 24, 24, 24, 16] bytes=312 recall=83.384300
+PQ_GREEDY_EVAL tag=it31_b2_plus8 alloc=[72, 64, 56, 32, 24, 24, 24, 16] bytes=312 recall=83.498500
+PQ_GREEDY_EVAL tag=it31_b3_plus8 alloc=[72, 64, 48, 40, 24, 24, 24, 16] bytes=312 recall=83.546300
+PQ_GREEDY_EVAL tag=it31_b4_plus8 alloc=[72, 64, 48, 32, 32, 24, 24, 16] bytes=312 recall=83.405900
+PQ_GREEDY_EVAL tag=it31_b5_plus8 alloc=[72, 64, 48, 32, 24, 32, 24, 16] bytes=312 recall=83.371900
+PQ_GREEDY_EVAL tag=it31_b6_plus8 alloc=[72, 64, 48, 32, 24, 24, 32, 16] bytes=312 recall=83.476900
+PQ_GREEDY_EVAL tag=it31_b7_plus8 alloc=[72, 64, 48, 32, 24, 24, 24, 24] bytes=312 recall=83.537000
+PQ_GREEDY_EVAL tag=it32_b0_plus8 alloc=[80, 64, 48, 40, 24, 24, 24, 16] bytes=320 recall=83.791700
+PQ_GREEDY_EVAL tag=it32_b1_plus8 alloc=[72, 72, 48, 40, 24, 24, 24, 16] bytes=320 recall=83.751500
+PQ_GREEDY_EVAL tag=it32_b2_plus8 alloc=[72, 64, 56, 40, 24, 24, 24, 16] bytes=320 recall=83.674400
+PQ_GREEDY_EVAL tag=it32_b3_plus8 alloc=[72, 64, 48, 48, 24, 24, 24, 16] bytes=320 recall=83.760800
+PQ_GREEDY_EVAL tag=it32_b4_plus8 alloc=[72, 64, 48, 40, 32, 24, 24, 16] bytes=320 recall=83.675900
+PQ_GREEDY_EVAL tag=it32_b5_plus8 alloc=[72, 64, 48, 40, 24, 32, 24, 16] bytes=320 recall=83.621900
+PQ_GREEDY_EVAL tag=it32_b6_plus8 alloc=[72, 64, 48, 40, 24, 24, 32, 16] bytes=320 recall=83.632700
+PQ_GREEDY_EVAL tag=it32_b7_plus8 alloc=[72, 64, 48, 40, 24, 24, 24, 24] bytes=320 recall=83.731500
+PQ_GREEDY_EVAL tag=it33_b0_plus8 alloc=[88, 64, 48, 40, 24, 24, 24, 16] bytes=328 recall=84.044800
+PQ_GREEDY_EVAL tag=it33_b1_plus8 alloc=[80, 72, 48, 40, 24, 24, 24, 16] bytes=328 recall=84.135800
+PQ_GREEDY_EVAL tag=it33_b2_plus8 alloc=[80, 64, 56, 40, 24, 24, 24, 16] bytes=328 recall=83.964500
+PQ_GREEDY_EVAL tag=it33_b3_plus8 alloc=[80, 64, 48, 48, 24, 24, 24, 16] bytes=328 recall=84.145100
+PQ_GREEDY_EVAL tag=it33_b4_plus8 alloc=[80, 64, 48, 40, 32, 24, 24, 16] bytes=328 recall=84.041700
+PQ_GREEDY_EVAL tag=it33_b5_plus8 alloc=[80, 64, 48, 40, 24, 32, 24, 16] bytes=328 recall=84.009300
+PQ_GREEDY_EVAL tag=it33_b6_plus8 alloc=[80, 64, 48, 40, 24, 24, 32, 16] bytes=328 recall=83.989200
+PQ_GREEDY_EVAL tag=it33_b7_plus8 alloc=[80, 64, 48, 40, 24, 24, 24, 24] bytes=328 recall=83.978400
+PQ_GREEDY_EVAL tag=it34_b0_plus8 alloc=[88, 64, 48, 48, 24, 24, 24, 16] bytes=336 recall=84.493800
+PQ_GREEDY_EVAL tag=it34_b1_plus8 alloc=[80, 72, 48, 48, 24, 24, 24, 16] bytes=336 recall=84.236100
+PQ_GREEDY_EVAL tag=it34_b2_plus8 alloc=[80, 64, 56, 48, 24, 24, 24, 16] bytes=336 recall=84.466000
+PQ_GREEDY_EVAL tag=it34_b3_plus8 alloc=[80, 64, 48, 56, 24, 24, 24, 16] bytes=336 recall=84.446000
+PQ_GREEDY_EVAL tag=it34_b4_plus8 alloc=[80, 64, 48, 48, 32, 24, 24, 16] bytes=336 recall=84.378100
+PQ_GREEDY_EVAL tag=it34_b5_plus8 alloc=[80, 64, 48, 48, 24, 32, 24, 16] bytes=336 recall=84.199100
+PQ_GREEDY_EVAL tag=it34_b6_plus8 alloc=[80, 64, 48, 48, 24, 24, 32, 16] bytes=336 recall=84.388900
+PQ_GREEDY_EVAL tag=it34_b7_plus8 alloc=[80, 64, 48, 48, 24, 24, 24, 24] bytes=336 recall=84.416700
+PQ_GREEDY_EVAL tag=it35_b0_plus8 alloc=[96, 64, 48, 48, 24, 24, 24, 16] bytes=344 recall=84.717600
+PQ_GREEDY_EVAL tag=it35_b1_plus8 alloc=[88, 72, 48, 48, 24, 24, 24, 16] bytes=344 recall=84.739200
+PQ_GREEDY_EVAL tag=it35_b2_plus8 alloc=[88, 64, 56, 48, 24, 24, 24, 16] bytes=344 recall=84.628100
+PQ_GREEDY_EVAL tag=it35_b3_plus8 alloc=[88, 64, 48, 56, 24, 24, 24, 16] bytes=344 recall=84.513900
+PQ_GREEDY_EVAL tag=it35_b4_plus8 alloc=[88, 64, 48, 48, 32, 24, 24, 16] bytes=344 recall=84.547800
+PQ_GREEDY_EVAL tag=it35_b5_plus8 alloc=[88, 64, 48, 48, 24, 32, 24, 16] bytes=344 recall=84.564800
+PQ_GREEDY_EVAL tag=it35_b6_plus8 alloc=[88, 64, 48, 48, 24, 24, 32, 16] bytes=344 recall=84.535500
+PQ_GREEDY_EVAL tag=it35_b7_plus8 alloc=[88, 64, 48, 48, 24, 24, 24, 24] bytes=344 recall=84.629600
+PQ_GREEDY_EVAL tag=it36_b0_plus8 alloc=[96, 72, 48, 48, 24, 24, 24, 16] bytes=352 recall=84.861100
+PQ_GREEDY_EVAL tag=it36_b1_plus8 alloc=[88, 80, 48, 48, 24, 24, 24, 16] bytes=352 recall=85.098800
+PQ_GREEDY_EVAL tag=it36_b2_plus8 alloc=[88, 72, 56, 48, 24, 24, 24, 16] bytes=352 recall=85.044800
+PQ_GREEDY_EVAL tag=it36_b3_plus8 alloc=[88, 72, 48, 56, 24, 24, 24, 16] bytes=352 recall=84.938300
+PQ_GREEDY_EVAL tag=it36_b4_plus8 alloc=[88, 72, 48, 48, 32, 24, 24, 16] bytes=352 recall=84.842600
+PQ_GREEDY_EVAL tag=it36_b5_plus8 alloc=[88, 72, 48, 48, 24, 32, 24, 16] bytes=352 recall=84.731500
+PQ_GREEDY_EVAL tag=it36_b6_plus8 alloc=[88, 72, 48, 48, 24, 24, 32, 16] bytes=352 recall=84.862700
+PQ_GREEDY_EVAL tag=it36_b7_plus8 alloc=[88, 72, 48, 48, 24, 24, 24, 24] bytes=352 recall=84.952200
+PQ_GREEDY_EVAL tag=it37_b0_plus8 alloc=[96, 80, 48, 48, 24, 24, 24, 16] bytes=360 recall=85.271600
+PQ_GREEDY_EVAL tag=it37_b1_plus8 alloc=[88, 88, 48, 48, 24, 24, 24, 16] bytes=360 recall=85.321000
+PQ_GREEDY_EVAL tag=it37_b2_plus8 alloc=[88, 80, 56, 48, 24, 24, 24, 16] bytes=360 recall=85.319400
+PQ_GREEDY_EVAL tag=it37_b3_plus8 alloc=[88, 80, 48, 56, 24, 24, 24, 16] bytes=360 recall=85.046300
+PQ_GREEDY_EVAL tag=it37_b4_plus8 alloc=[88, 80, 48, 48, 32, 24, 24, 16] bytes=360 recall=85.115700
+PQ_GREEDY_EVAL tag=it37_b5_plus8 alloc=[88, 80, 48, 48, 24, 32, 24, 16] bytes=360 recall=85.155900
+PQ_GREEDY_EVAL tag=it37_b6_plus8 alloc=[88, 80, 48, 48, 24, 24, 32, 16] bytes=360 recall=85.134300
+PQ_GREEDY_EVAL tag=it37_b7_plus8 alloc=[88, 80, 48, 48, 24, 24, 24, 24] bytes=360 recall=85.000000
+PQ_GREEDY_EVAL tag=it38_b0_plus8 alloc=[96, 88, 48, 48, 24, 24, 24, 16] bytes=368 recall=85.500000
+PQ_GREEDY_EVAL tag=it38_b1_plus8 alloc=[88, 96, 48, 48, 24, 24, 24, 16] bytes=368 recall=85.336400
+PQ_GREEDY_EVAL tag=it38_b2_plus8 alloc=[88, 88, 56, 48, 24, 24, 24, 16] bytes=368 recall=85.456800
+PQ_GREEDY_EVAL tag=it38_b3_plus8 alloc=[88, 88, 48, 56, 24, 24, 24, 16] bytes=368 recall=85.305600
+PQ_GREEDY_EVAL tag=it38_b4_plus8 alloc=[88, 88, 48, 48, 32, 24, 24, 16] bytes=368 recall=85.267000
+PQ_GREEDY_EVAL tag=it38_b5_plus8 alloc=[88, 88, 48, 48, 24, 32, 24, 16] bytes=368 recall=85.308600
+PQ_GREEDY_EVAL tag=it38_b6_plus8 alloc=[88, 88, 48, 48, 24, 24, 32, 16] bytes=368 recall=85.441400
+PQ_GREEDY_EVAL tag=it38_b7_plus8 alloc=[88, 88, 48, 48, 24, 24, 24, 24] bytes=368 recall=85.348800
+PQ_GREEDY_EVAL tag=it39_b0_plus8 alloc=[104, 88, 48, 48, 24, 24, 24, 16] bytes=376 recall=85.552500
+PQ_GREEDY_EVAL tag=it39_b1_plus8 alloc=[96, 96, 48, 48, 24, 24, 24, 16] bytes=376 recall=85.734600
+PQ_GREEDY_EVAL tag=it39_b2_plus8 alloc=[96, 88, 56, 48, 24, 24, 24, 16] bytes=376 recall=85.859600
+PQ_GREEDY_EVAL tag=it39_b3_plus8 alloc=[96, 88, 48, 56, 24, 24, 24, 16] bytes=376 recall=85.626500
+PQ_GREEDY_EVAL tag=it39_b4_plus8 alloc=[96, 88, 48, 48, 32, 24, 24, 16] bytes=376 recall=85.748500
+PQ_GREEDY_EVAL tag=it39_b5_plus8 alloc=[96, 88, 48, 48, 24, 32, 24, 16] bytes=376 recall=85.530900
+PQ_GREEDY_EVAL tag=it39_b6_plus8 alloc=[96, 88, 48, 48, 24, 24, 32, 16] bytes=376 recall=85.626500
+PQ_GREEDY_EVAL tag=it39_b7_plus8 alloc=[96, 88, 48, 48, 24, 24, 24, 24] bytes=376 recall=85.802500
+PQ_GREEDY_EVAL tag=it40_b0_plus8 alloc=[104, 88, 56, 48, 24, 24, 24, 16] bytes=384 recall=85.970700
+PQ_GREEDY_EVAL tag=it40_b1_plus8 alloc=[96, 96, 56, 48, 24, 24, 24, 16] bytes=384 recall=86.123500
+PQ_GREEDY_EVAL tag=it40_b2_plus8 alloc=[96, 88, 64, 48, 24, 24, 24, 16] bytes=384 recall=85.942900
+PQ_GREEDY_EVAL tag=it40_b3_plus8 alloc=[96, 88, 56, 56, 24, 24, 24, 16] bytes=384 recall=86.020100
+PQ_GREEDY_EVAL tag=it40_b4_plus8 alloc=[96, 88, 56, 48, 32, 24, 24, 16] bytes=384 recall=85.779300
+PQ_GREEDY_EVAL tag=it40_b5_plus8 alloc=[96, 88, 56, 48, 24, 32, 24, 16] bytes=384 recall=85.870400
+PQ_GREEDY_EVAL tag=it40_b6_plus8 alloc=[96, 88, 56, 48, 24, 24, 32, 16] bytes=384 recall=86.003100
+PQ_GREEDY_EVAL tag=it40_b7_plus8 alloc=[96, 88, 56, 48, 24, 24, 24, 24] bytes=384 recall=86.074100
+
+
+
+### Fiqa cohere v4
+
+#### Uniform
+PQ sweep completed!
+Results directory: /tmp/pq_sweep_1780768300
+
+Summary of recall results:
+Bytes,Recall
+64,58.3858
+96,64.6682
+128,68.875
+160,72.3086
+192,75.6481
+224,78.5463
+256,81.3843
+288,83.1991
+320,85.1127
+352,86.6235
+384,88.4568
+#### Variable
+PQ_GREEDY_EVAL tag=init alloc=[8, 8, 8, 8, 8, 8, 8, 8] bytes=64 recall=58.242300
+PQ_GREEDY_EVAL tag=it1_b0_plus8 alloc=[16, 8, 8, 8, 8, 8, 8, 8] bytes=72 recall=60.162000
+PQ_GREEDY_EVAL tag=it1_b1_plus8 alloc=[8, 16, 8, 8, 8, 8, 8, 8] bytes=72 recall=60.251500
+PQ_GREEDY_EVAL tag=it1_b2_plus8 alloc=[8, 8, 16, 8, 8, 8, 8, 8] bytes=72 recall=60.086400
+PQ_GREEDY_EVAL tag=it1_b3_plus8 alloc=[8, 8, 8, 16, 8, 8, 8, 8] bytes=72 recall=60.229900
+PQ_GREEDY_EVAL tag=it1_b4_plus8 alloc=[8, 8, 8, 8, 16, 8, 8, 8] bytes=72 recall=60.114200
+PQ_GREEDY_EVAL tag=it1_b5_plus8 alloc=[8, 8, 8, 8, 8, 16, 8, 8] bytes=72 recall=60.044800
+PQ_GREEDY_EVAL tag=it1_b6_plus8 alloc=[8, 8, 8, 8, 8, 8, 16, 8] bytes=72 recall=59.554000
+PQ_GREEDY_EVAL tag=it1_b7_plus8 alloc=[8, 8, 8, 8, 8, 8, 8, 16] bytes=72 recall=60.169800
+PQ_GREEDY_EVAL tag=it2_b0_plus8 alloc=[16, 16, 8, 8, 8, 8, 8, 8] bytes=80 recall=61.993800
+PQ_GREEDY_EVAL tag=it2_b1_plus8 alloc=[8, 24, 8, 8, 8, 8, 8, 8] bytes=80 recall=61.753100
+PQ_GREEDY_EVAL tag=it2_b2_plus8 alloc=[8, 16, 16, 8, 8, 8, 8, 8] bytes=80 recall=61.675900
+PQ_GREEDY_EVAL tag=it2_b3_plus8 alloc=[8, 16, 8, 16, 8, 8, 8, 8] bytes=80 recall=62.111100
+PQ_GREEDY_EVAL tag=it2_b4_plus8 alloc=[8, 16, 8, 8, 16, 8, 8, 8] bytes=80 recall=62.120400
+PQ_GREEDY_EVAL tag=it2_b5_plus8 alloc=[8, 16, 8, 8, 8, 16, 8, 8] bytes=80 recall=61.734600
+PQ_GREEDY_EVAL tag=it2_b6_plus8 alloc=[8, 16, 8, 8, 8, 8, 16, 8] bytes=80 recall=61.671300
+PQ_GREEDY_EVAL tag=it2_b7_plus8 alloc=[8, 16, 8, 8, 8, 8, 8, 16] bytes=80 recall=61.371900
+PQ_GREEDY_EVAL tag=it3_b0_plus8 alloc=[16, 16, 8, 8, 16, 8, 8, 8] bytes=88 recall=63.689800
+PQ_GREEDY_EVAL tag=it3_b1_plus8 alloc=[8, 24, 8, 8, 16, 8, 8, 8] bytes=88 recall=63.770100
+PQ_GREEDY_EVAL tag=it3_b2_plus8 alloc=[8, 16, 16, 8, 16, 8, 8, 8] bytes=88 recall=63.388900
+PQ_GREEDY_EVAL tag=it3_b3_plus8 alloc=[8, 16, 8, 16, 16, 8, 8, 8] bytes=88 recall=63.685200
+PQ_GREEDY_EVAL tag=it3_b4_plus8 alloc=[8, 16, 8, 8, 24, 8, 8, 8] bytes=88 recall=63.314800
+PQ_GREEDY_EVAL tag=it3_b5_plus8 alloc=[8, 16, 8, 8, 16, 16, 8, 8] bytes=88 recall=63.361100
+PQ_GREEDY_EVAL tag=it3_b6_plus8 alloc=[8, 16, 8, 8, 16, 8, 16, 8] bytes=88 recall=62.964500
+PQ_GREEDY_EVAL tag=it3_b7_plus8 alloc=[8, 16, 8, 8, 16, 8, 8, 16] bytes=88 recall=63.338000
+PQ_GREEDY_EVAL tag=it4_b0_plus8 alloc=[16, 24, 8, 8, 16, 8, 8, 8] bytes=96 recall=65.214500
+PQ_GREEDY_EVAL tag=it4_b1_plus8 alloc=[8, 32, 8, 8, 16, 8, 8, 8] bytes=96 recall=64.367300
+PQ_GREEDY_EVAL tag=it4_b2_plus8 alloc=[8, 24, 16, 8, 16, 8, 8, 8] bytes=96 recall=64.787000
+PQ_GREEDY_EVAL tag=it4_b3_plus8 alloc=[8, 24, 8, 16, 16, 8, 8, 8] bytes=96 recall=64.975300
+PQ_GREEDY_EVAL tag=it4_b4_plus8 alloc=[8, 24, 8, 8, 24, 8, 8, 8] bytes=96 recall=64.751500
+PQ_GREEDY_EVAL tag=it4_b5_plus8 alloc=[8, 24, 8, 8, 16, 16, 8, 8] bytes=96 recall=64.631200
+PQ_GREEDY_EVAL tag=it4_b6_plus8 alloc=[8, 24, 8, 8, 16, 8, 16, 8] bytes=96 recall=64.646600
+PQ_GREEDY_EVAL tag=it4_b7_plus8 alloc=[8, 24, 8, 8, 16, 8, 8, 16] bytes=96 recall=64.461400
+PQ_GREEDY_EVAL tag=it5_b0_plus8 alloc=[24, 24, 8, 8, 16, 8, 8, 8] bytes=104 recall=66.313300
+PQ_GREEDY_EVAL tag=it5_b1_plus8 alloc=[16, 32, 8, 8, 16, 8, 8, 8] bytes=104 recall=66.567900
+PQ_GREEDY_EVAL tag=it5_b2_plus8 alloc=[16, 24, 16, 8, 16, 8, 8, 8] bytes=104 recall=66.432100
+PQ_GREEDY_EVAL tag=it5_b3_plus8 alloc=[16, 24, 8, 16, 16, 8, 8, 8] bytes=104 recall=66.595700
+PQ_GREEDY_EVAL tag=it5_b4_plus8 alloc=[16, 24, 8, 8, 24, 8, 8, 8] bytes=104 recall=66.510800
+PQ_GREEDY_EVAL tag=it5_b5_plus8 alloc=[16, 24, 8, 8, 16, 16, 8, 8] bytes=104 recall=66.098800
+PQ_GREEDY_EVAL tag=it5_b6_plus8 alloc=[16, 24, 8, 8, 16, 8, 16, 8] bytes=104 recall=66.371900
+PQ_GREEDY_EVAL tag=it5_b7_plus8 alloc=[16, 24, 8, 8, 16, 8, 8, 16] bytes=104 recall=66.234600
+PQ_GREEDY_EVAL tag=it6_b0_plus8 alloc=[24, 24, 8, 16, 16, 8, 8, 8] bytes=112 recall=68.050900
+PQ_GREEDY_EVAL tag=it6_b1_plus8 alloc=[16, 32, 8, 16, 16, 8, 8, 8] bytes=112 recall=67.844100
+PQ_GREEDY_EVAL tag=it6_b2_plus8 alloc=[16, 24, 16, 16, 16, 8, 8, 8] bytes=112 recall=67.486100
+PQ_GREEDY_EVAL tag=it6_b3_plus8 alloc=[16, 24, 8, 24, 16, 8, 8, 8] bytes=112 recall=67.574100
+PQ_GREEDY_EVAL tag=it6_b4_plus8 alloc=[16, 24, 8, 16, 24, 8, 8, 8] bytes=112 recall=67.626500
+PQ_GREEDY_EVAL tag=it6_b5_plus8 alloc=[16, 24, 8, 16, 16, 16, 8, 8] bytes=112 recall=67.560200
+PQ_GREEDY_EVAL tag=it6_b6_plus8 alloc=[16, 24, 8, 16, 16, 8, 16, 8] bytes=112 recall=67.466000
+PQ_GREEDY_EVAL tag=it6_b7_plus8 alloc=[16, 24, 8, 16, 16, 8, 8, 16] bytes=112 recall=67.515400
+PQ_GREEDY_EVAL tag=it7_b0_plus8 alloc=[32, 24, 8, 16, 16, 8, 8, 8] bytes=120 recall=69.018500
+PQ_GREEDY_EVAL tag=it7_b1_plus8 alloc=[24, 32, 8, 16, 16, 8, 8, 8] bytes=120 recall=68.808600
+PQ_GREEDY_EVAL tag=it7_b2_plus8 alloc=[24, 24, 16, 16, 16, 8, 8, 8] bytes=120 recall=68.989200
+PQ_GREEDY_EVAL tag=it7_b3_plus8 alloc=[24, 24, 8, 24, 16, 8, 8, 8] bytes=120 recall=68.793200
+PQ_GREEDY_EVAL tag=it7_b4_plus8 alloc=[24, 24, 8, 16, 24, 8, 8, 8] bytes=120 recall=68.884300
+PQ_GREEDY_EVAL tag=it7_b5_plus8 alloc=[24, 24, 8, 16, 16, 16, 8, 8] bytes=120 recall=68.694400
+PQ_GREEDY_EVAL tag=it7_b6_plus8 alloc=[24, 24, 8, 16, 16, 8, 16, 8] bytes=120 recall=68.415100
+PQ_GREEDY_EVAL tag=it7_b7_plus8 alloc=[24, 24, 8, 16, 16, 8, 8, 16] bytes=120 recall=68.509300
+PQ_GREEDY_EVAL tag=it8_b0_plus8 alloc=[40, 24, 8, 16, 16, 8, 8, 8] bytes=128 recall=69.767000
+PQ_GREEDY_EVAL tag=it8_b1_plus8 alloc=[32, 32, 8, 16, 16, 8, 8, 8] bytes=128 recall=69.754600
+PQ_GREEDY_EVAL tag=it8_b2_plus8 alloc=[32, 24, 16, 16, 16, 8, 8, 8] bytes=128 recall=70.200600
+PQ_GREEDY_EVAL tag=it8_b3_plus8 alloc=[32, 24, 8, 24, 16, 8, 8, 8] bytes=128 recall=70.046300
+PQ_GREEDY_EVAL tag=it8_b4_plus8 alloc=[32, 24, 8, 16, 24, 8, 8, 8] bytes=128 recall=69.979900
+PQ_GREEDY_EVAL tag=it8_b5_plus8 alloc=[32, 24, 8, 16, 16, 16, 8, 8] bytes=128 recall=70.067900
+PQ_GREEDY_EVAL tag=it8_b6_plus8 alloc=[32, 24, 8, 16, 16, 8, 16, 8] bytes=128 recall=69.566400
+PQ_GREEDY_EVAL tag=it8_b7_plus8 alloc=[32, 24, 8, 16, 16, 8, 8, 16] bytes=128 recall=69.665100
+PQ_GREEDY_EVAL tag=it9_b0_plus8 alloc=[40, 24, 16, 16, 16, 8, 8, 8] bytes=136 recall=70.827200
+PQ_GREEDY_EVAL tag=it9_b1_plus8 alloc=[32, 32, 16, 16, 16, 8, 8, 8] bytes=136 recall=70.884300
+PQ_GREEDY_EVAL tag=it9_b2_plus8 alloc=[32, 24, 24, 16, 16, 8, 8, 8] bytes=136 recall=70.785500
+PQ_GREEDY_EVAL tag=it9_b3_plus8 alloc=[32, 24, 16, 24, 16, 8, 8, 8] bytes=136 recall=71.027800
+PQ_GREEDY_EVAL tag=it9_b4_plus8 alloc=[32, 24, 16, 16, 24, 8, 8, 8] bytes=136 recall=70.851900
+PQ_GREEDY_EVAL tag=it9_b5_plus8 alloc=[32, 24, 16, 16, 16, 16, 8, 8] bytes=136 recall=71.091000
+PQ_GREEDY_EVAL tag=it9_b6_plus8 alloc=[32, 24, 16, 16, 16, 8, 16, 8] bytes=136 recall=70.642000
+PQ_GREEDY_EVAL tag=it9_b7_plus8 alloc=[32, 24, 16, 16, 16, 8, 8, 16] bytes=136 recall=70.626500
+PQ_GREEDY_EVAL tag=it10_b0_plus8 alloc=[40, 24, 16, 16, 16, 16, 8, 8] bytes=144 recall=71.924400
+PQ_GREEDY_EVAL tag=it10_b1_plus8 alloc=[32, 32, 16, 16, 16, 16, 8, 8] bytes=144 recall=72.047800
+PQ_GREEDY_EVAL tag=it10_b2_plus8 alloc=[32, 24, 24, 16, 16, 16, 8, 8] bytes=144 recall=71.790100
+PQ_GREEDY_EVAL tag=it10_b3_plus8 alloc=[32, 24, 16, 24, 16, 16, 8, 8] bytes=144 recall=71.714500
+PQ_GREEDY_EVAL tag=it10_b4_plus8 alloc=[32, 24, 16, 16, 24, 16, 8, 8] bytes=144 recall=71.729900
+PQ_GREEDY_EVAL tag=it10_b5_plus8 alloc=[32, 24, 16, 16, 16, 24, 8, 8] bytes=144 recall=71.557100
+PQ_GREEDY_EVAL tag=it10_b6_plus8 alloc=[32, 24, 16, 16, 16, 16, 16, 8] bytes=144 recall=71.532400
+PQ_GREEDY_EVAL tag=it10_b7_plus8 alloc=[32, 24, 16, 16, 16, 16, 8, 16] bytes=144 recall=71.674400
+PQ_GREEDY_EVAL tag=it11_b0_plus8 alloc=[40, 32, 16, 16, 16, 16, 8, 8] bytes=152 recall=72.665100
+PQ_GREEDY_EVAL tag=it11_b1_plus8 alloc=[32, 40, 16, 16, 16, 16, 8, 8] bytes=152 recall=72.504600
+PQ_GREEDY_EVAL tag=it11_b2_plus8 alloc=[32, 32, 24, 16, 16, 16, 8, 8] bytes=152 recall=73.041700
+PQ_GREEDY_EVAL tag=it11_b3_plus8 alloc=[32, 32, 16, 24, 16, 16, 8, 8] bytes=152 recall=72.753100
+PQ_GREEDY_EVAL tag=it11_b4_plus8 alloc=[32, 32, 16, 16, 24, 16, 8, 8] bytes=152 recall=73.020100
+PQ_GREEDY_EVAL tag=it11_b5_plus8 alloc=[32, 32, 16, 16, 16, 24, 8, 8] bytes=152 recall=72.748500
+PQ_GREEDY_EVAL tag=it11_b6_plus8 alloc=[32, 32, 16, 16, 16, 16, 16, 8] bytes=152 recall=72.663600
+PQ_GREEDY_EVAL tag=it11_b7_plus8 alloc=[32, 32, 16, 16, 16, 16, 8, 16] bytes=152 recall=72.571000
+PQ_GREEDY_EVAL tag=it12_b0_plus8 alloc=[40, 32, 24, 16, 16, 16, 8, 8] bytes=160 recall=73.535500
+PQ_GREEDY_EVAL tag=it12_b1_plus8 alloc=[32, 40, 24, 16, 16, 16, 8, 8] bytes=160 recall=73.529300
+PQ_GREEDY_EVAL tag=it12_b2_plus8 alloc=[32, 32, 32, 16, 16, 16, 8, 8] bytes=160 recall=73.733000
+PQ_GREEDY_EVAL tag=it12_b3_plus8 alloc=[32, 32, 24, 24, 16, 16, 8, 8] bytes=160 recall=73.611100
+PQ_GREEDY_EVAL tag=it12_b4_plus8 alloc=[32, 32, 24, 16, 24, 16, 8, 8] bytes=160 recall=73.699100
+PQ_GREEDY_EVAL tag=it12_b5_plus8 alloc=[32, 32, 24, 16, 16, 24, 8, 8] bytes=160 recall=73.544800
+PQ_GREEDY_EVAL tag=it12_b6_plus8 alloc=[32, 32, 24, 16, 16, 16, 16, 8] bytes=160 recall=73.388900
+PQ_GREEDY_EVAL tag=it12_b7_plus8 alloc=[32, 32, 24, 16, 16, 16, 8, 16] bytes=160 recall=73.493800
+PQ_GREEDY_EVAL tag=it13_b0_plus8 alloc=[40, 32, 32, 16, 16, 16, 8, 8] bytes=168 recall=74.512300
+PQ_GREEDY_EVAL tag=it13_b1_plus8 alloc=[32, 40, 32, 16, 16, 16, 8, 8] bytes=168 recall=74.510800
+PQ_GREEDY_EVAL tag=it13_b2_plus8 alloc=[32, 32, 40, 16, 16, 16, 8, 8] bytes=168 recall=74.503100
+PQ_GREEDY_EVAL tag=it13_b3_plus8 alloc=[32, 32, 32, 24, 16, 16, 8, 8] bytes=168 recall=74.682100
+PQ_GREEDY_EVAL tag=it13_b4_plus8 alloc=[32, 32, 32, 16, 24, 16, 8, 8] bytes=168 recall=74.368800
+PQ_GREEDY_EVAL tag=it13_b5_plus8 alloc=[32, 32, 32, 16, 16, 24, 8, 8] bytes=168 recall=74.436700
+PQ_GREEDY_EVAL tag=it13_b6_plus8 alloc=[32, 32, 32, 16, 16, 16, 16, 8] bytes=168 recall=74.077200
+PQ_GREEDY_EVAL tag=it13_b7_plus8 alloc=[32, 32, 32, 16, 16, 16, 8, 16] bytes=168 recall=73.989200
+PQ_GREEDY_EVAL tag=it14_b0_plus8 alloc=[40, 32, 32, 24, 16, 16, 8, 8] bytes=176 recall=75.183600
+PQ_GREEDY_EVAL tag=it14_b1_plus8 alloc=[32, 40, 32, 24, 16, 16, 8, 8] bytes=176 recall=75.189800
+PQ_GREEDY_EVAL tag=it14_b2_plus8 alloc=[32, 32, 40, 24, 16, 16, 8, 8] bytes=176 recall=74.864200
+PQ_GREEDY_EVAL tag=it14_b3_plus8 alloc=[32, 32, 32, 32, 16, 16, 8, 8] bytes=176 recall=75.561700
+PQ_GREEDY_EVAL tag=it14_b4_plus8 alloc=[32, 32, 32, 24, 24, 16, 8, 8] bytes=176 recall=75.424400
+PQ_GREEDY_EVAL tag=it14_b5_plus8 alloc=[32, 32, 32, 24, 16, 24, 8, 8] bytes=176 recall=75.257700
+PQ_GREEDY_EVAL tag=it14_b6_plus8 alloc=[32, 32, 32, 24, 16, 16, 16, 8] bytes=176 recall=75.131200
+PQ_GREEDY_EVAL tag=it14_b7_plus8 alloc=[32, 32, 32, 24, 16, 16, 8, 16] bytes=176 recall=75.118800
+PQ_GREEDY_EVAL tag=it15_b0_plus8 alloc=[40, 32, 32, 32, 16, 16, 8, 8] bytes=184 recall=75.993800
+PQ_GREEDY_EVAL tag=it15_b1_plus8 alloc=[32, 40, 32, 32, 16, 16, 8, 8] bytes=184 recall=76.149700
+PQ_GREEDY_EVAL tag=it15_b2_plus8 alloc=[32, 32, 40, 32, 16, 16, 8, 8] bytes=184 recall=76.015400
+PQ_GREEDY_EVAL tag=it15_b3_plus8 alloc=[32, 32, 32, 40, 16, 16, 8, 8] bytes=184 recall=75.904300
+PQ_GREEDY_EVAL tag=it15_b4_plus8 alloc=[32, 32, 32, 32, 24, 16, 8, 8] bytes=184 recall=75.953700
+PQ_GREEDY_EVAL tag=it15_b5_plus8 alloc=[32, 32, 32, 32, 16, 24, 8, 8] bytes=184 recall=75.986100
+PQ_GREEDY_EVAL tag=it15_b6_plus8 alloc=[32, 32, 32, 32, 16, 16, 16, 8] bytes=184 recall=75.848800
+PQ_GREEDY_EVAL tag=it15_b7_plus8 alloc=[32, 32, 32, 32, 16, 16, 8, 16] bytes=184 recall=76.060200
+PQ_GREEDY_EVAL tag=it16_b0_plus8 alloc=[40, 40, 32, 32, 16, 16, 8, 8] bytes=192 recall=76.609600
+PQ_GREEDY_EVAL tag=it16_b1_plus8 alloc=[32, 48, 32, 32, 16, 16, 8, 8] bytes=192 recall=76.479900
+PQ_GREEDY_EVAL tag=it16_b2_plus8 alloc=[32, 40, 40, 32, 16, 16, 8, 8] bytes=192 recall=76.518500
+PQ_GREEDY_EVAL tag=it16_b3_plus8 alloc=[32, 40, 32, 40, 16, 16, 8, 8] bytes=192 recall=76.853400
+PQ_GREEDY_EVAL tag=it16_b4_plus8 alloc=[32, 40, 32, 32, 24, 16, 8, 8] bytes=192 recall=76.875000
+PQ_GREEDY_EVAL tag=it16_b5_plus8 alloc=[32, 40, 32, 32, 16, 24, 8, 8] bytes=192 recall=77.067900
+PQ_GREEDY_EVAL tag=it16_b6_plus8 alloc=[32, 40, 32, 32, 16, 16, 16, 8] bytes=192 recall=76.515400
+PQ_GREEDY_EVAL tag=it16_b7_plus8 alloc=[32, 40, 32, 32, 16, 16, 8, 16] bytes=192 recall=76.393500
+PQ_GREEDY_EVAL tag=it17_b0_plus8 alloc=[40, 40, 32, 32, 16, 24, 8, 8] bytes=200 recall=77.214500
+PQ_GREEDY_EVAL tag=it17_b1_plus8 alloc=[32, 48, 32, 32, 16, 24, 8, 8] bytes=200 recall=77.209900
+PQ_GREEDY_EVAL tag=it17_b2_plus8 alloc=[32, 40, 40, 32, 16, 24, 8, 8] bytes=200 recall=77.163600
+PQ_GREEDY_EVAL tag=it17_b3_plus8 alloc=[32, 40, 32, 40, 16, 24, 8, 8] bytes=200 recall=77.177500
+PQ_GREEDY_EVAL tag=it17_b4_plus8 alloc=[32, 40, 32, 32, 24, 24, 8, 8] bytes=200 recall=77.362700
+PQ_GREEDY_EVAL tag=it17_b5_plus8 alloc=[32, 40, 32, 32, 16, 32, 8, 8] bytes=200 recall=77.296300
+PQ_GREEDY_EVAL tag=it17_b6_plus8 alloc=[32, 40, 32, 32, 16, 24, 16, 8] bytes=200 recall=77.155900
+PQ_GREEDY_EVAL tag=it17_b7_plus8 alloc=[32, 40, 32, 32, 16, 24, 8, 16] bytes=200 recall=77.217600
+PQ_GREEDY_EVAL tag=it18_b0_plus8 alloc=[40, 40, 32, 32, 24, 24, 8, 8] bytes=208 recall=77.942900
+PQ_GREEDY_EVAL tag=it18_b1_plus8 alloc=[32, 48, 32, 32, 24, 24, 8, 8] bytes=208 recall=77.882700
+PQ_GREEDY_EVAL tag=it18_b2_plus8 alloc=[32, 40, 40, 32, 24, 24, 8, 8] bytes=208 recall=78.088000
+PQ_GREEDY_EVAL tag=it18_b3_plus8 alloc=[32, 40, 32, 40, 24, 24, 8, 8] bytes=208 recall=77.686700
+PQ_GREEDY_EVAL tag=it18_b4_plus8 alloc=[32, 40, 32, 32, 32, 24, 8, 8] bytes=208 recall=78.209900
+PQ_GREEDY_EVAL tag=it18_b5_plus8 alloc=[32, 40, 32, 32, 24, 32, 8, 8] bytes=208 recall=77.990700
+PQ_GREEDY_EVAL tag=it18_b6_plus8 alloc=[32, 40, 32, 32, 24, 24, 16, 8] bytes=208 recall=77.771600
+PQ_GREEDY_EVAL tag=it18_b7_plus8 alloc=[32, 40, 32, 32, 24, 24, 8, 16] bytes=208 recall=78.125000
+PQ_GREEDY_EVAL tag=it19_b0_plus8 alloc=[40, 40, 32, 32, 32, 24, 8, 8] bytes=216 recall=78.861100
+PQ_GREEDY_EVAL tag=it19_b1_plus8 alloc=[32, 48, 32, 32, 32, 24, 8, 8] bytes=216 recall=78.748500
+PQ_GREEDY_EVAL tag=it19_b2_plus8 alloc=[32, 40, 40, 32, 32, 24, 8, 8] bytes=216 recall=78.726900
+PQ_GREEDY_EVAL tag=it19_b3_plus8 alloc=[32, 40, 32, 40, 32, 24, 8, 8] bytes=216 recall=78.677500
+PQ_GREEDY_EVAL tag=it19_b4_plus8 alloc=[32, 40, 32, 32, 40, 24, 8, 8] bytes=216 recall=78.699100
+PQ_GREEDY_EVAL tag=it19_b5_plus8 alloc=[32, 40, 32, 32, 32, 32, 8, 8] bytes=216 recall=78.821000
+PQ_GREEDY_EVAL tag=it19_b6_plus8 alloc=[32, 40, 32, 32, 32, 24, 16, 8] bytes=216 recall=78.625000
+PQ_GREEDY_EVAL tag=it19_b7_plus8 alloc=[32, 40, 32, 32, 32, 24, 8, 16] bytes=216 recall=78.683600
+PQ_GREEDY_EVAL tag=it20_b0_plus8 alloc=[48, 40, 32, 32, 32, 24, 8, 8] bytes=224 recall=79.280900
+PQ_GREEDY_EVAL tag=it20_b1_plus8 alloc=[40, 48, 32, 32, 32, 24, 8, 8] bytes=224 recall=79.243800
+PQ_GREEDY_EVAL tag=it20_b2_plus8 alloc=[40, 40, 40, 32, 32, 24, 8, 8] bytes=224 recall=79.233000
+PQ_GREEDY_EVAL tag=it20_b3_plus8 alloc=[40, 40, 32, 40, 32, 24, 8, 8] bytes=224 recall=79.296300
+PQ_GREEDY_EVAL tag=it20_b4_plus8 alloc=[40, 40, 32, 32, 40, 24, 8, 8] bytes=224 recall=79.297800
+PQ_GREEDY_EVAL tag=it20_b5_plus8 alloc=[40, 40, 32, 32, 32, 32, 8, 8] bytes=224 recall=79.240700
+PQ_GREEDY_EVAL tag=it20_b6_plus8 alloc=[40, 40, 32, 32, 32, 24, 16, 8] bytes=224 recall=79.160500
+PQ_GREEDY_EVAL tag=it20_b7_plus8 alloc=[40, 40, 32, 32, 32, 24, 8, 16] bytes=224 recall=79.351900
+PQ_GREEDY_EVAL tag=it21_b0_plus8 alloc=[48, 40, 32, 32, 32, 24, 8, 16] bytes=232 recall=80.091000
+PQ_GREEDY_EVAL tag=it21_b1_plus8 alloc=[40, 48, 32, 32, 32, 24, 8, 16] bytes=232 recall=79.878100
+PQ_GREEDY_EVAL tag=it21_b2_plus8 alloc=[40, 40, 40, 32, 32, 24, 8, 16] bytes=232 recall=80.032400
+PQ_GREEDY_EVAL tag=it21_b3_plus8 alloc=[40, 40, 32, 40, 32, 24, 8, 16] bytes=232 recall=79.776200
+PQ_GREEDY_EVAL tag=it21_b4_plus8 alloc=[40, 40, 32, 32, 40, 24, 8, 16] bytes=232 recall=79.791700
+PQ_GREEDY_EVAL tag=it21_b5_plus8 alloc=[40, 40, 32, 32, 32, 32, 8, 16] bytes=232 recall=79.925900
+PQ_GREEDY_EVAL tag=it21_b6_plus8 alloc=[40, 40, 32, 32, 32, 24, 16, 16] bytes=232 recall=79.850300
+PQ_GREEDY_EVAL tag=it21_b7_plus8 alloc=[40, 40, 32, 32, 32, 24, 8, 24] bytes=232 recall=79.944400
+PQ_GREEDY_EVAL tag=it22_b0_plus8 alloc=[56, 40, 32, 32, 32, 24, 8, 16] bytes=240 recall=80.273100
+PQ_GREEDY_EVAL tag=it22_b1_plus8 alloc=[48, 48, 32, 32, 32, 24, 8, 16] bytes=240 recall=80.478400
+PQ_GREEDY_EVAL tag=it22_b2_plus8 alloc=[48, 40, 40, 32, 32, 24, 8, 16] bytes=240 recall=80.191400
+PQ_GREEDY_EVAL tag=it22_b3_plus8 alloc=[48, 40, 32, 40, 32, 24, 8, 16] bytes=240 recall=80.376500
+PQ_GREEDY_EVAL tag=it22_b4_plus8 alloc=[48, 40, 32, 32, 40, 24, 8, 16] bytes=240 recall=80.688300
+PQ_GREEDY_EVAL tag=it22_b5_plus8 alloc=[48, 40, 32, 32, 32, 32, 8, 16] bytes=240 recall=80.604900
+PQ_GREEDY_EVAL tag=it22_b6_plus8 alloc=[48, 40, 32, 32, 32, 24, 16, 16] bytes=240 recall=80.300900
+PQ_GREEDY_EVAL tag=it22_b7_plus8 alloc=[48, 40, 32, 32, 32, 24, 8, 24] bytes=240 recall=80.395100
+PQ_GREEDY_EVAL tag=it23_b0_plus8 alloc=[56, 40, 32, 32, 40, 24, 8, 16] bytes=248 recall=80.637300
+PQ_GREEDY_EVAL tag=it23_b1_plus8 alloc=[48, 48, 32, 32, 40, 24, 8, 16] bytes=248 recall=80.853400
+PQ_GREEDY_EVAL tag=it23_b2_plus8 alloc=[48, 40, 40, 32, 40, 24, 8, 16] bytes=248 recall=80.878100
+PQ_GREEDY_EVAL tag=it23_b3_plus8 alloc=[48, 40, 32, 40, 40, 24, 8, 16] bytes=248 recall=80.969100
+PQ_GREEDY_EVAL tag=it23_b4_plus8 alloc=[48, 40, 32, 32, 48, 24, 8, 16] bytes=248 recall=80.893500
+PQ_GREEDY_EVAL tag=it23_b5_plus8 alloc=[48, 40, 32, 32, 40, 32, 8, 16] bytes=248 recall=81.058600
+PQ_GREEDY_EVAL tag=it23_b6_plus8 alloc=[48, 40, 32, 32, 40, 24, 16, 16] bytes=248 recall=80.794800
+PQ_GREEDY_EVAL tag=it23_b7_plus8 alloc=[48, 40, 32, 32, 40, 24, 8, 24] bytes=248 recall=81.046300
+PQ_GREEDY_EVAL tag=it24_b0_plus8 alloc=[56, 40, 32, 32, 40, 32, 8, 16] bytes=256 recall=81.162000
+PQ_GREEDY_EVAL tag=it24_b1_plus8 alloc=[48, 48, 32, 32, 40, 32, 8, 16] bytes=256 recall=81.611100
+PQ_GREEDY_EVAL tag=it24_b2_plus8 alloc=[48, 40, 40, 32, 40, 32, 8, 16] bytes=256 recall=81.697500
+PQ_GREEDY_EVAL tag=it24_b3_plus8 alloc=[48, 40, 32, 40, 40, 32, 8, 16] bytes=256 recall=81.567900
+PQ_GREEDY_EVAL tag=it24_b4_plus8 alloc=[48, 40, 32, 32, 48, 32, 8, 16] bytes=256 recall=81.368800
+PQ_GREEDY_EVAL tag=it24_b5_plus8 alloc=[48, 40, 32, 32, 40, 40, 8, 16] bytes=256 recall=81.515400
+PQ_GREEDY_EVAL tag=it24_b6_plus8 alloc=[48, 40, 32, 32, 40, 32, 16, 16] bytes=256 recall=81.407400
+PQ_GREEDY_EVAL tag=it24_b7_plus8 alloc=[48, 40, 32, 32, 40, 32, 8, 24] bytes=256 recall=81.299400
+PQ_GREEDY_EVAL tag=it25_b0_plus8 alloc=[56, 40, 40, 32, 40, 32, 8, 16] bytes=264 recall=81.642000
+PQ_GREEDY_EVAL tag=it25_b1_plus8 alloc=[48, 48, 40, 32, 40, 32, 8, 16] bytes=264 recall=81.915100
+PQ_GREEDY_EVAL tag=it25_b2_plus8 alloc=[48, 40, 48, 32, 40, 32, 8, 16] bytes=264 recall=81.933600
+PQ_GREEDY_EVAL tag=it25_b3_plus8 alloc=[48, 40, 40, 40, 40, 32, 8, 16] bytes=264 recall=81.932100
+PQ_GREEDY_EVAL tag=it25_b4_plus8 alloc=[48, 40, 40, 32, 48, 32, 8, 16] bytes=264 recall=82.084900
+PQ_GREEDY_EVAL tag=it25_b5_plus8 alloc=[48, 40, 40, 32, 40, 40, 8, 16] bytes=264 recall=81.888900
+PQ_GREEDY_EVAL tag=it25_b6_plus8 alloc=[48, 40, 40, 32, 40, 32, 16, 16] bytes=264 recall=82.030900
+PQ_GREEDY_EVAL tag=it25_b7_plus8 alloc=[48, 40, 40, 32, 40, 32, 8, 24] bytes=264 recall=81.918200
+PQ_GREEDY_EVAL tag=it26_b0_plus8 alloc=[56, 40, 40, 32, 48, 32, 8, 16] bytes=272 recall=82.313300
+PQ_GREEDY_EVAL tag=it26_b1_plus8 alloc=[48, 48, 40, 32, 48, 32, 8, 16] bytes=272 recall=82.239200
+PQ_GREEDY_EVAL tag=it26_b2_plus8 alloc=[48, 40, 48, 32, 48, 32, 8, 16] bytes=272 recall=82.325600
+PQ_GREEDY_EVAL tag=it26_b3_plus8 alloc=[48, 40, 40, 40, 48, 32, 8, 16] bytes=272 recall=82.524700
+PQ_GREEDY_EVAL tag=it26_b4_plus8 alloc=[48, 40, 40, 32, 56, 32, 8, 16] bytes=272 recall=82.297800
+PQ_GREEDY_EVAL tag=it26_b5_plus8 alloc=[48, 40, 40, 32, 48, 40, 8, 16] bytes=272 recall=82.342600
+PQ_GREEDY_EVAL tag=it26_b6_plus8 alloc=[48, 40, 40, 32, 48, 32, 16, 16] bytes=272 recall=82.382700
+PQ_GREEDY_EVAL tag=it26_b7_plus8 alloc=[48, 40, 40, 32, 48, 32, 8, 24] bytes=272 recall=82.336400
+PQ_GREEDY_EVAL tag=it27_b0_plus8 alloc=[56, 40, 40, 40, 48, 32, 8, 16] bytes=280 recall=82.507700
+PQ_GREEDY_EVAL tag=it27_b1_plus8 alloc=[48, 48, 40, 40, 48, 32, 8, 16] bytes=280 recall=82.873500
+PQ_GREEDY_EVAL tag=it27_b2_plus8 alloc=[48, 40, 48, 40, 48, 32, 8, 16] bytes=280 recall=82.842600
+PQ_GREEDY_EVAL tag=it27_b3_plus8 alloc=[48, 40, 40, 48, 48, 32, 8, 16] bytes=280 recall=83.017000
+PQ_GREEDY_EVAL tag=it27_b4_plus8 alloc=[48, 40, 40, 40, 56, 32, 8, 16] bytes=280 recall=82.774700
+PQ_GREEDY_EVAL tag=it27_b5_plus8 alloc=[48, 40, 40, 40, 48, 40, 8, 16] bytes=280 recall=82.963000
+PQ_GREEDY_EVAL tag=it27_b6_plus8 alloc=[48, 40, 40, 40, 48, 32, 16, 16] bytes=280 recall=82.938300
+PQ_GREEDY_EVAL tag=it27_b7_plus8 alloc=[48, 40, 40, 40, 48, 32, 8, 24] bytes=280 recall=82.925900
+PQ_GREEDY_EVAL tag=it28_b0_plus8 alloc=[56, 40, 40, 48, 48, 32, 8, 16] bytes=288 recall=83.080200
+PQ_GREEDY_EVAL tag=it28_b1_plus8 alloc=[48, 48, 40, 48, 48, 32, 8, 16] bytes=288 recall=83.409000
+PQ_GREEDY_EVAL tag=it28_b2_plus8 alloc=[48, 40, 48, 48, 48, 32, 8, 16] bytes=288 recall=83.367300
+PQ_GREEDY_EVAL tag=it28_b3_plus8 alloc=[48, 40, 40, 56, 48, 32, 8, 16] bytes=288 recall=83.219100
+PQ_GREEDY_EVAL tag=it28_b4_plus8 alloc=[48, 40, 40, 48, 56, 32, 8, 16] bytes=288 recall=83.171300
+PQ_GREEDY_EVAL tag=it28_b5_plus8 alloc=[48, 40, 40, 48, 48, 40, 8, 16] bytes=288 recall=83.302500
+PQ_GREEDY_EVAL tag=it28_b6_plus8 alloc=[48, 40, 40, 48, 48, 32, 16, 16] bytes=288 recall=83.348800
+PQ_GREEDY_EVAL tag=it28_b7_plus8 alloc=[48, 40, 40, 48, 48, 32, 8, 24] bytes=288 recall=83.310200
+PQ_GREEDY_EVAL tag=it29_b0_plus8 alloc=[56, 48, 40, 48, 48, 32, 8, 16] bytes=296 recall=83.682100
+PQ_GREEDY_EVAL tag=it29_b1_plus8 alloc=[48, 56, 40, 48, 48, 32, 8, 16] bytes=296 recall=83.666700
+PQ_GREEDY_EVAL tag=it29_b2_plus8 alloc=[48, 48, 48, 48, 48, 32, 8, 16] bytes=296 recall=83.742300
+PQ_GREEDY_EVAL tag=it29_b3_plus8 alloc=[48, 48, 40, 56, 48, 32, 8, 16] bytes=296 recall=83.618800
+PQ_GREEDY_EVAL tag=it29_b4_plus8 alloc=[48, 48, 40, 48, 56, 32, 8, 16] bytes=296 recall=83.594100
+PQ_GREEDY_EVAL tag=it29_b5_plus8 alloc=[48, 48, 40, 48, 48, 40, 8, 16] bytes=296 recall=83.719100
+PQ_GREEDY_EVAL tag=it29_b6_plus8 alloc=[48, 48, 40, 48, 48, 32, 16, 16] bytes=296 recall=83.683600
+PQ_GREEDY_EVAL tag=it29_b7_plus8 alloc=[48, 48, 40, 48, 48, 32, 8, 24] bytes=296 recall=83.861100
+PQ_GREEDY_EVAL tag=it30_b0_plus8 alloc=[56, 48, 40, 48, 48, 32, 8, 24] bytes=304 recall=83.936700
+PQ_GREEDY_EVAL tag=it30_b1_plus8 alloc=[48, 56, 40, 48, 48, 32, 8, 24] bytes=304 recall=84.098800
+PQ_GREEDY_EVAL tag=it30_b2_plus8 alloc=[48, 48, 48, 48, 48, 32, 8, 24] bytes=304 recall=84.197500
+PQ_GREEDY_EVAL tag=it30_b3_plus8 alloc=[48, 48, 40, 56, 48, 32, 8, 24] bytes=304 recall=84.154300
+PQ_GREEDY_EVAL tag=it30_b4_plus8 alloc=[48, 48, 40, 48, 56, 32, 8, 24] bytes=304 recall=84.296300
+PQ_GREEDY_EVAL tag=it30_b5_plus8 alloc=[48, 48, 40, 48, 48, 40, 8, 24] bytes=304 recall=84.324100
+PQ_GREEDY_EVAL tag=it30_b6_plus8 alloc=[48, 48, 40, 48, 48, 32, 16, 24] bytes=304 recall=84.341000
+PQ_GREEDY_EVAL tag=it30_b7_plus8 alloc=[48, 48, 40, 48, 48, 32, 8, 32] bytes=304 recall=84.304000
+PQ_GREEDY_EVAL tag=it31_b0_plus8 alloc=[56, 48, 40, 48, 48, 32, 16, 24] bytes=312 recall=84.375000
+PQ_GREEDY_EVAL tag=it31_b1_plus8 alloc=[48, 56, 40, 48, 48, 32, 16, 24] bytes=312 recall=84.652800
+PQ_GREEDY_EVAL tag=it31_b2_plus8 alloc=[48, 48, 48, 48, 48, 32, 16, 24] bytes=312 recall=84.942900
+PQ_GREEDY_EVAL tag=it31_b3_plus8 alloc=[48, 48, 40, 56, 48, 32, 16, 24] bytes=312 recall=84.555600
+PQ_GREEDY_EVAL tag=it31_b4_plus8 alloc=[48, 48, 40, 48, 56, 32, 16, 24] bytes=312 recall=84.578700
+PQ_GREEDY_EVAL tag=it31_b5_plus8 alloc=[48, 48, 40, 48, 48, 40, 16, 24] bytes=312 recall=84.853400
+PQ_GREEDY_EVAL tag=it31_b6_plus8 alloc=[48, 48, 40, 48, 48, 32, 24, 24] bytes=312 recall=84.816400
+PQ_GREEDY_EVAL tag=it31_b7_plus8 alloc=[48, 48, 40, 48, 48, 32, 16, 32] bytes=312 recall=84.632700
+PQ_GREEDY_EVAL tag=it32_b0_plus8 alloc=[56, 48, 48, 48, 48, 32, 16, 24] bytes=320 recall=85.066400
+PQ_GREEDY_EVAL tag=it32_b1_plus8 alloc=[48, 56, 48, 48, 48, 32, 16, 24] bytes=320 recall=84.913600
+PQ_GREEDY_EVAL tag=it32_b2_plus8 alloc=[48, 48, 56, 48, 48, 32, 16, 24] bytes=320 recall=85.071000
+PQ_GREEDY_EVAL tag=it32_b3_plus8 alloc=[48, 48, 48, 56, 48, 32, 16, 24] bytes=320 recall=85.063300
+PQ_GREEDY_EVAL tag=it32_b4_plus8 alloc=[48, 48, 48, 48, 56, 32, 16, 24] bytes=320 recall=85.035500
+PQ_GREEDY_EVAL tag=it32_b5_plus8 alloc=[48, 48, 48, 48, 48, 40, 16, 24] bytes=320 recall=85.276200
+PQ_GREEDY_EVAL tag=it32_b6_plus8 alloc=[48, 48, 48, 48, 48, 32, 24, 24] bytes=320 recall=85.333300
+PQ_GREEDY_EVAL tag=it32_b7_plus8 alloc=[48, 48, 48, 48, 48, 32, 16, 32] bytes=320 recall=85.263900
+PQ_GREEDY_EVAL tag=it33_b0_plus8 alloc=[56, 48, 48, 48, 48, 32, 24, 24] bytes=328 recall=85.575600
+PQ_GREEDY_EVAL tag=it33_b1_plus8 alloc=[48, 56, 48, 48, 48, 32, 24, 24] bytes=328 recall=85.708300
+PQ_GREEDY_EVAL tag=it33_b2_plus8 alloc=[48, 48, 56, 48, 48, 32, 24, 24] bytes=328 recall=85.561700
+PQ_GREEDY_EVAL tag=it33_b3_plus8 alloc=[48, 48, 48, 56, 48, 32, 24, 24] bytes=328 recall=85.463000
+PQ_GREEDY_EVAL tag=it33_b4_plus8 alloc=[48, 48, 48, 48, 56, 32, 24, 24] bytes=328 recall=85.547800
+PQ_GREEDY_EVAL tag=it33_b5_plus8 alloc=[48, 48, 48, 48, 48, 40, 24, 24] bytes=328 recall=85.765400
+PQ_GREEDY_EVAL tag=it33_b6_plus8 alloc=[48, 48, 48, 48, 48, 32, 32, 24] bytes=328 recall=85.780900
+PQ_GREEDY_EVAL tag=it33_b7_plus8 alloc=[48, 48, 48, 48, 48, 32, 24, 32] bytes=328 recall=85.662000
+PQ_GREEDY_EVAL tag=it34_b0_plus8 alloc=[56, 48, 48, 48, 48, 32, 32, 24] bytes=336 recall=86.086400
+PQ_GREEDY_EVAL tag=it34_b1_plus8 alloc=[48, 56, 48, 48, 48, 32, 32, 24] bytes=336 recall=86.004600
+PQ_GREEDY_EVAL tag=it34_b2_plus8 alloc=[48, 48, 56, 48, 48, 32, 32, 24] bytes=336 recall=85.955200
+PQ_GREEDY_EVAL tag=it34_b3_plus8 alloc=[48, 48, 48, 56, 48, 32, 32, 24] bytes=336 recall=85.856500
+PQ_GREEDY_EVAL tag=it34_b4_plus8 alloc=[48, 48, 48, 48, 56, 32, 32, 24] bytes=336 recall=85.979900
+PQ_GREEDY_EVAL tag=it34_b5_plus8 alloc=[48, 48, 48, 48, 48, 40, 32, 24] bytes=336 recall=86.109600
+PQ_GREEDY_EVAL tag=it34_b6_plus8 alloc=[48, 48, 48, 48, 48, 32, 40, 24] bytes=336 recall=86.304000
+PQ_GREEDY_EVAL tag=it34_b7_plus8 alloc=[48, 48, 48, 48, 48, 32, 32, 32] bytes=336 recall=86.205200
+PQ_GREEDY_EVAL tag=it35_b0_plus8 alloc=[56, 48, 48, 48, 48, 32, 40, 24] bytes=344 recall=86.381200
+PQ_GREEDY_EVAL tag=it35_b1_plus8 alloc=[48, 56, 48, 48, 48, 32, 40, 24] bytes=344 recall=86.421300
+PQ_GREEDY_EVAL tag=it35_b2_plus8 alloc=[48, 48, 56, 48, 48, 32, 40, 24] bytes=344 recall=86.345700
+PQ_GREEDY_EVAL tag=it35_b3_plus8 alloc=[48, 48, 48, 56, 48, 32, 40, 24] bytes=344 recall=86.353400
+PQ_GREEDY_EVAL tag=it35_b4_plus8 alloc=[48, 48, 48, 48, 56, 32, 40, 24] bytes=344 recall=86.521600
+PQ_GREEDY_EVAL tag=it35_b5_plus8 alloc=[48, 48, 48, 48, 48, 40, 40, 24] bytes=344 recall=86.675900
+PQ_GREEDY_EVAL tag=it35_b6_plus8 alloc=[48, 48, 48, 48, 48, 32, 48, 24] bytes=344 recall=86.387300
+PQ_GREEDY_EVAL tag=it35_b7_plus8 alloc=[48, 48, 48, 48, 48, 32, 40, 32] bytes=344 recall=86.558600
+PQ_GREEDY_EVAL tag=it36_b0_plus8 alloc=[56, 48, 48, 48, 48, 40, 40, 24] bytes=352 recall=86.983000
+PQ_GREEDY_EVAL tag=it36_b1_plus8 alloc=[48, 56, 48, 48, 48, 40, 40, 24] bytes=352 recall=86.800900
+PQ_GREEDY_EVAL tag=it36_b2_plus8 alloc=[48, 48, 56, 48, 48, 40, 40, 24] bytes=352 recall=87.007700
+PQ_GREEDY_EVAL tag=it36_b3_plus8 alloc=[48, 48, 48, 56, 48, 40, 40, 24] bytes=352 recall=86.949100
+PQ_GREEDY_EVAL tag=it36_b4_plus8 alloc=[48, 48, 48, 48, 56, 40, 40, 24] bytes=352 recall=86.967600
+PQ_GREEDY_EVAL tag=it36_b5_plus8 alloc=[48, 48, 48, 48, 48, 48, 40, 24] bytes=352 recall=87.038600
+PQ_GREEDY_EVAL tag=it36_b6_plus8 alloc=[48, 48, 48, 48, 48, 40, 48, 24] bytes=352 recall=86.930600
+PQ_GREEDY_EVAL tag=it36_b7_plus8 alloc=[48, 48, 48, 48, 48, 40, 40, 32] bytes=352 recall=87.088000
+PQ_GREEDY_EVAL tag=it37_b0_plus8 alloc=[56, 48, 48, 48, 48, 40, 40, 32] bytes=360 recall=87.331800
+PQ_GREEDY_EVAL tag=it37_b1_plus8 alloc=[48, 56, 48, 48, 48, 40, 40, 32] bytes=360 recall=87.345700
+PQ_GREEDY_EVAL tag=it37_b2_plus8 alloc=[48, 48, 56, 48, 48, 40, 40, 32] bytes=360 recall=87.364200
+PQ_GREEDY_EVAL tag=it37_b3_plus8 alloc=[48, 48, 48, 56, 48, 40, 40, 32] bytes=360 recall=87.390400
+PQ_GREEDY_EVAL tag=it37_b4_plus8 alloc=[48, 48, 48, 48, 56, 40, 40, 32] bytes=360 recall=87.362700
+PQ_GREEDY_EVAL tag=it37_b5_plus8 alloc=[48, 48, 48, 48, 48, 48, 40, 32] bytes=360 recall=87.461400
+PQ_GREEDY_EVAL tag=it37_b6_plus8 alloc=[48, 48, 48, 48, 48, 40, 48, 32] bytes=360 recall=87.415100
+PQ_GREEDY_EVAL tag=it37_b7_plus8 alloc=[48, 48, 48, 48, 48, 40, 40, 40] bytes=360 recall=87.401200
+PQ_GREEDY_EVAL tag=it38_b0_plus8 alloc=[56, 48, 48, 48, 48, 48, 40, 32] bytes=368 recall=87.700600
+PQ_GREEDY_EVAL tag=it38_b1_plus8 alloc=[48, 56, 48, 48, 48, 48, 40, 32] bytes=368 recall=87.601900
+PQ_GREEDY_EVAL tag=it38_b2_plus8 alloc=[48, 48, 56, 48, 48, 48, 40, 32] bytes=368 recall=87.537000
+PQ_GREEDY_EVAL tag=it38_b3_plus8 alloc=[48, 48, 48, 56, 48, 48, 40, 32] bytes=368 recall=87.742300
+PQ_GREEDY_EVAL tag=it38_b4_plus8 alloc=[48, 48, 48, 48, 56, 48, 40, 32] bytes=368 recall=87.654300
+PQ_GREEDY_EVAL tag=it38_b5_plus8 alloc=[48, 48, 48, 48, 48, 56, 40, 32] bytes=368 recall=87.541700
+PQ_GREEDY_EVAL tag=it38_b6_plus8 alloc=[48, 48, 48, 48, 48, 48, 48, 32] bytes=368 recall=87.729900
+PQ_GREEDY_EVAL tag=it38_b7_plus8 alloc=[48, 48, 48, 48, 48, 48, 40, 40] bytes=368 recall=87.847200
+PQ_GREEDY_EVAL tag=it39_b0_plus8 alloc=[56, 48, 48, 48, 48, 48, 40, 40] bytes=376 recall=88.197500
+PQ_GREEDY_EVAL tag=it39_b1_plus8 alloc=[48, 56, 48, 48, 48, 48, 40, 40] bytes=376 recall=88.168200
+PQ_GREEDY_EVAL tag=it39_b2_plus8 alloc=[48, 48, 56, 48, 48, 48, 40, 40] bytes=376 recall=88.111100
+PQ_GREEDY_EVAL tag=it39_b3_plus8 alloc=[48, 48, 48, 56, 48, 48, 40, 40] bytes=376 recall=88.064800
+PQ_GREEDY_EVAL tag=it39_b4_plus8 alloc=[48, 48, 48, 48, 56, 48, 40, 40] bytes=376 recall=88.072500
+PQ_GREEDY_EVAL tag=it39_b5_plus8 alloc=[48, 48, 48, 48, 48, 56, 40, 40] bytes=376 recall=88.239200
+PQ_GREEDY_EVAL tag=it39_b6_plus8 alloc=[48, 48, 48, 48, 48, 48, 48, 40] bytes=376 recall=88.078700
+PQ_GREEDY_EVAL tag=it39_b7_plus8 alloc=[48, 48, 48, 48, 48, 48, 40, 48] bytes=376 recall=88.104900
+PQ_GREEDY_EVAL tag=it40_b0_plus8 alloc=[56, 48, 48, 48, 48, 56, 40, 40] bytes=384 recall=88.418200
+PQ_GREEDY_EVAL tag=it40_b1_plus8 alloc=[48, 56, 48, 48, 48, 56, 40, 40] bytes=384 recall=88.375000
+PQ_GREEDY_EVAL tag=it40_b2_plus8 alloc=[48, 48, 56, 48, 48, 56, 40, 40] bytes=384 recall=88.327200
+PQ_GREEDY_EVAL tag=it40_b3_plus8 alloc=[48, 48, 48, 56, 48, 56, 40, 40] bytes=384 recall=88.243800
+PQ_GREEDY_EVAL tag=it40_b4_plus8 alloc=[48, 48, 48, 48, 56, 56, 40, 40] bytes=384 recall=88.375000
+PQ_GREEDY_EVAL tag=it40_b5_plus8 alloc=[48, 48, 48, 48, 48, 64, 40, 40] bytes=384 recall=88.185200
+PQ_GREEDY_EVAL tag=it40_b6_plus8 alloc=[48, 48, 48, 48, 48, 56, 48, 40] bytes=384 recall=88.362700
+PQ_GREEDY_EVAL tag=it40_b7_plus8 alloc=[48, 48, 48, 48, 48, 56, 40, 48] bytes=384 recall=88.118800
+
+
 ## SQ
 ### DBPedia Cohere v4
 #### Uniform SQ
@@ -4769,6 +6790,7 @@ SQ_GREEDY_EVAL tag=it40_b6_plus8 alloc=[96, 104, 96, 40, 16, 8, 16, 8] bytes=384
 
 SQ_GREEDY_EVAL tag=it40_b7_plus8 alloc=[96, 104, 96, 40, 16, 8, 8, 16] bytes=384 recall=75.462500
 
+---
 ### DBpedia Cohere v4 stride
 #### Uniform
 SQ sweep completed!
@@ -5438,7 +7460,7 @@ SQ_GREEDY_EVAL tag=it40_b7_plus8 alloc=[56, 56, 48, 24, 48, 48, 48, 56] bytes=38
 
 
 
-### DBpedia Openai text large 3 SQ:
+### DBpedia Openai text large 3 stride:
 #### Uniform
 SQ sweep completed!
 Results directory: /tmp/sq_sweep_1779820867
@@ -6755,7 +8777,8 @@ SQ_GREEDY_EVAL tag=it40_b7_plus8 alloc=[120, 24, 96, 64, 24, 16, 24, 16] bytes=3
 
 
 
-### MSMarco Openai text large 3, SQ:
+---
+### MSMarco Openai text large 3 stride:
 #### Uniform
 SQ sweep completed!
 Results directory: /tmp/sq_sweep_1779868460
@@ -8072,7 +10095,7 @@ SQ_GREEDY_EVAL tag=it40_b7_plus8 alloc=[128, 96, 96, 16, 8, 8, 16, 16] bytes=384
 
 
 
-### MSMarco Cohere v4, SQ:
+### MSMarco Cohere v4 stride:
 
   
 #### Uniform
@@ -8757,1340 +10780,10 @@ SQ_GREEDY_EVAL tag=it40_b6_plus8 alloc=[64, 48, 48, 48, 48, 48, 48, 32] bytes=38
 SQ_GREEDY_EVAL tag=it40_b7_plus8 alloc=[64, 48, 48, 48, 48, 48, 40, 40] bytes=384 recall=75.970300
 
 
-## Quora Dataset
-### PQ
-#### Cohere v4
-##### Variable
-PQ_GREEDY_EVAL tag=init alloc=[8, 8, 8, 8, 8, 8, 8, 8] bytes=64 recall=66.361100
+---
+### Quora Openai text large 3
 
-PQ_GREEDY_EVAL tag=it1_b0_plus8 alloc=[16, 8, 8, 8, 8, 8, 8, 8] bytes=72 recall=69.102500
-
-PQ_GREEDY_EVAL tag=it1_b1_plus8 alloc=[8, 16, 8, 8, 8, 8, 8, 8] bytes=72 recall=69.086800
-
-PQ_GREEDY_EVAL tag=it1_b2_plus8 alloc=[8, 8, 16, 8, 8, 8, 8, 8] bytes=72 recall=68.933900
-
-PQ_GREEDY_EVAL tag=it1_b3_plus8 alloc=[8, 8, 8, 16, 8, 8, 8, 8] bytes=72 recall=68.758000
-
-PQ_GREEDY_EVAL tag=it1_b4_plus8 alloc=[8, 8, 8, 8, 16, 8, 8, 8] bytes=72 recall=68.686100
-
-PQ_GREEDY_EVAL tag=it1_b5_plus8 alloc=[8, 8, 8, 8, 8, 16, 8, 8] bytes=72 recall=68.438500
-
-PQ_GREEDY_EVAL tag=it1_b6_plus8 alloc=[8, 8, 8, 8, 8, 8, 16, 8] bytes=72 recall=68.506100
-
-PQ_GREEDY_EVAL tag=it1_b7_plus8 alloc=[8, 8, 8, 8, 8, 8, 8, 16] bytes=72 recall=68.398500
-
-PQ_GREEDY_EVAL tag=it2_b0_plus8 alloc=[24, 8, 8, 8, 8, 8, 8, 8] bytes=80 recall=70.634400
-
-PQ_GREEDY_EVAL tag=it2_b1_plus8 alloc=[16, 16, 8, 8, 8, 8, 8, 8] bytes=80 recall=71.170800
-
-PQ_GREEDY_EVAL tag=it2_b2_plus8 alloc=[16, 8, 16, 8, 8, 8, 8, 8] bytes=80 recall=71.137000
-
-PQ_GREEDY_EVAL tag=it2_b3_plus8 alloc=[16, 8, 8, 16, 8, 8, 8, 8] bytes=80 recall=70.990300
-
-PQ_GREEDY_EVAL tag=it2_b4_plus8 alloc=[16, 8, 8, 8, 16, 8, 8, 8] bytes=80 recall=70.948200
-
-PQ_GREEDY_EVAL tag=it2_b5_plus8 alloc=[16, 8, 8, 8, 8, 16, 8, 8] bytes=80 recall=70.824200
-
-PQ_GREEDY_EVAL tag=it2_b6_plus8 alloc=[16, 8, 8, 8, 8, 8, 16, 8] bytes=80 recall=70.865300
-
-PQ_GREEDY_EVAL tag=it2_b7_plus8 alloc=[16, 8, 8, 8, 8, 8, 8, 16] bytes=80 recall=70.807600
-
-PQ_GREEDY_EVAL tag=it3_b0_plus8 alloc=[24, 16, 8, 8, 8, 8, 8, 8] bytes=88 recall=72.666100
-
-PQ_GREEDY_EVAL tag=it3_b1_plus8 alloc=[16, 24, 8, 8, 8, 8, 8, 8] bytes=88 recall=72.552300
-
-PQ_GREEDY_EVAL tag=it3_b2_plus8 alloc=[16, 16, 16, 8, 8, 8, 8, 8] bytes=88 recall=73.067800
-
-PQ_GREEDY_EVAL tag=it3_b3_plus8 alloc=[16, 16, 8, 16, 8, 8, 8, 8] bytes=88 recall=72.938700
-
-PQ_GREEDY_EVAL tag=it3_b4_plus8 alloc=[16, 16, 8, 8, 16, 8, 8, 8] bytes=88 recall=73.038200
-
-PQ_GREEDY_EVAL tag=it3_b5_plus8 alloc=[16, 16, 8, 8, 8, 16, 8, 8] bytes=88 recall=72.934500
-
-PQ_GREEDY_EVAL tag=it3_b6_plus8 alloc=[16, 16, 8, 8, 8, 8, 16, 8] bytes=88 recall=72.731600
-
-PQ_GREEDY_EVAL tag=it3_b7_plus8 alloc=[16, 16, 8, 8, 8, 8, 8, 16] bytes=88 recall=72.667900
-
-PQ_GREEDY_EVAL tag=it4_b0_plus8 alloc=[24, 16, 16, 8, 8, 8, 8, 8] bytes=96 recall=74.449400
-
-PQ_GREEDY_EVAL tag=it4_b1_plus8 alloc=[16, 24, 16, 8, 8, 8, 8, 8] bytes=96 recall=74.322600
-
-PQ_GREEDY_EVAL tag=it4_b2_plus8 alloc=[16, 16, 24, 8, 8, 8, 8, 8] bytes=96 recall=74.271300
-
-PQ_GREEDY_EVAL tag=it4_b3_plus8 alloc=[16, 16, 16, 16, 8, 8, 8, 8] bytes=96 recall=74.519300
-
-PQ_GREEDY_EVAL tag=it4_b4_plus8 alloc=[16, 16, 16, 8, 16, 8, 8, 8] bytes=96 recall=74.552400
-
-PQ_GREEDY_EVAL tag=it4_b5_plus8 alloc=[16, 16, 16, 8, 8, 16, 8, 8] bytes=96 recall=74.408000
-
-PQ_GREEDY_EVAL tag=it4_b6_plus8 alloc=[16, 16, 16, 8, 8, 8, 16, 8] bytes=96 recall=74.436700
-
-PQ_GREEDY_EVAL tag=it4_b7_plus8 alloc=[16, 16, 16, 8, 8, 8, 8, 16] bytes=96 recall=74.400400
-
-PQ_GREEDY_EVAL tag=it5_b0_plus8 alloc=[24, 16, 16, 8, 16, 8, 8, 8] bytes=104 recall=75.775300
-
-PQ_GREEDY_EVAL tag=it5_b1_plus8 alloc=[16, 24, 16, 8, 16, 8, 8, 8] bytes=104 recall=75.630400
-
-PQ_GREEDY_EVAL tag=it5_b2_plus8 alloc=[16, 16, 24, 8, 16, 8, 8, 8] bytes=104 recall=75.674000
-
-PQ_GREEDY_EVAL tag=it5_b3_plus8 alloc=[16, 16, 16, 16, 16, 8, 8, 8] bytes=104 recall=75.944300
-
-PQ_GREEDY_EVAL tag=it5_b4_plus8 alloc=[16, 16, 16, 8, 24, 8, 8, 8] bytes=104 recall=75.531500
-
-PQ_GREEDY_EVAL tag=it5_b5_plus8 alloc=[16, 16, 16, 8, 16, 16, 8, 8] bytes=104 recall=75.744600
-
-PQ_GREEDY_EVAL tag=it5_b6_plus8 alloc=[16, 16, 16, 8, 16, 8, 16, 8] bytes=104 recall=75.693900
-
-PQ_GREEDY_EVAL tag=it5_b7_plus8 alloc=[16, 16, 16, 8, 16, 8, 8, 16] bytes=104 recall=75.667600
-
-PQ_GREEDY_EVAL tag=it6_b0_plus8 alloc=[24, 16, 16, 16, 16, 8, 8, 8] bytes=112 recall=76.958700
-
-PQ_GREEDY_EVAL tag=it6_b1_plus8 alloc=[16, 24, 16, 16, 16, 8, 8, 8] bytes=112 recall=76.892800
-
-PQ_GREEDY_EVAL tag=it6_b2_plus8 alloc=[16, 16, 24, 16, 16, 8, 8, 8] bytes=112 recall=76.944900
-
-PQ_GREEDY_EVAL tag=it6_b3_plus8 alloc=[16, 16, 16, 24, 16, 8, 8, 8] bytes=112 recall=76.877000
-
-PQ_GREEDY_EVAL tag=it6_b4_plus8 alloc=[16, 16, 16, 16, 24, 8, 8, 8] bytes=112 recall=76.802400
-
-PQ_GREEDY_EVAL tag=it6_b5_plus8 alloc=[16, 16, 16, 16, 16, 16, 8, 8] bytes=112 recall=77.012700
-
-PQ_GREEDY_EVAL tag=it6_b6_plus8 alloc=[16, 16, 16, 16, 16, 8, 16, 8] bytes=112 recall=76.980600
-
-PQ_GREEDY_EVAL tag=it6_b7_plus8 alloc=[16, 16, 16, 16, 16, 8, 8, 16] bytes=112 recall=76.868400
-
-PQ_GREEDY_EVAL tag=it7_b0_plus8 alloc=[24, 16, 16, 16, 16, 16, 8, 8] bytes=120 recall=77.985900
-
-PQ_GREEDY_EVAL tag=it7_b1_plus8 alloc=[16, 24, 16, 16, 16, 16, 8, 8] bytes=120 recall=77.926000
-
-PQ_GREEDY_EVAL tag=it7_b2_plus8 alloc=[16, 16, 24, 16, 16, 16, 8, 8] bytes=120 recall=77.896200
-
-PQ_GREEDY_EVAL tag=it7_b3_plus8 alloc=[16, 16, 16, 24, 16, 16, 8, 8] bytes=120 recall=77.862500
-
-PQ_GREEDY_EVAL tag=it7_b4_plus8 alloc=[16, 16, 16, 16, 24, 16, 8, 8] bytes=120 recall=77.861300
-
-PQ_GREEDY_EVAL tag=it7_b5_plus8 alloc=[16, 16, 16, 16, 16, 24, 8, 8] bytes=120 recall=77.713900
-
-PQ_GREEDY_EVAL tag=it7_b6_plus8 alloc=[16, 16, 16, 16, 16, 16, 16, 8] bytes=120 recall=77.872600
-
-PQ_GREEDY_EVAL tag=it7_b7_plus8 alloc=[16, 16, 16, 16, 16, 16, 8, 16] bytes=120 recall=77.880100
-
-PQ_GREEDY_EVAL tag=it8_b0_plus8 alloc=[32, 16, 16, 16, 16, 16, 8, 8] bytes=128 recall=78.710000
-
-PQ_GREEDY_EVAL tag=it8_b1_plus8 alloc=[24, 24, 16, 16, 16, 16, 8, 8] bytes=128 recall=78.798000
-
-PQ_GREEDY_EVAL tag=it8_b2_plus8 alloc=[24, 16, 24, 16, 16, 16, 8, 8] bytes=128 recall=78.800700
-
-PQ_GREEDY_EVAL tag=it8_b3_plus8 alloc=[24, 16, 16, 24, 16, 16, 8, 8] bytes=128 recall=78.727800
-
-PQ_GREEDY_EVAL tag=it8_b4_plus8 alloc=[24, 16, 16, 16, 24, 16, 8, 8] bytes=128 recall=78.711200
-
-PQ_GREEDY_EVAL tag=it8_b5_plus8 alloc=[24, 16, 16, 16, 16, 24, 8, 8] bytes=128 recall=78.720300
-
-PQ_GREEDY_EVAL tag=it8_b6_plus8 alloc=[24, 16, 16, 16, 16, 16, 16, 8] bytes=128 recall=78.745700
-
-PQ_GREEDY_EVAL tag=it8_b7_plus8 alloc=[24, 16, 16, 16, 16, 16, 8, 16] bytes=128 recall=78.789200
-
-PQ_GREEDY_EVAL tag=it9_b0_plus8 alloc=[32, 16, 24, 16, 16, 16, 8, 8] bytes=136 recall=79.528300
-
-PQ_GREEDY_EVAL tag=it9_b1_plus8 alloc=[24, 24, 24, 16, 16, 16, 8, 8] bytes=136 recall=79.591700
-
-PQ_GREEDY_EVAL tag=it9_b2_plus8 alloc=[24, 16, 32, 16, 16, 16, 8, 8] bytes=136 recall=79.514300
-
-PQ_GREEDY_EVAL tag=it9_b3_plus8 alloc=[24, 16, 24, 24, 16, 16, 8, 8] bytes=136 recall=79.593200
-
-PQ_GREEDY_EVAL tag=it9_b4_plus8 alloc=[24, 16, 24, 16, 24, 16, 8, 8] bytes=136 recall=79.555700
-
-PQ_GREEDY_EVAL tag=it9_b5_plus8 alloc=[24, 16, 24, 16, 16, 24, 8, 8] bytes=136 recall=79.495500
-
-PQ_GREEDY_EVAL tag=it9_b6_plus8 alloc=[24, 16, 24, 16, 16, 16, 16, 8] bytes=136 recall=79.555900
-
-PQ_GREEDY_EVAL tag=it9_b7_plus8 alloc=[24, 16, 24, 16, 16, 16, 8, 16] bytes=136 recall=79.585300
-
-PQ_GREEDY_EVAL tag=it10_b0_plus8 alloc=[32, 16, 24, 24, 16, 16, 8, 8] bytes=144 recall=80.180900
-
-PQ_GREEDY_EVAL tag=it10_b1_plus8 alloc=[24, 24, 24, 24, 16, 16, 8, 8] bytes=144 recall=80.286500
-
-PQ_GREEDY_EVAL tag=it10_b2_plus8 alloc=[24, 16, 32, 24, 16, 16, 8, 8] bytes=144 recall=80.271800
-
-PQ_GREEDY_EVAL tag=it10_b3_plus8 alloc=[24, 16, 24, 32, 16, 16, 8, 8] bytes=144 recall=80.181300
-
-PQ_GREEDY_EVAL tag=it10_b4_plus8 alloc=[24, 16, 24, 24, 24, 16, 8, 8] bytes=144 recall=80.274700
-
-PQ_GREEDY_EVAL tag=it10_b5_plus8 alloc=[24, 16, 24, 24, 16, 24, 8, 8] bytes=144 recall=80.178400
-
-PQ_GREEDY_EVAL tag=it10_b6_plus8 alloc=[24, 16, 24, 24, 16, 16, 16, 8] bytes=144 recall=80.230600
-
-PQ_GREEDY_EVAL tag=it10_b7_plus8 alloc=[24, 16, 24, 24, 16, 16, 8, 16] bytes=144 recall=80.275200
-
-PQ_GREEDY_EVAL tag=it11_b0_plus8 alloc=[32, 24, 24, 24, 16, 16, 8, 8] bytes=152 recall=80.991500
-
-PQ_GREEDY_EVAL tag=it11_b1_plus8 alloc=[24, 32, 24, 24, 16, 16, 8, 8] bytes=152 recall=81.021500
-
-PQ_GREEDY_EVAL tag=it11_b2_plus8 alloc=[24, 24, 32, 24, 16, 16, 8, 8] bytes=152 recall=80.939900
-
-PQ_GREEDY_EVAL tag=it11_b3_plus8 alloc=[24, 24, 24, 32, 16, 16, 8, 8] bytes=152 recall=80.947400
-
-PQ_GREEDY_EVAL tag=it11_b4_plus8 alloc=[24, 24, 24, 24, 24, 16, 8, 8] bytes=152 recall=81.023900
-
-PQ_GREEDY_EVAL tag=it11_b5_plus8 alloc=[24, 24, 24, 24, 16, 24, 8, 8] bytes=152 recall=80.927600
-
-PQ_GREEDY_EVAL tag=it11_b6_plus8 alloc=[24, 24, 24, 24, 16, 16, 16, 8] bytes=152 recall=81.005800
-
-PQ_GREEDY_EVAL tag=it11_b7_plus8 alloc=[24, 24, 24, 24, 16, 16, 8, 16] bytes=152 recall=80.918600
-
-PQ_GREEDY_EVAL tag=it12_b0_plus8 alloc=[32, 24, 24, 24, 24, 16, 8, 8] bytes=160 recall=81.632300
-
-PQ_GREEDY_EVAL tag=it12_b1_plus8 alloc=[24, 32, 24, 24, 24, 16, 8, 8] bytes=160 recall=81.635500
-
-PQ_GREEDY_EVAL tag=it12_b2_plus8 alloc=[24, 24, 32, 24, 24, 16, 8, 8] bytes=160 recall=81.625600
-
-PQ_GREEDY_EVAL tag=it12_b3_plus8 alloc=[24, 24, 24, 32, 24, 16, 8, 8] bytes=160 recall=81.526100
-
-PQ_GREEDY_EVAL tag=it12_b4_plus8 alloc=[24, 24, 24, 24, 32, 16, 8, 8] bytes=160 recall=81.582700
-
-PQ_GREEDY_EVAL tag=it12_b5_plus8 alloc=[24, 24, 24, 24, 24, 24, 8, 8] bytes=160 recall=81.588400
-
-PQ_GREEDY_EVAL tag=it12_b6_plus8 alloc=[24, 24, 24, 24, 24, 16, 16, 8] bytes=160 recall=81.597900
-
-PQ_GREEDY_EVAL tag=it12_b7_plus8 alloc=[24, 24, 24, 24, 24, 16, 8, 16] bytes=160 recall=81.622800
-
-PQ_GREEDY_EVAL tag=it13_b0_plus8 alloc=[32, 32, 24, 24, 24, 16, 8, 8] bytes=168 recall=82.274800
-
-PQ_GREEDY_EVAL tag=it13_b1_plus8 alloc=[24, 40, 24, 24, 24, 16, 8, 8] bytes=168 recall=82.145800
-
-PQ_GREEDY_EVAL tag=it13_b2_plus8 alloc=[24, 32, 32, 24, 24, 16, 8, 8] bytes=168 recall=82.248300
-
-PQ_GREEDY_EVAL tag=it13_b3_plus8 alloc=[24, 32, 24, 32, 24, 16, 8, 8] bytes=168 recall=82.199400
-
-PQ_GREEDY_EVAL tag=it13_b4_plus8 alloc=[24, 32, 24, 24, 32, 16, 8, 8] bytes=168 recall=82.222100
-
-PQ_GREEDY_EVAL tag=it13_b5_plus8 alloc=[24, 32, 24, 24, 24, 24, 8, 8] bytes=168 recall=82.191000
-
-PQ_GREEDY_EVAL tag=it13_b6_plus8 alloc=[24, 32, 24, 24, 24, 16, 16, 8] bytes=168 recall=82.279600
-
-PQ_GREEDY_EVAL tag=it13_b7_plus8 alloc=[24, 32, 24, 24, 24, 16, 8, 16] bytes=168 recall=82.224500
-
-PQ_GREEDY_EVAL tag=it14_b0_plus8 alloc=[32, 32, 24, 24, 24, 16, 16, 8] bytes=176 recall=82.844700
-
-PQ_GREEDY_EVAL tag=it14_b1_plus8 alloc=[24, 40, 24, 24, 24, 16, 16, 8] bytes=176 recall=82.709800
-
-PQ_GREEDY_EVAL tag=it14_b2_plus8 alloc=[24, 32, 32, 24, 24, 16, 16, 8] bytes=176 recall=82.796400
-
-PQ_GREEDY_EVAL tag=it14_b3_plus8 alloc=[24, 32, 24, 32, 24, 16, 16, 8] bytes=176 recall=82.809600
-
-PQ_GREEDY_EVAL tag=it14_b4_plus8 alloc=[24, 32, 24, 24, 32, 16, 16, 8] bytes=176 recall=82.727800
-
-PQ_GREEDY_EVAL tag=it14_b5_plus8 alloc=[24, 32, 24, 24, 24, 24, 16, 8] bytes=176 recall=82.742000
-
-PQ_GREEDY_EVAL tag=it14_b6_plus8 alloc=[24, 32, 24, 24, 24, 16, 24, 8] bytes=176 recall=82.738300
-
-PQ_GREEDY_EVAL tag=it14_b7_plus8 alloc=[24, 32, 24, 24, 24, 16, 16, 16] bytes=176 recall=82.751500
-
-PQ_GREEDY_EVAL tag=it15_b0_plus8 alloc=[40, 32, 24, 24, 24, 16, 16, 8] bytes=184 recall=83.284100
-
-PQ_GREEDY_EVAL tag=it15_b1_plus8 alloc=[32, 40, 24, 24, 24, 16, 16, 8] bytes=184 recall=83.279000
-
-PQ_GREEDY_EVAL tag=it15_b2_plus8 alloc=[32, 32, 32, 24, 24, 16, 16, 8] bytes=184 recall=83.425300
-
-PQ_GREEDY_EVAL tag=it15_b3_plus8 alloc=[32, 32, 24, 32, 24, 16, 16, 8] bytes=184 recall=83.366000
-
-PQ_GREEDY_EVAL tag=it15_b4_plus8 alloc=[32, 32, 24, 24, 32, 16, 16, 8] bytes=184 recall=83.373900
-
-PQ_GREEDY_EVAL tag=it15_b5_plus8 alloc=[32, 32, 24, 24, 24, 24, 16, 8] bytes=184 recall=83.289900
-
-PQ_GREEDY_EVAL tag=it15_b6_plus8 alloc=[32, 32, 24, 24, 24, 16, 24, 8] bytes=184 recall=83.283900
-
-PQ_GREEDY_EVAL tag=it15_b7_plus8 alloc=[32, 32, 24, 24, 24, 16, 16, 16] bytes=184 recall=83.290300
-
-PQ_GREEDY_EVAL tag=it16_b0_plus8 alloc=[40, 32, 32, 24, 24, 16, 16, 8] bytes=192 recall=83.838900
-
-PQ_GREEDY_EVAL tag=it16_b1_plus8 alloc=[32, 40, 32, 24, 24, 16, 16, 8] bytes=192 recall=83.868900
-
-PQ_GREEDY_EVAL tag=it16_b2_plus8 alloc=[32, 32, 40, 24, 24, 16, 16, 8] bytes=192 recall=83.834800
-
-PQ_GREEDY_EVAL tag=it16_b3_plus8 alloc=[32, 32, 32, 32, 24, 16, 16, 8] bytes=192 recall=83.955900
-
-PQ_GREEDY_EVAL tag=it16_b4_plus8 alloc=[32, 32, 32, 24, 32, 16, 16, 8] bytes=192 recall=83.930300
-
-PQ_GREEDY_EVAL tag=it16_b5_plus8 alloc=[32, 32, 32, 24, 24, 24, 16, 8] bytes=192 recall=83.869300
-
-PQ_GREEDY_EVAL tag=it16_b6_plus8 alloc=[32, 32, 32, 24, 24, 16, 24, 8] bytes=192 recall=83.830900
-
-PQ_GREEDY_EVAL tag=it16_b7_plus8 alloc=[32, 32, 32, 24, 24, 16, 16, 16] bytes=192 recall=83.828900
-
-PQ_GREEDY_EVAL tag=it17_b0_plus8 alloc=[40, 32, 32, 32, 24, 16, 16, 8] bytes=200 recall=84.387900
-
-PQ_GREEDY_EVAL tag=it17_b1_plus8 alloc=[32, 40, 32, 32, 24, 16, 16, 8] bytes=200 recall=84.363000
-
-PQ_GREEDY_EVAL tag=it17_b2_plus8 alloc=[32, 32, 40, 32, 24, 16, 16, 8] bytes=200 recall=84.337900
-
-PQ_GREEDY_EVAL tag=it17_b3_plus8 alloc=[32, 32, 32, 40, 24, 16, 16, 8] bytes=200 recall=84.355900
-
-PQ_GREEDY_EVAL tag=it17_b4_plus8 alloc=[32, 32, 32, 32, 32, 16, 16, 8] bytes=200 recall=84.430100
-
-PQ_GREEDY_EVAL tag=it17_b5_plus8 alloc=[32, 32, 32, 32, 24, 24, 16, 8] bytes=200 recall=84.397600
-
-PQ_GREEDY_EVAL tag=it17_b6_plus8 alloc=[32, 32, 32, 32, 24, 16, 24, 8] bytes=200 recall=84.352700
-
-PQ_GREEDY_EVAL tag=it17_b7_plus8 alloc=[32, 32, 32, 32, 24, 16, 16, 16] bytes=200 recall=84.388600
-
-PQ_GREEDY_EVAL tag=it18_b0_plus8 alloc=[40, 32, 32, 32, 32, 16, 16, 8] bytes=208 recall=84.866200
-
-PQ_GREEDY_EVAL tag=it18_b1_plus8 alloc=[32, 40, 32, 32, 32, 16, 16, 8] bytes=208 recall=84.880900
-
-PQ_GREEDY_EVAL tag=it18_b2_plus8 alloc=[32, 32, 40, 32, 32, 16, 16, 8] bytes=208 recall=84.858300
-
-PQ_GREEDY_EVAL tag=it18_b3_plus8 alloc=[32, 32, 32, 40, 32, 16, 16, 8] bytes=208 recall=84.862500
-
-PQ_GREEDY_EVAL tag=it18_b4_plus8 alloc=[32, 32, 32, 32, 40, 16, 16, 8] bytes=208 recall=84.874600
-
-PQ_GREEDY_EVAL tag=it18_b5_plus8 alloc=[32, 32, 32, 32, 32, 24, 16, 8] bytes=208 recall=84.945100
-
-PQ_GREEDY_EVAL tag=it18_b6_plus8 alloc=[32, 32, 32, 32, 32, 16, 24, 8] bytes=208 recall=84.850900
-
-PQ_GREEDY_EVAL tag=it18_b7_plus8 alloc=[32, 32, 32, 32, 32, 16, 16, 16] bytes=208 recall=84.866500
-
-PQ_GREEDY_EVAL tag=it19_b0_plus8 alloc=[40, 32, 32, 32, 32, 24, 16, 8] bytes=216 recall=85.318300
-
-PQ_GREEDY_EVAL tag=it19_b1_plus8 alloc=[32, 40, 32, 32, 32, 24, 16, 8] bytes=216 recall=85.338200
-
-PQ_GREEDY_EVAL tag=it19_b2_plus8 alloc=[32, 32, 40, 32, 32, 24, 16, 8] bytes=216 recall=85.317600
-
-PQ_GREEDY_EVAL tag=it19_b3_plus8 alloc=[32, 32, 32, 40, 32, 24, 16, 8] bytes=216 recall=85.286300
-
-PQ_GREEDY_EVAL tag=it19_b4_plus8 alloc=[32, 32, 32, 32, 40, 24, 16, 8] bytes=216 recall=85.277100
-
-PQ_GREEDY_EVAL tag=it19_b5_plus8 alloc=[32, 32, 32, 32, 32, 32, 16, 8] bytes=216 recall=85.328000
-
-PQ_GREEDY_EVAL tag=it19_b6_plus8 alloc=[32, 32, 32, 32, 32, 24, 24, 8] bytes=216 recall=85.309500
-
-PQ_GREEDY_EVAL tag=it19_b7_plus8 alloc=[32, 32, 32, 32, 32, 24, 16, 16] bytes=216 recall=85.269900
-
-PQ_GREEDY_EVAL tag=it20_b0_plus8 alloc=[40, 40, 32, 32, 32, 24, 16, 8] bytes=224 recall=85.767100
-
-PQ_GREEDY_EVAL tag=it20_b1_plus8 alloc=[32, 48, 32, 32, 32, 24, 16, 8] bytes=224 recall=85.604100
-
-PQ_GREEDY_EVAL tag=it20_b2_plus8 alloc=[32, 40, 40, 32, 32, 24, 16, 8] bytes=224 recall=85.737900
-
-PQ_GREEDY_EVAL tag=it20_b3_plus8 alloc=[32, 40, 32, 40, 32, 24, 16, 8] bytes=224 recall=85.684900
-
-PQ_GREEDY_EVAL tag=it20_b4_plus8 alloc=[32, 40, 32, 32, 40, 24, 16, 8] bytes=224 recall=85.685200
-
-PQ_GREEDY_EVAL tag=it20_b5_plus8 alloc=[32, 40, 32, 32, 32, 32, 16, 8] bytes=224 recall=85.729400
-
-PQ_GREEDY_EVAL tag=it20_b6_plus8 alloc=[32, 40, 32, 32, 32, 24, 24, 8] bytes=224 recall=85.736300
-
-PQ_GREEDY_EVAL tag=it20_b7_plus8 alloc=[32, 40, 32, 32, 32, 24, 16, 16] bytes=224 recall=85.697700
-
-PQ_GREEDY_EVAL tag=it21_b0_plus8 alloc=[48, 40, 32, 32, 32, 24, 16, 8] bytes=232 recall=86.126700
-
-PQ_GREEDY_EVAL tag=it21_b1_plus8 alloc=[40, 48, 32, 32, 32, 24, 16, 8] bytes=232 recall=86.115700
-
-PQ_GREEDY_EVAL tag=it21_b2_plus8 alloc=[40, 40, 40, 32, 32, 24, 16, 8] bytes=232 recall=86.150600
-
-PQ_GREEDY_EVAL tag=it21_b3_plus8 alloc=[40, 40, 32, 40, 32, 24, 16, 8] bytes=232 recall=86.127600
-
-PQ_GREEDY_EVAL tag=it21_b4_plus8 alloc=[40, 40, 32, 32, 40, 24, 16, 8] bytes=232 recall=86.121800
-
-PQ_GREEDY_EVAL tag=it21_b5_plus8 alloc=[40, 40, 32, 32, 32, 32, 16, 8] bytes=232 recall=86.176900
-
-PQ_GREEDY_EVAL tag=it21_b6_plus8 alloc=[40, 40, 32, 32, 32, 24, 24, 8] bytes=232 recall=86.157800
-
-PQ_GREEDY_EVAL tag=it21_b7_plus8 alloc=[40, 40, 32, 32, 32, 24, 16, 16] bytes=232 recall=86.141500
-
-PQ_GREEDY_EVAL tag=it22_b0_plus8 alloc=[48, 40, 32, 32, 32, 32, 16, 8] bytes=240 recall=86.487100
-
-PQ_GREEDY_EVAL tag=it22_b1_plus8 alloc=[40, 48, 32, 32, 32, 32, 16, 8] bytes=240 recall=86.490600
-
-PQ_GREEDY_EVAL tag=it22_b2_plus8 alloc=[40, 40, 40, 32, 32, 32, 16, 8] bytes=240 recall=86.588500
-
-PQ_GREEDY_EVAL tag=it22_b3_plus8 alloc=[40, 40, 32, 40, 32, 32, 16, 8] bytes=240 recall=86.552100
-
-PQ_GREEDY_EVAL tag=it22_b4_plus8 alloc=[40, 40, 32, 32, 40, 32, 16, 8] bytes=240 recall=86.561000
-
-PQ_GREEDY_EVAL tag=it22_b5_plus8 alloc=[40, 40, 32, 32, 32, 40, 16, 8] bytes=240 recall=86.490800
-
-PQ_GREEDY_EVAL tag=it22_b6_plus8 alloc=[40, 40, 32, 32, 32, 32, 24, 8] bytes=240 recall=86.552800
-
-PQ_GREEDY_EVAL tag=it22_b7_plus8 alloc=[40, 40, 32, 32, 32, 32, 16, 16] bytes=240 recall=86.565800
-
-PQ_GREEDY_EVAL tag=it23_b0_plus8 alloc=[48, 40, 40, 32, 32, 32, 16, 8] bytes=248 recall=86.889700
-
-PQ_GREEDY_EVAL tag=it23_b1_plus8 alloc=[40, 48, 40, 32, 32, 32, 16, 8] bytes=248 recall=86.881000
-
-PQ_GREEDY_EVAL tag=it23_b2_plus8 alloc=[40, 40, 48, 32, 32, 32, 16, 8] bytes=248 recall=86.907800
-
-PQ_GREEDY_EVAL tag=it23_b3_plus8 alloc=[40, 40, 40, 40, 32, 32, 16, 8] bytes=248 recall=86.932200
-
-PQ_GREEDY_EVAL tag=it23_b4_plus8 alloc=[40, 40, 40, 32, 40, 32, 16, 8] bytes=248 recall=86.938200
-
-PQ_GREEDY_EVAL tag=it23_b5_plus8 alloc=[40, 40, 40, 32, 32, 40, 16, 8] bytes=248 recall=86.867900
-
-PQ_GREEDY_EVAL tag=it23_b6_plus8 alloc=[40, 40, 40, 32, 32, 32, 24, 8] bytes=248 recall=86.913400
-
-PQ_GREEDY_EVAL tag=it23_b7_plus8 alloc=[40, 40, 40, 32, 32, 32, 16, 16] bytes=248 recall=86.933300
-
-PQ_GREEDY_EVAL tag=it24_b0_plus8 alloc=[48, 40, 40, 32, 40, 32, 16, 8] bytes=256 recall=87.313400
-
-PQ_GREEDY_EVAL tag=it24_b1_plus8 alloc=[40, 48, 40, 32, 40, 32, 16, 8] bytes=256 recall=87.273800
-
-PQ_GREEDY_EVAL tag=it24_b2_plus8 alloc=[40, 40, 48, 32, 40, 32, 16, 8] bytes=256 recall=87.272200
-
-PQ_GREEDY_EVAL tag=it24_b3_plus8 alloc=[40, 40, 40, 40, 40, 32, 16, 8] bytes=256 recall=87.311200
-
-PQ_GREEDY_EVAL tag=it24_b4_plus8 alloc=[40, 40, 40, 32, 48, 32, 16, 8] bytes=256 recall=87.257200
-
-PQ_GREEDY_EVAL tag=it24_b5_plus8 alloc=[40, 40, 40, 32, 40, 40, 16, 8] bytes=256 recall=87.258100
-
-PQ_GREEDY_EVAL tag=it24_b6_plus8 alloc=[40, 40, 40, 32, 40, 32, 24, 8] bytes=256 recall=87.304400
-
-PQ_GREEDY_EVAL tag=it24_b7_plus8 alloc=[40, 40, 40, 32, 40, 32, 16, 16] bytes=256 recall=87.320600
-
-PQ_GREEDY_EVAL tag=it25_b0_plus8 alloc=[48, 40, 40, 32, 40, 32, 16, 16] bytes=264 recall=87.672500
-
-PQ_GREEDY_EVAL tag=it25_b1_plus8 alloc=[40, 48, 40, 32, 40, 32, 16, 16] bytes=264 recall=87.600800
-
-PQ_GREEDY_EVAL tag=it25_b2_plus8 alloc=[40, 40, 48, 32, 40, 32, 16, 16] bytes=264 recall=87.634900
-
-PQ_GREEDY_EVAL tag=it25_b3_plus8 alloc=[40, 40, 40, 40, 40, 32, 16, 16] bytes=264 recall=87.671000
-
-PQ_GREEDY_EVAL tag=it25_b4_plus8 alloc=[40, 40, 40, 32, 48, 32, 16, 16] bytes=264 recall=87.635500
-
-PQ_GREEDY_EVAL tag=it25_b5_plus8 alloc=[40, 40, 40, 32, 40, 40, 16, 16] bytes=264 recall=87.637600
-
-PQ_GREEDY_EVAL tag=it25_b6_plus8 alloc=[40, 40, 40, 32, 40, 32, 24, 16] bytes=264 recall=87.668200
-
-PQ_GREEDY_EVAL tag=it25_b7_plus8 alloc=[40, 40, 40, 32, 40, 32, 16, 24] bytes=264 recall=87.680400
-
-PQ_GREEDY_EVAL tag=it26_b0_plus8 alloc=[48, 40, 40, 32, 40, 32, 16, 24] bytes=272 recall=88.050600
-
-PQ_GREEDY_EVAL tag=it26_b1_plus8 alloc=[40, 48, 40, 32, 40, 32, 16, 24] bytes=272 recall=87.991700
-
-PQ_GREEDY_EVAL tag=it26_b2_plus8 alloc=[40, 40, 48, 32, 40, 32, 16, 24] bytes=272 recall=88.028100
-
-PQ_GREEDY_EVAL tag=it26_b3_plus8 alloc=[40, 40, 40, 40, 40, 32, 16, 24] bytes=272 recall=88.022200
-
-PQ_GREEDY_EVAL tag=it26_b4_plus8 alloc=[40, 40, 40, 32, 48, 32, 16, 24] bytes=272 recall=87.950400
-
-PQ_GREEDY_EVAL tag=it26_b5_plus8 alloc=[40, 40, 40, 32, 40, 40, 16, 24] bytes=272 recall=87.987700
-
-PQ_GREEDY_EVAL tag=it26_b6_plus8 alloc=[40, 40, 40, 32, 40, 32, 24, 24] bytes=272 recall=88.040100
-
-PQ_GREEDY_EVAL tag=it26_b7_plus8 alloc=[40, 40, 40, 32, 40, 32, 16, 32] bytes=272 recall=88.076200
-
-PQ_GREEDY_EVAL tag=it27_b0_plus8 alloc=[48, 40, 40, 32, 40, 32, 16, 32] bytes=280 recall=88.403000
-
-PQ_GREEDY_EVAL tag=it27_b1_plus8 alloc=[40, 48, 40, 32, 40, 32, 16, 32] bytes=280 recall=88.331500
-
-PQ_GREEDY_EVAL tag=it27_b2_plus8 alloc=[40, 40, 48, 32, 40, 32, 16, 32] bytes=280 recall=88.388100
-
-PQ_GREEDY_EVAL tag=it27_b3_plus8 alloc=[40, 40, 40, 40, 40, 32, 16, 32] bytes=280 recall=88.373300
-
-PQ_GREEDY_EVAL tag=it27_b4_plus8 alloc=[40, 40, 40, 32, 48, 32, 16, 32] bytes=280 recall=88.349900
-
-PQ_GREEDY_EVAL tag=it27_b5_plus8 alloc=[40, 40, 40, 32, 40, 40, 16, 32] bytes=280 recall=88.342600
-
-PQ_GREEDY_EVAL tag=it27_b6_plus8 alloc=[40, 40, 40, 32, 40, 32, 24, 32] bytes=280 recall=88.359900
-
-PQ_GREEDY_EVAL tag=it27_b7_plus8 alloc=[40, 40, 40, 32, 40, 32, 16, 40] bytes=280 recall=88.342000
-
-PQ_GREEDY_EVAL tag=it28_b0_plus8 alloc=[56, 40, 40, 32, 40, 32, 16, 32] bytes=288 recall=88.581900
-
-PQ_GREEDY_EVAL tag=it28_b1_plus8 alloc=[48, 48, 40, 32, 40, 32, 16, 32] bytes=288 recall=88.665900
-
-PQ_GREEDY_EVAL tag=it28_b2_plus8 alloc=[48, 40, 48, 32, 40, 32, 16, 32] bytes=288 recall=88.661200
-
-PQ_GREEDY_EVAL tag=it28_b3_plus8 alloc=[48, 40, 40, 40, 40, 32, 16, 32] bytes=288 recall=88.683600
-
-PQ_GREEDY_EVAL tag=it28_b4_plus8 alloc=[48, 40, 40, 32, 48, 32, 16, 32] bytes=288 recall=88.657100
-
-PQ_GREEDY_EVAL tag=it28_b5_plus8 alloc=[48, 40, 40, 32, 40, 40, 16, 32] bytes=288 recall=88.670700
-
-PQ_GREEDY_EVAL tag=it28_b6_plus8 alloc=[48, 40, 40, 32, 40, 32, 24, 32] bytes=288 recall=88.714900
-
-PQ_GREEDY_EVAL tag=it28_b7_plus8 alloc=[48, 40, 40, 32, 40, 32, 16, 40] bytes=288 recall=88.692900
-
-PQ_GREEDY_EVAL tag=it29_b0_plus8 alloc=[56, 40, 40, 32, 40, 32, 24, 32] bytes=296 recall=88.859500
-
-PQ_GREEDY_EVAL tag=it29_b1_plus8 alloc=[48, 48, 40, 32, 40, 32, 24, 32] bytes=296 recall=89.003700
-
-PQ_GREEDY_EVAL tag=it29_b2_plus8 alloc=[48, 40, 48, 32, 40, 32, 24, 32] bytes=296 recall=89.008900
-
-PQ_GREEDY_EVAL tag=it29_b3_plus8 alloc=[48, 40, 40, 40, 40, 32, 24, 32] bytes=296 recall=89.046000
-
-PQ_GREEDY_EVAL tag=it29_b4_plus8 alloc=[48, 40, 40, 32, 48, 32, 24, 32] bytes=296 recall=89.009400
-
-PQ_GREEDY_EVAL tag=it29_b5_plus8 alloc=[48, 40, 40, 32, 40, 40, 24, 32] bytes=296 recall=88.994300
-
-PQ_GREEDY_EVAL tag=it29_b6_plus8 alloc=[48, 40, 40, 32, 40, 32, 32, 32] bytes=296 recall=89.072000
-
-PQ_GREEDY_EVAL tag=it29_b7_plus8 alloc=[48, 40, 40, 32, 40, 32, 24, 40] bytes=296 recall=89.012900
-
-PQ_GREEDY_EVAL tag=it30_b0_plus8 alloc=[56, 40, 40, 32, 40, 32, 32, 32] bytes=304 recall=89.269400
-
-PQ_GREEDY_EVAL tag=it30_b1_plus8 alloc=[48, 48, 40, 32, 40, 32, 32, 32] bytes=304 recall=89.367100
-
-PQ_GREEDY_EVAL tag=it30_b2_plus8 alloc=[48, 40, 48, 32, 40, 32, 32, 32] bytes=304 recall=89.390300
-
-PQ_GREEDY_EVAL tag=it30_b3_plus8 alloc=[48, 40, 40, 40, 40, 32, 32, 32] bytes=304 recall=89.393900
-
-PQ_GREEDY_EVAL tag=it30_b4_plus8 alloc=[48, 40, 40, 32, 48, 32, 32, 32] bytes=304 recall=89.339400
-
-PQ_GREEDY_EVAL tag=it30_b5_plus8 alloc=[48, 40, 40, 32, 40, 40, 32, 32] bytes=304 recall=89.384800
-
-PQ_GREEDY_EVAL tag=it30_b6_plus8 alloc=[48, 40, 40, 32, 40, 32, 40, 32] bytes=304 recall=89.385900
-
-PQ_GREEDY_EVAL tag=it30_b7_plus8 alloc=[48, 40, 40, 32, 40, 32, 32, 40] bytes=304 recall=89.357600
-
-PQ_GREEDY_EVAL tag=it31_b0_plus8 alloc=[56, 40, 40, 40, 40, 32, 32, 32] bytes=312 recall=89.562100
-
-PQ_GREEDY_EVAL tag=it31_b1_plus8 alloc=[48, 48, 40, 40, 40, 32, 32, 32] bytes=312 recall=89.702400
-
-PQ_GREEDY_EVAL tag=it31_b2_plus8 alloc=[48, 40, 48, 40, 40, 32, 32, 32] bytes=312 recall=89.712200
-
-PQ_GREEDY_EVAL tag=it31_b3_plus8 alloc=[48, 40, 40, 48, 40, 32, 32, 32] bytes=312 recall=89.663200
-
-PQ_GREEDY_EVAL tag=it31_b4_plus8 alloc=[48, 40, 40, 40, 48, 32, 32, 32] bytes=312 recall=89.692300
-
-PQ_GREEDY_EVAL tag=it31_b5_plus8 alloc=[48, 40, 40, 40, 40, 40, 32, 32] bytes=312 recall=89.697700
-
-PQ_GREEDY_EVAL tag=it31_b6_plus8 alloc=[48, 40, 40, 40, 40, 32, 40, 32] bytes=312 recall=89.699500
-
-PQ_GREEDY_EVAL tag=it31_b7_plus8 alloc=[48, 40, 40, 40, 40, 32, 32, 40] bytes=312 recall=89.716300
-
-PQ_GREEDY_EVAL tag=it32_b0_plus8 alloc=[56, 40, 40, 40, 40, 32, 32, 40] bytes=320 recall=89.839800
-
-PQ_GREEDY_EVAL tag=it32_b1_plus8 alloc=[48, 48, 40, 40, 40, 32, 32, 40] bytes=320 recall=89.980900
-
-PQ_GREEDY_EVAL tag=it32_b2_plus8 alloc=[48, 40, 48, 40, 40, 32, 32, 40] bytes=320 recall=90.014800
-
-PQ_GREEDY_EVAL tag=it32_b3_plus8 alloc=[48, 40, 40, 48, 40, 32, 32, 40] bytes=320 recall=89.993000
-
-PQ_GREEDY_EVAL tag=it32_b4_plus8 alloc=[48, 40, 40, 40, 48, 32, 32, 40] bytes=320 recall=89.973600
-
-PQ_GREEDY_EVAL tag=it32_b5_plus8 alloc=[48, 40, 40, 40, 40, 40, 32, 40] bytes=320 recall=89.947900
-
-PQ_GREEDY_EVAL tag=it32_b6_plus8 alloc=[48, 40, 40, 40, 40, 32, 40, 40] bytes=320 recall=89.984800
-
-PQ_GREEDY_EVAL tag=it32_b7_plus8 alloc=[48, 40, 40, 40, 40, 32, 32, 48] bytes=320 recall=89.900800
-
-PQ_GREEDY_EVAL tag=it33_b0_plus8 alloc=[56, 40, 48, 40, 40, 32, 32, 40] bytes=328 recall=90.149500
-
-PQ_GREEDY_EVAL tag=it33_b1_plus8 alloc=[48, 48, 48, 40, 40, 32, 32, 40] bytes=328 recall=90.306900
-
-PQ_GREEDY_EVAL tag=it33_b2_plus8 alloc=[48, 40, 56, 40, 40, 32, 32, 40] bytes=328 recall=90.190700
-
-PQ_GREEDY_EVAL tag=it33_b3_plus8 alloc=[48, 40, 48, 48, 40, 32, 32, 40] bytes=328 recall=90.248500
-
-PQ_GREEDY_EVAL tag=it33_b4_plus8 alloc=[48, 40, 48, 40, 48, 32, 32, 40] bytes=328 recall=90.283100
-
-PQ_GREEDY_EVAL tag=it33_b5_plus8 alloc=[48, 40, 48, 40, 40, 40, 32, 40] bytes=328 recall=90.262200
-
-PQ_GREEDY_EVAL tag=it33_b6_plus8 alloc=[48, 40, 48, 40, 40, 32, 40, 40] bytes=328 recall=90.283600
-
-PQ_GREEDY_EVAL tag=it33_b7_plus8 alloc=[48, 40, 48, 40, 40, 32, 32, 48] bytes=328 recall=90.247900
-
-PQ_GREEDY_EVAL tag=it34_b0_plus8 alloc=[56, 48, 48, 40, 40, 32, 32, 40] bytes=336 recall=90.512300
-
-PQ_GREEDY_EVAL tag=it34_b1_plus8 alloc=[48, 56, 48, 40, 40, 32, 32, 40] bytes=336 recall=90.476300
-
-PQ_GREEDY_EVAL tag=it34_b2_plus8 alloc=[48, 48, 56, 40, 40, 32, 32, 40] bytes=336 recall=90.482300
-
-PQ_GREEDY_EVAL tag=it34_b3_plus8 alloc=[48, 48, 48, 48, 40, 32, 32, 40] bytes=336 recall=90.612600
-
-PQ_GREEDY_EVAL tag=it34_b4_plus8 alloc=[48, 48, 48, 40, 48, 32, 32, 40] bytes=336 recall=90.597700
-
-PQ_GREEDY_EVAL tag=it34_b5_plus8 alloc=[48, 48, 48, 40, 40, 40, 32, 40] bytes=336 recall=90.599200
-
-PQ_GREEDY_EVAL tag=it34_b6_plus8 alloc=[48, 48, 48, 40, 40, 32, 40, 40] bytes=336 recall=90.594500
-
-PQ_GREEDY_EVAL tag=it34_b7_plus8 alloc=[48, 48, 48, 40, 40, 32, 32, 48] bytes=336 recall=90.509000
-
-PQ_GREEDY_EVAL tag=it35_b0_plus8 alloc=[56, 48, 48, 48, 40, 32, 32, 40] bytes=344 recall=90.766200
-
-PQ_GREEDY_EVAL tag=it35_b1_plus8 alloc=[48, 56, 48, 48, 40, 32, 32, 40] bytes=344 recall=90.774900
-
-PQ_GREEDY_EVAL tag=it35_b2_plus8 alloc=[48, 48, 56, 48, 40, 32, 32, 40] bytes=344 recall=90.724300
-
-PQ_GREEDY_EVAL tag=it35_b3_plus8 alloc=[48, 48, 48, 56, 40, 32, 32, 40] bytes=344 recall=90.758100
-
-PQ_GREEDY_EVAL tag=it35_b4_plus8 alloc=[48, 48, 48, 48, 48, 32, 32, 40] bytes=344 recall=90.826500
-
-PQ_GREEDY_EVAL tag=it35_b5_plus8 alloc=[48, 48, 48, 48, 40, 40, 32, 40] bytes=344 recall=90.866100
-
-PQ_GREEDY_EVAL tag=it35_b6_plus8 alloc=[48, 48, 48, 48, 40, 32, 40, 40] bytes=344 recall=90.857600
-
-PQ_GREEDY_EVAL tag=it35_b7_plus8 alloc=[48, 48, 48, 48, 40, 32, 32, 48] bytes=344 recall=90.812400
-
-PQ_GREEDY_EVAL tag=it36_b0_plus8 alloc=[56, 48, 48, 48, 40, 40, 32, 40] bytes=352 recall=91.051800
-
-PQ_GREEDY_EVAL tag=it36_b1_plus8 alloc=[48, 56, 48, 48, 40, 40, 32, 40] bytes=352 recall=91.041400
-
-PQ_GREEDY_EVAL tag=it36_b2_plus8 alloc=[48, 48, 56, 48, 40, 40, 32, 40] bytes=352 recall=91.063200
-
-PQ_GREEDY_EVAL tag=it36_b3_plus8 alloc=[48, 48, 48, 56, 40, 40, 32, 40] bytes=352 recall=91.040900
-
-PQ_GREEDY_EVAL tag=it36_b4_plus8 alloc=[48, 48, 48, 48, 48, 40, 32, 40] bytes=352 recall=91.144900
-
-PQ_GREEDY_EVAL tag=it36_b5_plus8 alloc=[48, 48, 48, 48, 40, 48, 32, 40] bytes=352 recall=91.100800
-
-PQ_GREEDY_EVAL tag=it36_b6_plus8 alloc=[48, 48, 48, 48, 40, 40, 40, 40] bytes=352 recall=91.149700
-
-PQ_GREEDY_EVAL tag=it36_b7_plus8 alloc=[48, 48, 48, 48, 40, 40, 32, 48] bytes=352 recall=91.102100
-
-PQ_GREEDY_EVAL tag=it37_b0_plus8 alloc=[56, 48, 48, 48, 40, 40, 40, 40] bytes=360 recall=91.328700
-
-PQ_GREEDY_EVAL tag=it37_b1_plus8 alloc=[48, 56, 48, 48, 40, 40, 40, 40] bytes=360 recall=91.331100
-
-PQ_GREEDY_EVAL tag=it37_b2_plus8 alloc=[48, 48, 56, 48, 40, 40, 40, 40] bytes=360 recall=91.347300
-
-PQ_GREEDY_EVAL tag=it37_b3_plus8 alloc=[48, 48, 48, 56, 40, 40, 40, 40] bytes=360 recall=91.307200
-
-PQ_GREEDY_EVAL tag=it37_b4_plus8 alloc=[48, 48, 48, 48, 48, 40, 40, 40] bytes=360 recall=91.401300
-
-PQ_GREEDY_EVAL tag=it37_b5_plus8 alloc=[48, 48, 48, 48, 40, 48, 40, 40] bytes=360 recall=91.384000
-
-PQ_GREEDY_EVAL tag=it37_b6_plus8 alloc=[48, 48, 48, 48, 40, 40, 48, 40] bytes=360 recall=91.378200
-
-PQ_GREEDY_EVAL tag=it37_b7_plus8 alloc=[48, 48, 48, 48, 40, 40, 40, 48] bytes=360 recall=91.340800
-
-PQ_GREEDY_EVAL tag=it38_b0_plus8 alloc=[56, 48, 48, 48, 48, 40, 40, 40] bytes=368 recall=91.626800
-
-PQ_GREEDY_EVAL tag=it38_b1_plus8 alloc=[48, 56, 48, 48, 48, 40, 40, 40] bytes=368 recall=91.630700
-
-PQ_GREEDY_EVAL tag=it38_b2_plus8 alloc=[48, 48, 56, 48, 48, 40, 40, 40] bytes=368 recall=91.598600
-
-PQ_GREEDY_EVAL tag=it38_b3_plus8 alloc=[48, 48, 48, 56, 48, 40, 40, 40] bytes=368 recall=91.562200
-
-PQ_GREEDY_EVAL tag=it38_b4_plus8 alloc=[48, 48, 48, 48, 56, 40, 40, 40] bytes=368 recall=91.601900
-
-PQ_GREEDY_EVAL tag=it38_b5_plus8 alloc=[48, 48, 48, 48, 48, 48, 40, 40] bytes=368 recall=91.653100
-
-PQ_GREEDY_EVAL tag=it38_b6_plus8 alloc=[48, 48, 48, 48, 48, 40, 48, 40] bytes=368 recall=91.673200
-
-PQ_GREEDY_EVAL tag=it38_b7_plus8 alloc=[48, 48, 48, 48, 48, 40, 40, 48] bytes=368 recall=91.643200
-
-PQ_GREEDY_EVAL tag=it39_b0_plus8 alloc=[56, 48, 48, 48, 48, 40, 48, 40] bytes=376 recall=91.846400
-
-PQ_GREEDY_EVAL tag=it39_b1_plus8 alloc=[48, 56, 48, 48, 48, 40, 48, 40] bytes=376 recall=91.820200
-
-PQ_GREEDY_EVAL tag=it39_b2_plus8 alloc=[48, 48, 56, 48, 48, 40, 48, 40] bytes=376 recall=91.833900
-
-PQ_GREEDY_EVAL tag=it39_b3_plus8 alloc=[48, 48, 48, 56, 48, 40, 48, 40] bytes=376 recall=91.843200
-
-PQ_GREEDY_EVAL tag=it39_b4_plus8 alloc=[48, 48, 48, 48, 56, 40, 48, 40] bytes=376 recall=91.831300
-
-PQ_GREEDY_EVAL tag=it39_b5_plus8 alloc=[48, 48, 48, 48, 48, 48, 48, 40] bytes=376 recall=91.869200
-
-PQ_GREEDY_EVAL tag=it39_b6_plus8 alloc=[48, 48, 48, 48, 48, 40, 56, 40] bytes=376 recall=91.810100
-
-PQ_GREEDY_EVAL tag=it39_b7_plus8 alloc=[48, 48, 48, 48, 48, 40, 48, 48] bytes=376 recall=91.868500
-
-PQ_GREEDY_EVAL tag=it40_b0_plus8 alloc=[56, 48, 48, 48, 48, 48, 48, 40] bytes=384 recall=92.074000
-
-PQ_GREEDY_EVAL tag=it40_b1_plus8 alloc=[48, 56, 48, 48, 48, 48, 48, 40] bytes=384 recall=92.120200
-
-PQ_GREEDY_EVAL tag=it40_b2_plus8 alloc=[48, 48, 56, 48, 48, 48, 48, 40] bytes=384 recall=92.047500
-
-PQ_GREEDY_EVAL tag=it40_b3_plus8 alloc=[48, 48, 48, 56, 48, 48, 48, 40] bytes=384 recall=92.061400
-
-PQ_GREEDY_EVAL tag=it40_b4_plus8 alloc=[48, 48, 48, 48, 56, 48, 48, 40] bytes=384 recall=92.074000
-
-PQ_GREEDY_EVAL tag=it40_b5_plus8 alloc=[48, 48, 48, 48, 48, 56, 48, 40] bytes=384 recall=92.030600
-
-PQ_GREEDY_EVAL tag=it40_b6_plus8 alloc=[48, 48, 48, 48, 48, 48, 56, 40] bytes=384 recall=92.027700
-
-PQ_GREEDY_EVAL tag=it40_b7_plus8 alloc=[48, 48, 48, 48, 48, 48, 48, 48] bytes=384 recall=92.088700
-
-##### Uniform:
-PQ sweep completed!
-Results directory: /tmp/pq_sweep_1780574468
-
-Summary of recall results:
-Bytes,Recall
-64,66.4822
-96,74.536
-128,78.684
-160,81.2712
-192,83.5087
-224,85.3981
-256,87.2072
-288,88.545
-320,89.8942
-352,90.9085
-384,92.1349
-
-#### OpenAI text large 3
-
-##### Variable
-PQ_GREEDY_EVAL tag=init alloc=[8, 8, 8, 8, 8, 8, 8, 8] bytes=64 recall=51.366000
-
-PQ_GREEDY_EVAL tag=it1_b0_plus8 alloc=[16, 8, 8, 8, 8, 8, 8, 8] bytes=72 recall=56.897100
-
-PQ_GREEDY_EVAL tag=it1_b1_plus8 alloc=[8, 16, 8, 8, 8, 8, 8, 8] bytes=72 recall=56.316600
-
-PQ_GREEDY_EVAL tag=it1_b2_plus8 alloc=[8, 8, 16, 8, 8, 8, 8, 8] bytes=72 recall=55.286900
-
-PQ_GREEDY_EVAL tag=it1_b3_plus8 alloc=[8, 8, 8, 16, 8, 8, 8, 8] bytes=72 recall=54.694100
-
-PQ_GREEDY_EVAL tag=it1_b4_plus8 alloc=[8, 8, 8, 8, 16, 8, 8, 8] bytes=72 recall=53.605800
-
-PQ_GREEDY_EVAL tag=it1_b5_plus8 alloc=[8, 8, 8, 8, 8, 16, 8, 8] bytes=72 recall=53.656500
-
-PQ_GREEDY_EVAL tag=it1_b6_plus8 alloc=[8, 8, 8, 8, 8, 8, 16, 8] bytes=72 recall=53.478500
-
-PQ_GREEDY_EVAL tag=it1_b7_plus8 alloc=[8, 8, 8, 8, 8, 8, 8, 16] bytes=72 recall=53.721200
-
-PQ_GREEDY_EVAL tag=it2_b0_plus8 alloc=[24, 8, 8, 8, 8, 8, 8, 8] bytes=80 recall=61.226700
-
-PQ_GREEDY_EVAL tag=it2_b1_plus8 alloc=[16, 16, 8, 8, 8, 8, 8, 8] bytes=80 recall=61.082500
-
-PQ_GREEDY_EVAL tag=it2_b2_plus8 alloc=[16, 8, 16, 8, 8, 8, 8, 8] bytes=80 recall=60.409200
-
-PQ_GREEDY_EVAL tag=it2_b3_plus8 alloc=[16, 8, 8, 16, 8, 8, 8, 8] bytes=80 recall=59.700600
-
-PQ_GREEDY_EVAL tag=it2_b4_plus8 alloc=[16, 8, 8, 8, 16, 8, 8, 8] bytes=80 recall=58.883100
-
-PQ_GREEDY_EVAL tag=it2_b5_plus8 alloc=[16, 8, 8, 8, 8, 16, 8, 8] bytes=80 recall=59.244400
-
-PQ_GREEDY_EVAL tag=it2_b6_plus8 alloc=[16, 8, 8, 8, 8, 8, 16, 8] bytes=80 recall=58.820400
-
-PQ_GREEDY_EVAL tag=it2_b7_plus8 alloc=[16, 8, 8, 8, 8, 8, 8, 16] bytes=80 recall=59.128900
-
-PQ_GREEDY_EVAL tag=it3_b0_plus8 alloc=[32, 8, 8, 8, 8, 8, 8, 8] bytes=88 recall=64.221000
-
-PQ_GREEDY_EVAL tag=it3_b1_plus8 alloc=[24, 16, 8, 8, 8, 8, 8, 8] bytes=88 recall=65.039300
-
-PQ_GREEDY_EVAL tag=it3_b2_plus8 alloc=[24, 8, 16, 8, 8, 8, 8, 8] bytes=88 recall=64.164200
-
-PQ_GREEDY_EVAL tag=it3_b3_plus8 alloc=[24, 8, 8, 16, 8, 8, 8, 8] bytes=88 recall=63.681200
-
-PQ_GREEDY_EVAL tag=it3_b4_plus8 alloc=[24, 8, 8, 8, 16, 8, 8, 8] bytes=88 recall=63.026900
-
-PQ_GREEDY_EVAL tag=it3_b5_plus8 alloc=[24, 8, 8, 8, 8, 16, 8, 8] bytes=88 recall=62.947500
-
-PQ_GREEDY_EVAL tag=it3_b6_plus8 alloc=[24, 8, 8, 8, 8, 8, 16, 8] bytes=88 recall=62.852400
-
-PQ_GREEDY_EVAL tag=it3_b7_plus8 alloc=[24, 8, 8, 8, 8, 8, 8, 16] bytes=88 recall=63.077700
-
-PQ_GREEDY_EVAL tag=it4_b0_plus8 alloc=[32, 16, 8, 8, 8, 8, 8, 8] bytes=96 recall=67.604800
-
-PQ_GREEDY_EVAL tag=it4_b1_plus8 alloc=[24, 24, 8, 8, 8, 8, 8, 8] bytes=96 recall=67.576900
-
-PQ_GREEDY_EVAL tag=it4_b2_plus8 alloc=[24, 16, 16, 8, 8, 8, 8, 8] bytes=96 recall=67.585500
-
-PQ_GREEDY_EVAL tag=it4_b3_plus8 alloc=[24, 16, 8, 16, 8, 8, 8, 8] bytes=96 recall=67.134300
-
-PQ_GREEDY_EVAL tag=it4_b4_plus8 alloc=[24, 16, 8, 8, 16, 8, 8, 8] bytes=96 recall=66.350800
-
-PQ_GREEDY_EVAL tag=it4_b5_plus8 alloc=[24, 16, 8, 8, 8, 16, 8, 8] bytes=96 recall=66.453800
-
-PQ_GREEDY_EVAL tag=it4_b6_plus8 alloc=[24, 16, 8, 8, 8, 8, 16, 8] bytes=96 recall=66.571500
-
-PQ_GREEDY_EVAL tag=it4_b7_plus8 alloc=[24, 16, 8, 8, 8, 8, 8, 16] bytes=96 recall=66.503300
-
-PQ_GREEDY_EVAL tag=it5_b0_plus8 alloc=[40, 16, 8, 8, 8, 8, 8, 8] bytes=104 recall=69.499600
-
-PQ_GREEDY_EVAL tag=it5_b1_plus8 alloc=[32, 24, 8, 8, 8, 8, 8, 8] bytes=104 recall=70.014300
-
-PQ_GREEDY_EVAL tag=it5_b2_plus8 alloc=[32, 16, 16, 8, 8, 8, 8, 8] bytes=104 recall=70.009900
-
-PQ_GREEDY_EVAL tag=it5_b3_plus8 alloc=[32, 16, 8, 16, 8, 8, 8, 8] bytes=104 recall=69.557300
-
-PQ_GREEDY_EVAL tag=it5_b4_plus8 alloc=[32, 16, 8, 8, 16, 8, 8, 8] bytes=104 recall=68.947500
-
-PQ_GREEDY_EVAL tag=it5_b5_plus8 alloc=[32, 16, 8, 8, 8, 16, 8, 8] bytes=104 recall=68.871600
-
-PQ_GREEDY_EVAL tag=it5_b6_plus8 alloc=[32, 16, 8, 8, 8, 8, 16, 8] bytes=104 recall=68.896200
-
-PQ_GREEDY_EVAL tag=it5_b7_plus8 alloc=[32, 16, 8, 8, 8, 8, 8, 16] bytes=104 recall=69.067700
-
-PQ_GREEDY_EVAL tag=it6_b0_plus8 alloc=[40, 24, 8, 8, 8, 8, 8, 8] bytes=112 recall=71.776200
-
-PQ_GREEDY_EVAL tag=it6_b1_plus8 alloc=[32, 32, 8, 8, 8, 8, 8, 8] bytes=112 recall=71.693900
-
-PQ_GREEDY_EVAL tag=it6_b2_plus8 alloc=[32, 24, 16, 8, 8, 8, 8, 8] bytes=112 recall=72.236900
-
-PQ_GREEDY_EVAL tag=it6_b3_plus8 alloc=[32, 24, 8, 16, 8, 8, 8, 8] bytes=112 recall=71.972100
-
-PQ_GREEDY_EVAL tag=it6_b4_plus8 alloc=[32, 24, 8, 8, 16, 8, 8, 8] bytes=112 recall=71.458200
-
-PQ_GREEDY_EVAL tag=it6_b5_plus8 alloc=[32, 24, 8, 8, 8, 16, 8, 8] bytes=112 recall=71.364100
-
-PQ_GREEDY_EVAL tag=it6_b6_plus8 alloc=[32, 24, 8, 8, 8, 8, 16, 8] bytes=112 recall=71.254500
-
-PQ_GREEDY_EVAL tag=it6_b7_plus8 alloc=[32, 24, 8, 8, 8, 8, 8, 16] bytes=112 recall=71.355800
-
-PQ_GREEDY_EVAL tag=it7_b0_plus8 alloc=[40, 24, 16, 8, 8, 8, 8, 8] bytes=120 recall=73.799000
-
-PQ_GREEDY_EVAL tag=it7_b1_plus8 alloc=[32, 32, 16, 8, 8, 8, 8, 8] bytes=120 recall=73.931900
-
-PQ_GREEDY_EVAL tag=it7_b2_plus8 alloc=[32, 24, 24, 8, 8, 8, 8, 8] bytes=120 recall=73.920700
-
-PQ_GREEDY_EVAL tag=it7_b3_plus8 alloc=[32, 24, 16, 16, 8, 8, 8, 8] bytes=120 recall=74.110600
-
-PQ_GREEDY_EVAL tag=it7_b4_plus8 alloc=[32, 24, 16, 8, 16, 8, 8, 8] bytes=120 recall=73.443300
-
-PQ_GREEDY_EVAL tag=it7_b5_plus8 alloc=[32, 24, 16, 8, 8, 16, 8, 8] bytes=120 recall=73.434600
-
-PQ_GREEDY_EVAL tag=it7_b6_plus8 alloc=[32, 24, 16, 8, 8, 8, 16, 8] bytes=120 recall=73.504600
-
-PQ_GREEDY_EVAL tag=it7_b7_plus8 alloc=[32, 24, 16, 8, 8, 8, 8, 16] bytes=120 recall=73.541300
-
-PQ_GREEDY_EVAL tag=it8_b0_plus8 alloc=[40, 24, 16, 16, 8, 8, 8, 8] bytes=128 recall=75.461100
-
-PQ_GREEDY_EVAL tag=it8_b1_plus8 alloc=[32, 32, 16, 16, 8, 8, 8, 8] bytes=128 recall=75.666700
-
-PQ_GREEDY_EVAL tag=it8_b2_plus8 alloc=[32, 24, 24, 16, 8, 8, 8, 8] bytes=128 recall=75.544200
-
-PQ_GREEDY_EVAL tag=it8_b3_plus8 alloc=[32, 24, 16, 24, 8, 8, 8, 8] bytes=128 recall=75.217900
-
-PQ_GREEDY_EVAL tag=it8_b4_plus8 alloc=[32, 24, 16, 16, 16, 8, 8, 8] bytes=128 recall=75.158500
-
-PQ_GREEDY_EVAL tag=it8_b5_plus8 alloc=[32, 24, 16, 16, 8, 16, 8, 8] bytes=128 recall=75.241900
-
-PQ_GREEDY_EVAL tag=it8_b6_plus8 alloc=[32, 24, 16, 16, 8, 8, 16, 8] bytes=128 recall=75.192100
-
-PQ_GREEDY_EVAL tag=it8_b7_plus8 alloc=[32, 24, 16, 16, 8, 8, 8, 16] bytes=128 recall=75.211800
-
-PQ_GREEDY_EVAL tag=it9_b0_plus8 alloc=[40, 32, 16, 16, 8, 8, 8, 8] bytes=136 recall=76.851300
-
-PQ_GREEDY_EVAL tag=it9_b1_plus8 alloc=[32, 40, 16, 16, 8, 8, 8, 8] bytes=136 recall=76.578500
-
-PQ_GREEDY_EVAL tag=it9_b2_plus8 alloc=[32, 32, 24, 16, 8, 8, 8, 8] bytes=136 recall=76.888600
-
-PQ_GREEDY_EVAL tag=it9_b3_plus8 alloc=[32, 32, 16, 24, 8, 8, 8, 8] bytes=136 recall=76.672000
-
-PQ_GREEDY_EVAL tag=it9_b4_plus8 alloc=[32, 32, 16, 16, 16, 8, 8, 8] bytes=136 recall=76.696500
-
-PQ_GREEDY_EVAL tag=it9_b5_plus8 alloc=[32, 32, 16, 16, 8, 16, 8, 8] bytes=136 recall=76.597900
-
-PQ_GREEDY_EVAL tag=it9_b6_plus8 alloc=[32, 32, 16, 16, 8, 8, 16, 8] bytes=136 recall=76.666700
-
-PQ_GREEDY_EVAL tag=it9_b7_plus8 alloc=[32, 32, 16, 16, 8, 8, 8, 16] bytes=136 recall=76.584900
-
-PQ_GREEDY_EVAL tag=it10_b0_plus8 alloc=[40, 32, 24, 16, 8, 8, 8, 8] bytes=144 recall=78.199700
-
-PQ_GREEDY_EVAL tag=it10_b1_plus8 alloc=[32, 40, 24, 16, 8, 8, 8, 8] bytes=144 recall=77.926400
-
-PQ_GREEDY_EVAL tag=it10_b2_plus8 alloc=[32, 32, 32, 16, 8, 8, 8, 8] bytes=144 recall=77.962500
-
-PQ_GREEDY_EVAL tag=it10_b3_plus8 alloc=[32, 32, 24, 24, 8, 8, 8, 8] bytes=144 recall=78.011000
-
-PQ_GREEDY_EVAL tag=it10_b4_plus8 alloc=[32, 32, 24, 16, 16, 8, 8, 8] bytes=144 recall=78.023400
-
-PQ_GREEDY_EVAL tag=it10_b5_plus8 alloc=[32, 32, 24, 16, 8, 16, 8, 8] bytes=144 recall=77.935100
-
-PQ_GREEDY_EVAL tag=it10_b6_plus8 alloc=[32, 32, 24, 16, 8, 8, 16, 8] bytes=144 recall=78.044000
-
-PQ_GREEDY_EVAL tag=it10_b7_plus8 alloc=[32, 32, 24, 16, 8, 8, 8, 16] bytes=144 recall=78.024900
-
-PQ_GREEDY_EVAL tag=it11_b0_plus8 alloc=[48, 32, 24, 16, 8, 8, 8, 8] bytes=152 recall=79.120600
-
-PQ_GREEDY_EVAL tag=it11_b1_plus8 alloc=[40, 40, 24, 16, 8, 8, 8, 8] bytes=152 recall=79.085800
-
-PQ_GREEDY_EVAL tag=it11_b2_plus8 alloc=[40, 32, 32, 16, 8, 8, 8, 8] bytes=152 recall=79.163700
-
-PQ_GREEDY_EVAL tag=it11_b3_plus8 alloc=[40, 32, 24, 24, 8, 8, 8, 8] bytes=152 recall=79.173500
-
-PQ_GREEDY_EVAL tag=it11_b4_plus8 alloc=[40, 32, 24, 16, 16, 8, 8, 8] bytes=152 recall=79.173900
-
-PQ_GREEDY_EVAL tag=it11_b5_plus8 alloc=[40, 32, 24, 16, 8, 16, 8, 8] bytes=152 recall=79.075300
-
-PQ_GREEDY_EVAL tag=it11_b6_plus8 alloc=[40, 32, 24, 16, 8, 8, 16, 8] bytes=152 recall=79.118200
-
-PQ_GREEDY_EVAL tag=it11_b7_plus8 alloc=[40, 32, 24, 16, 8, 8, 8, 16] bytes=152 recall=79.118800
-
-PQ_GREEDY_EVAL tag=it12_b0_plus8 alloc=[48, 32, 24, 16, 16, 8, 8, 8] bytes=160 recall=79.996100
-
-PQ_GREEDY_EVAL tag=it12_b1_plus8 alloc=[40, 40, 24, 16, 16, 8, 8, 8] bytes=160 recall=79.941500
-
-PQ_GREEDY_EVAL tag=it12_b2_plus8 alloc=[40, 32, 32, 16, 16, 8, 8, 8] bytes=160 recall=79.978700
-
-PQ_GREEDY_EVAL tag=it12_b3_plus8 alloc=[40, 32, 24, 24, 16, 8, 8, 8] bytes=160 recall=80.089800
-
-PQ_GREEDY_EVAL tag=it12_b4_plus8 alloc=[40, 32, 24, 16, 24, 8, 8, 8] bytes=160 recall=79.827600
-
-PQ_GREEDY_EVAL tag=it12_b5_plus8 alloc=[40, 32, 24, 16, 16, 16, 8, 8] bytes=160 recall=80.067500
-
-PQ_GREEDY_EVAL tag=it12_b6_plus8 alloc=[40, 32, 24, 16, 16, 8, 16, 8] bytes=160 recall=80.029500
-
-PQ_GREEDY_EVAL tag=it12_b7_plus8 alloc=[40, 32, 24, 16, 16, 8, 8, 16] bytes=160 recall=80.028200
-
-PQ_GREEDY_EVAL tag=it13_b0_plus8 alloc=[48, 32, 24, 24, 16, 8, 8, 8] bytes=168 recall=80.921400
-
-PQ_GREEDY_EVAL tag=it13_b1_plus8 alloc=[40, 40, 24, 24, 16, 8, 8, 8] bytes=168 recall=80.898800
-
-PQ_GREEDY_EVAL tag=it13_b2_plus8 alloc=[40, 32, 32, 24, 16, 8, 8, 8] bytes=168 recall=80.955400
-
-PQ_GREEDY_EVAL tag=it13_b3_plus8 alloc=[40, 32, 24, 32, 16, 8, 8, 8] bytes=168 recall=80.746400
-
-PQ_GREEDY_EVAL tag=it13_b4_plus8 alloc=[40, 32, 24, 24, 24, 8, 8, 8] bytes=168 recall=80.682300
-
-PQ_GREEDY_EVAL tag=it13_b5_plus8 alloc=[40, 32, 24, 24, 16, 16, 8, 8] bytes=168 recall=80.901700
-
-PQ_GREEDY_EVAL tag=it13_b6_plus8 alloc=[40, 32, 24, 24, 16, 8, 16, 8] bytes=168 recall=80.980600
-
-PQ_GREEDY_EVAL tag=it13_b7_plus8 alloc=[40, 32, 24, 24, 16, 8, 8, 16] bytes=168 recall=80.928000
-
-PQ_GREEDY_EVAL tag=it14_b0_plus8 alloc=[48, 32, 24, 24, 16, 8, 16, 8] bytes=176 recall=81.680100
-
-PQ_GREEDY_EVAL tag=it14_b1_plus8 alloc=[40, 40, 24, 24, 16, 8, 16, 8] bytes=176 recall=81.728400
-
-PQ_GREEDY_EVAL tag=it14_b2_plus8 alloc=[40, 32, 32, 24, 16, 8, 16, 8] bytes=176 recall=81.704300
-
-PQ_GREEDY_EVAL tag=it14_b3_plus8 alloc=[40, 32, 24, 32, 16, 8, 16, 8] bytes=176 recall=81.588300
-
-PQ_GREEDY_EVAL tag=it14_b4_plus8 alloc=[40, 32, 24, 24, 24, 8, 16, 8] bytes=176 recall=81.528200
-
-PQ_GREEDY_EVAL tag=it14_b5_plus8 alloc=[40, 32, 24, 24, 16, 16, 16, 8] bytes=176 recall=81.711300
-
-PQ_GREEDY_EVAL tag=it14_b6_plus8 alloc=[40, 32, 24, 24, 16, 8, 24, 8] bytes=176 recall=81.489000
-
-PQ_GREEDY_EVAL tag=it14_b7_plus8 alloc=[40, 32, 24, 24, 16, 8, 16, 16] bytes=176 recall=81.732600
-
-PQ_GREEDY_EVAL tag=it15_b0_plus8 alloc=[48, 32, 24, 24, 16, 8, 16, 16] bytes=184 recall=82.524700
-
-PQ_GREEDY_EVAL tag=it15_b1_plus8 alloc=[40, 40, 24, 24, 16, 8, 16, 16] bytes=184 recall=82.501600
-
-PQ_GREEDY_EVAL tag=it15_b2_plus8 alloc=[40, 32, 32, 24, 16, 8, 16, 16] bytes=184 recall=82.467400
-
-PQ_GREEDY_EVAL tag=it15_b3_plus8 alloc=[40, 32, 24, 32, 16, 8, 16, 16] bytes=184 recall=82.320200
-
-PQ_GREEDY_EVAL tag=it15_b4_plus8 alloc=[40, 32, 24, 24, 24, 8, 16, 16] bytes=184 recall=82.249900
-
-PQ_GREEDY_EVAL tag=it15_b5_plus8 alloc=[40, 32, 24, 24, 16, 16, 16, 16] bytes=184 recall=82.435400
-
-PQ_GREEDY_EVAL tag=it15_b6_plus8 alloc=[40, 32, 24, 24, 16, 8, 24, 16] bytes=184 recall=82.319300
-
-PQ_GREEDY_EVAL tag=it15_b7_plus8 alloc=[40, 32, 24, 24, 16, 8, 16, 24] bytes=184 recall=82.301300
-
-PQ_GREEDY_EVAL tag=it16_b0_plus8 alloc=[56, 32, 24, 24, 16, 8, 16, 16] bytes=192 recall=83.051600
-
-PQ_GREEDY_EVAL tag=it16_b1_plus8 alloc=[48, 40, 24, 24, 16, 8, 16, 16] bytes=192 recall=83.157000
-
-PQ_GREEDY_EVAL tag=it16_b2_plus8 alloc=[48, 32, 32, 24, 16, 8, 16, 16] bytes=192 recall=83.154200
-
-PQ_GREEDY_EVAL tag=it16_b3_plus8 alloc=[48, 32, 24, 32, 16, 8, 16, 16] bytes=192 recall=83.081900
-
-PQ_GREEDY_EVAL tag=it16_b4_plus8 alloc=[48, 32, 24, 24, 24, 8, 16, 16] bytes=192 recall=83.062000
-
-PQ_GREEDY_EVAL tag=it16_b5_plus8 alloc=[48, 32, 24, 24, 16, 16, 16, 16] bytes=192 recall=83.169300
-
-PQ_GREEDY_EVAL tag=it16_b6_plus8 alloc=[48, 32, 24, 24, 16, 8, 24, 16] bytes=192 recall=83.015300
-
-PQ_GREEDY_EVAL tag=it16_b7_plus8 alloc=[48, 32, 24, 24, 16, 8, 16, 24] bytes=192 recall=83.020100
-
-PQ_GREEDY_EVAL tag=it17_b0_plus8 alloc=[56, 32, 24, 24, 16, 16, 16, 16] bytes=200 recall=83.665300
-
-PQ_GREEDY_EVAL tag=it17_b1_plus8 alloc=[48, 40, 24, 24, 16, 16, 16, 16] bytes=200 recall=83.875300
-
-PQ_GREEDY_EVAL tag=it17_b2_plus8 alloc=[48, 32, 32, 24, 16, 16, 16, 16] bytes=200 recall=83.873800
-
-PQ_GREEDY_EVAL tag=it17_b3_plus8 alloc=[48, 32, 24, 32, 16, 16, 16, 16] bytes=200 recall=83.733500
-
-PQ_GREEDY_EVAL tag=it17_b4_plus8 alloc=[48, 32, 24, 24, 24, 16, 16, 16] bytes=200 recall=83.689000
-
-PQ_GREEDY_EVAL tag=it17_b5_plus8 alloc=[48, 32, 24, 24, 16, 24, 16, 16] bytes=200 recall=83.729500
-
-PQ_GREEDY_EVAL tag=it17_b6_plus8 alloc=[48, 32, 24, 24, 16, 16, 24, 16] bytes=200 recall=83.672700
-
-PQ_GREEDY_EVAL tag=it17_b7_plus8 alloc=[48, 32, 24, 24, 16, 16, 16, 24] bytes=200 recall=83.688900
-
-PQ_GREEDY_EVAL tag=it18_b0_plus8 alloc=[56, 40, 24, 24, 16, 16, 16, 16] bytes=208 recall=84.431100
-
-PQ_GREEDY_EVAL tag=it18_b1_plus8 alloc=[48, 48, 24, 24, 16, 16, 16, 16] bytes=208 recall=84.401100
-
-PQ_GREEDY_EVAL tag=it18_b2_plus8 alloc=[48, 40, 32, 24, 16, 16, 16, 16] bytes=208 recall=84.474000
-
-PQ_GREEDY_EVAL tag=it18_b3_plus8 alloc=[48, 40, 24, 32, 16, 16, 16, 16] bytes=208 recall=84.435900
-
-PQ_GREEDY_EVAL tag=it18_b4_plus8 alloc=[48, 40, 24, 24, 24, 16, 16, 16] bytes=208 recall=84.297800
-
-PQ_GREEDY_EVAL tag=it18_b5_plus8 alloc=[48, 40, 24, 24, 16, 24, 16, 16] bytes=208 recall=84.313600
-
-PQ_GREEDY_EVAL tag=it18_b6_plus8 alloc=[48, 40, 24, 24, 16, 16, 24, 16] bytes=208 recall=84.338400
-
-PQ_GREEDY_EVAL tag=it18_b7_plus8 alloc=[48, 40, 24, 24, 16, 16, 16, 24] bytes=208 recall=84.335400
-
-PQ_GREEDY_EVAL tag=it19_b0_plus8 alloc=[56, 40, 32, 24, 16, 16, 16, 16] bytes=216 recall=84.975500
-
-PQ_GREEDY_EVAL tag=it19_b1_plus8 alloc=[48, 48, 32, 24, 16, 16, 16, 16] bytes=216 recall=85.041900
-
-PQ_GREEDY_EVAL tag=it19_b2_plus8 alloc=[48, 40, 40, 24, 16, 16, 16, 16] bytes=216 recall=84.977200
-
-PQ_GREEDY_EVAL tag=it19_b3_plus8 alloc=[48, 40, 32, 32, 16, 16, 16, 16] bytes=216 recall=85.010900
-
-PQ_GREEDY_EVAL tag=it19_b4_plus8 alloc=[48, 40, 32, 24, 24, 16, 16, 16] bytes=216 recall=84.977600
-
-PQ_GREEDY_EVAL tag=it19_b5_plus8 alloc=[48, 40, 32, 24, 16, 24, 16, 16] bytes=216 recall=84.973600
-
-PQ_GREEDY_EVAL tag=it19_b6_plus8 alloc=[48, 40, 32, 24, 16, 16, 24, 16] bytes=216 recall=84.931900
-
-PQ_GREEDY_EVAL tag=it19_b7_plus8 alloc=[48, 40, 32, 24, 16, 16, 16, 24] bytes=216 recall=84.959100
-
-PQ_GREEDY_EVAL tag=it20_b0_plus8 alloc=[56, 48, 32, 24, 16, 16, 16, 16] bytes=224 recall=85.492700
-
-PQ_GREEDY_EVAL tag=it20_b1_plus8 alloc=[48, 56, 32, 24, 16, 16, 16, 16] bytes=224 recall=85.412000
-
-PQ_GREEDY_EVAL tag=it20_b2_plus8 alloc=[48, 48, 40, 24, 16, 16, 16, 16] bytes=224 recall=85.453500
-
-PQ_GREEDY_EVAL tag=it20_b3_plus8 alloc=[48, 48, 32, 32, 16, 16, 16, 16] bytes=224 recall=85.492300
-
-PQ_GREEDY_EVAL tag=it20_b4_plus8 alloc=[48, 48, 32, 24, 24, 16, 16, 16] bytes=224 recall=85.439500
-
-PQ_GREEDY_EVAL tag=it20_b5_plus8 alloc=[48, 48, 32, 24, 16, 24, 16, 16] bytes=224 recall=85.489400
-
-PQ_GREEDY_EVAL tag=it20_b6_plus8 alloc=[48, 48, 32, 24, 16, 16, 24, 16] bytes=224 recall=85.409100
-
-PQ_GREEDY_EVAL tag=it20_b7_plus8 alloc=[48, 48, 32, 24, 16, 16, 16, 24] bytes=224 recall=85.439300
-
-PQ_GREEDY_EVAL tag=it21_b0_plus8 alloc=[64, 48, 32, 24, 16, 16, 16, 16] bytes=232 recall=85.859600
-
-PQ_GREEDY_EVAL tag=it21_b1_plus8 alloc=[56, 56, 32, 24, 16, 16, 16, 16] bytes=232 recall=85.830000
-
-PQ_GREEDY_EVAL tag=it21_b2_plus8 alloc=[56, 48, 40, 24, 16, 16, 16, 16] bytes=232 recall=85.925000
-
-PQ_GREEDY_EVAL tag=it21_b3_plus8 alloc=[56, 48, 32, 32, 16, 16, 16, 16] bytes=232 recall=85.936600
-
-PQ_GREEDY_EVAL tag=it21_b4_plus8 alloc=[56, 48, 32, 24, 24, 16, 16, 16] bytes=232 recall=85.912300
-
-PQ_GREEDY_EVAL tag=it21_b5_plus8 alloc=[56, 48, 32, 24, 16, 24, 16, 16] bytes=232 recall=85.906600
-
-PQ_GREEDY_EVAL tag=it21_b6_plus8 alloc=[56, 48, 32, 24, 16, 16, 24, 16] bytes=232 recall=85.885000
-
-PQ_GREEDY_EVAL tag=it21_b7_plus8 alloc=[56, 48, 32, 24, 16, 16, 16, 24] bytes=232 recall=85.877600
-
-PQ_GREEDY_EVAL tag=it22_b0_plus8 alloc=[64, 48, 32, 32, 16, 16, 16, 16] bytes=240 recall=86.287800
-
-PQ_GREEDY_EVAL tag=it22_b1_plus8 alloc=[56, 56, 32, 32, 16, 16, 16, 16] bytes=240 recall=86.299800
-
-PQ_GREEDY_EVAL tag=it22_b2_plus8 alloc=[56, 48, 40, 32, 16, 16, 16, 16] bytes=240 recall=86.352500
-
-PQ_GREEDY_EVAL tag=it22_b3_plus8 alloc=[56, 48, 32, 40, 16, 16, 16, 16] bytes=240 recall=86.243800
-
-PQ_GREEDY_EVAL tag=it22_b4_plus8 alloc=[56, 48, 32, 32, 24, 16, 16, 16] bytes=240 recall=86.296700
-
-PQ_GREEDY_EVAL tag=it22_b5_plus8 alloc=[56, 48, 32, 32, 16, 24, 16, 16] bytes=240 recall=86.381300
-
-PQ_GREEDY_EVAL tag=it22_b6_plus8 alloc=[56, 48, 32, 32, 16, 16, 24, 16] bytes=240 recall=86.337600
-
-PQ_GREEDY_EVAL tag=it22_b7_plus8 alloc=[56, 48, 32, 32, 16, 16, 16, 24] bytes=240 recall=86.355800
-
-PQ_GREEDY_EVAL tag=it23_b0_plus8 alloc=[64, 48, 32, 32, 16, 24, 16, 16] bytes=248 recall=86.653700
-
-PQ_GREEDY_EVAL tag=it23_b1_plus8 alloc=[56, 56, 32, 32, 16, 24, 16, 16] bytes=248 recall=86.640300
-
-PQ_GREEDY_EVAL tag=it23_b2_plus8 alloc=[56, 48, 40, 32, 16, 24, 16, 16] bytes=248 recall=86.755400
-
-PQ_GREEDY_EVAL tag=it23_b3_plus8 alloc=[56, 48, 32, 40, 16, 24, 16, 16] bytes=248 recall=86.710300
-
-PQ_GREEDY_EVAL tag=it23_b4_plus8 alloc=[56, 48, 32, 32, 24, 24, 16, 16] bytes=248 recall=86.681600
-
-PQ_GREEDY_EVAL tag=it23_b5_plus8 alloc=[56, 48, 32, 32, 16, 32, 16, 16] bytes=248 recall=86.587700
-
-PQ_GREEDY_EVAL tag=it23_b6_plus8 alloc=[56, 48, 32, 32, 16, 24, 24, 16] bytes=248 recall=86.673900
-
-PQ_GREEDY_EVAL tag=it23_b7_plus8 alloc=[56, 48, 32, 32, 16, 24, 16, 24] bytes=248 recall=86.690300
-
-PQ_GREEDY_EVAL tag=it24_b0_plus8 alloc=[64, 48, 40, 32, 16, 24, 16, 16] bytes=256 recall=87.065400
-
-PQ_GREEDY_EVAL tag=it24_b1_plus8 alloc=[56, 56, 40, 32, 16, 24, 16, 16] bytes=256 recall=87.069800
-
-PQ_GREEDY_EVAL tag=it24_b2_plus8 alloc=[56, 48, 48, 32, 16, 24, 16, 16] bytes=256 recall=87.044800
-
-PQ_GREEDY_EVAL tag=it24_b3_plus8 alloc=[56, 48, 40, 40, 16, 24, 16, 16] bytes=256 recall=87.027900
-
-PQ_GREEDY_EVAL tag=it24_b4_plus8 alloc=[56, 48, 40, 32, 24, 24, 16, 16] bytes=256 recall=87.106400
-
-PQ_GREEDY_EVAL tag=it24_b5_plus8 alloc=[56, 48, 40, 32, 16, 32, 16, 16] bytes=256 recall=86.988500
-
-PQ_GREEDY_EVAL tag=it24_b6_plus8 alloc=[56, 48, 40, 32, 16, 24, 24, 16] bytes=256 recall=87.086100
-
-PQ_GREEDY_EVAL tag=it24_b7_plus8 alloc=[56, 48, 40, 32, 16, 24, 16, 24] bytes=256 recall=87.095300
-
-PQ_GREEDY_EVAL tag=it25_b0_plus8 alloc=[64, 48, 40, 32, 24, 24, 16, 16] bytes=264 recall=87.438600
-
-PQ_GREEDY_EVAL tag=it25_b1_plus8 alloc=[56, 56, 40, 32, 24, 24, 16, 16] bytes=264 recall=87.399700
-
-PQ_GREEDY_EVAL tag=it25_b2_plus8 alloc=[56, 48, 48, 32, 24, 24, 16, 16] bytes=264 recall=87.380800
-
-PQ_GREEDY_EVAL tag=it25_b3_plus8 alloc=[56, 48, 40, 40, 24, 24, 16, 16] bytes=264 recall=87.372100
-
-PQ_GREEDY_EVAL tag=it25_b4_plus8 alloc=[56, 48, 40, 32, 32, 24, 16, 16] bytes=264 recall=87.306800
-
-PQ_GREEDY_EVAL tag=it25_b5_plus8 alloc=[56, 48, 40, 32, 24, 32, 16, 16] bytes=264 recall=87.338700
-
-PQ_GREEDY_EVAL tag=it25_b6_plus8 alloc=[56, 48, 40, 32, 24, 24, 24, 16] bytes=264 recall=87.391600
-
-PQ_GREEDY_EVAL tag=it25_b7_plus8 alloc=[56, 48, 40, 32, 24, 24, 16, 24] bytes=264 recall=87.439600
-
-PQ_GREEDY_EVAL tag=it26_b0_plus8 alloc=[64, 48, 40, 32, 24, 24, 16, 24] bytes=272 recall=87.727400
-
-PQ_GREEDY_EVAL tag=it26_b1_plus8 alloc=[56, 56, 40, 32, 24, 24, 16, 24] bytes=272 recall=87.761600
-
-PQ_GREEDY_EVAL tag=it26_b2_plus8 alloc=[56, 48, 48, 32, 24, 24, 16, 24] bytes=272 recall=87.746900
-
-PQ_GREEDY_EVAL tag=it26_b3_plus8 alloc=[56, 48, 40, 40, 24, 24, 16, 24] bytes=272 recall=87.674400
-
-PQ_GREEDY_EVAL tag=it26_b4_plus8 alloc=[56, 48, 40, 32, 32, 24, 16, 24] bytes=272 recall=87.683400
-
-PQ_GREEDY_EVAL tag=it26_b5_plus8 alloc=[56, 48, 40, 32, 24, 32, 16, 24] bytes=272 recall=87.645200
-
-PQ_GREEDY_EVAL tag=it26_b6_plus8 alloc=[56, 48, 40, 32, 24, 24, 24, 24] bytes=272 recall=87.719500
-
-PQ_GREEDY_EVAL tag=it26_b7_plus8 alloc=[56, 48, 40, 32, 24, 24, 16, 32] bytes=272 recall=87.674300
-
-PQ_GREEDY_EVAL tag=it27_b0_plus8 alloc=[64, 56, 40, 32, 24, 24, 16, 24] bytes=280 recall=88.071400
-
-PQ_GREEDY_EVAL tag=it27_b1_plus8 alloc=[56, 64, 40, 32, 24, 24, 16, 24] bytes=280 recall=88.010100
-
-PQ_GREEDY_EVAL tag=it27_b2_plus8 alloc=[56, 56, 48, 32, 24, 24, 16, 24] bytes=280 recall=88.003200
-
-PQ_GREEDY_EVAL tag=it27_b3_plus8 alloc=[56, 56, 40, 40, 24, 24, 16, 24] bytes=280 recall=87.947400
-
-PQ_GREEDY_EVAL tag=it27_b4_plus8 alloc=[56, 56, 40, 32, 32, 24, 16, 24] bytes=280 recall=87.977800
-
-PQ_GREEDY_EVAL tag=it27_b5_plus8 alloc=[56, 56, 40, 32, 24, 32, 16, 24] bytes=280 recall=87.915700
-
-PQ_GREEDY_EVAL tag=it27_b6_plus8 alloc=[56, 56, 40, 32, 24, 24, 24, 24] bytes=280 recall=88.016400
-
-PQ_GREEDY_EVAL tag=it27_b7_plus8 alloc=[56, 56, 40, 32, 24, 24, 16, 32] bytes=280 recall=87.984100
-
-PQ_GREEDY_EVAL tag=it28_b0_plus8 alloc=[72, 56, 40, 32, 24, 24, 16, 24] bytes=288 recall=88.342600
-
-PQ_GREEDY_EVAL tag=it28_b1_plus8 alloc=[64, 64, 40, 32, 24, 24, 16, 24] bytes=288 recall=88.357500
-
-PQ_GREEDY_EVAL tag=it28_b2_plus8 alloc=[64, 56, 48, 32, 24, 24, 16, 24] bytes=288 recall=88.324700
-
-PQ_GREEDY_EVAL tag=it28_b3_plus8 alloc=[64, 56, 40, 40, 24, 24, 16, 24] bytes=288 recall=88.323700
-
-PQ_GREEDY_EVAL tag=it28_b4_plus8 alloc=[64, 56, 40, 32, 32, 24, 16, 24] bytes=288 recall=88.283300
-
-PQ_GREEDY_EVAL tag=it28_b5_plus8 alloc=[64, 56, 40, 32, 24, 32, 16, 24] bytes=288 recall=88.290600
-
-PQ_GREEDY_EVAL tag=it28_b6_plus8 alloc=[64, 56, 40, 32, 24, 24, 24, 24] bytes=288 recall=88.363700
-
-PQ_GREEDY_EVAL tag=it28_b7_plus8 alloc=[64, 56, 40, 32, 24, 24, 16, 32] bytes=288 recall=88.298200
-
-PQ_GREEDY_EVAL tag=it29_b0_plus8 alloc=[72, 56, 40, 32, 24, 24, 24, 24] bytes=296 recall=88.562100
-
-PQ_GREEDY_EVAL tag=it29_b1_plus8 alloc=[64, 64, 40, 32, 24, 24, 24, 24] bytes=296 recall=88.600000
-
-PQ_GREEDY_EVAL tag=it29_b2_plus8 alloc=[64, 56, 48, 32, 24, 24, 24, 24] bytes=296 recall=88.644600
-
-PQ_GREEDY_EVAL tag=it29_b3_plus8 alloc=[64, 56, 40, 40, 24, 24, 24, 24] bytes=296 recall=88.627700
-
-PQ_GREEDY_EVAL tag=it29_b4_plus8 alloc=[64, 56, 40, 32, 32, 24, 24, 24] bytes=296 recall=88.577700
-
-PQ_GREEDY_EVAL tag=it29_b5_plus8 alloc=[64, 56, 40, 32, 24, 32, 24, 24] bytes=296 recall=88.608900
-
-PQ_GREEDY_EVAL tag=it29_b6_plus8 alloc=[64, 56, 40, 32, 24, 24, 32, 24] bytes=296 recall=88.559100
-
-PQ_GREEDY_EVAL tag=it29_b7_plus8 alloc=[64, 56, 40, 32, 24, 24, 24, 32] bytes=296 recall=88.564700
-
-PQ_GREEDY_EVAL tag=it30_b0_plus8 alloc=[72, 56, 48, 32, 24, 24, 24, 24] bytes=304 recall=88.889900
-
-PQ_GREEDY_EVAL tag=it30_b1_plus8 alloc=[64, 64, 48, 32, 24, 24, 24, 24] bytes=304 recall=88.901100
-
-PQ_GREEDY_EVAL tag=it30_b2_plus8 alloc=[64, 56, 56, 32, 24, 24, 24, 24] bytes=304 recall=88.826700
-
-PQ_GREEDY_EVAL tag=it30_b3_plus8 alloc=[64, 56, 48, 40, 24, 24, 24, 24] bytes=304 recall=88.882900
-
-PQ_GREEDY_EVAL tag=it30_b4_plus8 alloc=[64, 56, 48, 32, 32, 24, 24, 24] bytes=304 recall=88.860900
-
-PQ_GREEDY_EVAL tag=it30_b5_plus8 alloc=[64, 56, 48, 32, 24, 32, 24, 24] bytes=304 recall=88.819700
-
-PQ_GREEDY_EVAL tag=it30_b6_plus8 alloc=[64, 56, 48, 32, 24, 24, 32, 24] bytes=304 recall=88.812700
-
-PQ_GREEDY_EVAL tag=it30_b7_plus8 alloc=[64, 56, 48, 32, 24, 24, 24, 32] bytes=304 recall=88.868500
-
-PQ_GREEDY_EVAL tag=it31_b0_plus8 alloc=[72, 64, 48, 32, 24, 24, 24, 24] bytes=312 recall=89.119000
-
-PQ_GREEDY_EVAL tag=it31_b1_plus8 alloc=[64, 72, 48, 32, 24, 24, 24, 24] bytes=312 recall=89.056900
-
-PQ_GREEDY_EVAL tag=it31_b2_plus8 alloc=[64, 64, 56, 32, 24, 24, 24, 24] bytes=312 recall=89.097600
-
-PQ_GREEDY_EVAL tag=it31_b3_plus8 alloc=[64, 64, 48, 40, 24, 24, 24, 24] bytes=312 recall=89.148200
-
-PQ_GREEDY_EVAL tag=it31_b4_plus8 alloc=[64, 64, 48, 32, 32, 24, 24, 24] bytes=312 recall=89.079200
-
-PQ_GREEDY_EVAL tag=it31_b5_plus8 alloc=[64, 64, 48, 32, 24, 32, 24, 24] bytes=312 recall=89.101900
-
-PQ_GREEDY_EVAL tag=it31_b6_plus8 alloc=[64, 64, 48, 32, 24, 24, 32, 24] bytes=312 recall=89.125300
-
-PQ_GREEDY_EVAL tag=it31_b7_plus8 alloc=[64, 64, 48, 32, 24, 24, 24, 32] bytes=312 recall=89.078300
-
-PQ_GREEDY_EVAL tag=it32_b0_plus8 alloc=[72, 64, 48, 40, 24, 24, 24, 24] bytes=320 recall=89.367700
-
-PQ_GREEDY_EVAL tag=it32_b1_plus8 alloc=[64, 72, 48, 40, 24, 24, 24, 24] bytes=320 recall=89.276100
-
-PQ_GREEDY_EVAL tag=it32_b2_plus8 alloc=[64, 64, 56, 40, 24, 24, 24, 24] bytes=320 recall=89.385600
-
-PQ_GREEDY_EVAL tag=it32_b3_plus8 alloc=[64, 64, 48, 48, 24, 24, 24, 24] bytes=320 recall=89.351700
-
-PQ_GREEDY_EVAL tag=it32_b4_plus8 alloc=[64, 64, 48, 40, 32, 24, 24, 24] bytes=320 recall=89.348800
-
-PQ_GREEDY_EVAL tag=it32_b5_plus8 alloc=[64, 64, 48, 40, 24, 32, 24, 24] bytes=320 recall=89.316200
-
-PQ_GREEDY_EVAL tag=it32_b6_plus8 alloc=[64, 64, 48, 40, 24, 24, 32, 24] bytes=320 recall=89.309300
-
-PQ_GREEDY_EVAL tag=it32_b7_plus8 alloc=[64, 64, 48, 40, 24, 24, 24, 32] bytes=320 recall=89.335200
-
-PQ_GREEDY_EVAL tag=it33_b0_plus8 alloc=[72, 64, 56, 40, 24, 24, 24, 24] bytes=328 recall=89.618600
-
-PQ_GREEDY_EVAL tag=it33_b1_plus8 alloc=[64, 72, 56, 40, 24, 24, 24, 24] bytes=328 recall=89.477800
-
-PQ_GREEDY_EVAL tag=it33_b2_plus8 alloc=[64, 64, 64, 40, 24, 24, 24, 24] bytes=328 recall=89.489900
-
-PQ_GREEDY_EVAL tag=it33_b3_plus8 alloc=[64, 64, 56, 48, 24, 24, 24, 24] bytes=328 recall=89.559000
-
-PQ_GREEDY_EVAL tag=it33_b4_plus8 alloc=[64, 64, 56, 40, 32, 24, 24, 24] bytes=328 recall=89.520600
-
-PQ_GREEDY_EVAL tag=it33_b5_plus8 alloc=[64, 64, 56, 40, 24, 32, 24, 24] bytes=328 recall=89.507200
-
-PQ_GREEDY_EVAL tag=it33_b6_plus8 alloc=[64, 64, 56, 40, 24, 24, 32, 24] bytes=328 recall=89.520400
-
-PQ_GREEDY_EVAL tag=it33_b7_plus8 alloc=[64, 64, 56, 40, 24, 24, 24, 32] bytes=328 recall=89.524700
-
-PQ_GREEDY_EVAL tag=it34_b0_plus8 alloc=[80, 64, 56, 40, 24, 24, 24, 24] bytes=336 recall=89.774100
-
-PQ_GREEDY_EVAL tag=it34_b1_plus8 alloc=[72, 72, 56, 40, 24, 24, 24, 24] bytes=336 recall=89.710300
-
-PQ_GREEDY_EVAL tag=it34_b2_plus8 alloc=[72, 64, 64, 40, 24, 24, 24, 24] bytes=336 recall=89.745700
-
-PQ_GREEDY_EVAL tag=it34_b3_plus8 alloc=[72, 64, 56, 48, 24, 24, 24, 24] bytes=336 recall=89.748800
-
-PQ_GREEDY_EVAL tag=it34_b4_plus8 alloc=[72, 64, 56, 40, 32, 24, 24, 24] bytes=336 recall=89.749100
-
-PQ_GREEDY_EVAL tag=it34_b5_plus8 alloc=[72, 64, 56, 40, 24, 32, 24, 24] bytes=336 recall=89.764200
-
-PQ_GREEDY_EVAL tag=it34_b6_plus8 alloc=[72, 64, 56, 40, 24, 24, 32, 24] bytes=336 recall=89.783800
-
-PQ_GREEDY_EVAL tag=it34_b7_plus8 alloc=[72, 64, 56, 40, 24, 24, 24, 32] bytes=336 recall=89.764900
-
-PQ_GREEDY_EVAL tag=it35_b0_plus8 alloc=[80, 64, 56, 40, 24, 24, 32, 24] bytes=344 recall=89.924600
-
-PQ_GREEDY_EVAL tag=it35_b1_plus8 alloc=[72, 72, 56, 40, 24, 24, 32, 24] bytes=344 recall=89.886900
-
-PQ_GREEDY_EVAL tag=it35_b2_plus8 alloc=[72, 64, 64, 40, 24, 24, 32, 24] bytes=344 recall=89.944800
-
-PQ_GREEDY_EVAL tag=it35_b3_plus8 alloc=[72, 64, 56, 48, 24, 24, 32, 24] bytes=344 recall=89.935200
-
-PQ_GREEDY_EVAL tag=it35_b4_plus8 alloc=[72, 64, 56, 40, 32, 24, 32, 24] bytes=344 recall=89.939900
-
-PQ_GREEDY_EVAL tag=it35_b5_plus8 alloc=[72, 64, 56, 40, 24, 32, 32, 24] bytes=344 recall=89.919800
-
-PQ_GREEDY_EVAL tag=it35_b6_plus8 alloc=[72, 64, 56, 40, 24, 24, 40, 24] bytes=344 recall=89.917500
-
-PQ_GREEDY_EVAL tag=it35_b7_plus8 alloc=[72, 64, 56, 40, 24, 24, 32, 32] bytes=344 recall=89.938100
-
-PQ_GREEDY_EVAL tag=it36_b0_plus8 alloc=[80, 64, 64, 40, 24, 24, 32, 24] bytes=352 recall=90.123900
-
-PQ_GREEDY_EVAL tag=it36_b1_plus8 alloc=[72, 72, 64, 40, 24, 24, 32, 24] bytes=352 recall=90.094600
-
-PQ_GREEDY_EVAL tag=it36_b2_plus8 alloc=[72, 64, 72, 40, 24, 24, 32, 24] bytes=352 recall=90.052800
-
-PQ_GREEDY_EVAL tag=it36_b3_plus8 alloc=[72, 64, 64, 48, 24, 24, 32, 24] bytes=352 recall=90.100200
-
-PQ_GREEDY_EVAL tag=it36_b4_plus8 alloc=[72, 64, 64, 40, 32, 24, 32, 24] bytes=352 recall=90.108400
-
-PQ_GREEDY_EVAL tag=it36_b5_plus8 alloc=[72, 64, 64, 40, 24, 32, 32, 24] bytes=352 recall=90.128700
-
-PQ_GREEDY_EVAL tag=it36_b6_plus8 alloc=[72, 64, 64, 40, 24, 24, 40, 24] bytes=352 recall=90.109000
-
-PQ_GREEDY_EVAL tag=it36_b7_plus8 alloc=[72, 64, 64, 40, 24, 24, 32, 32] bytes=352 recall=90.092900
-
-PQ_GREEDY_EVAL tag=it37_b0_plus8 alloc=[80, 64, 64, 40, 24, 32, 32, 24] bytes=360 recall=90.296000
-
-PQ_GREEDY_EVAL tag=it37_b1_plus8 alloc=[72, 72, 64, 40, 24, 32, 32, 24] bytes=360 recall=90.269200
-
-PQ_GREEDY_EVAL tag=it37_b2_plus8 alloc=[72, 64, 72, 40, 24, 32, 32, 24] bytes=360 recall=90.223800
-
-PQ_GREEDY_EVAL tag=it37_b3_plus8 alloc=[72, 64, 64, 48, 24, 32, 32, 24] bytes=360 recall=90.292600
-
-PQ_GREEDY_EVAL tag=it37_b4_plus8 alloc=[72, 64, 64, 40, 32, 32, 32, 24] bytes=360 recall=90.254300
-
-PQ_GREEDY_EVAL tag=it37_b5_plus8 alloc=[72, 64, 64, 40, 24, 40, 32, 24] bytes=360 recall=90.240600
-
-PQ_GREEDY_EVAL tag=it37_b6_plus8 alloc=[72, 64, 64, 40, 24, 32, 40, 24] bytes=360 recall=90.237900
-
-PQ_GREEDY_EVAL tag=it37_b7_plus8 alloc=[72, 64, 64, 40, 24, 32, 32, 32] bytes=360 recall=90.315200
-
-PQ_GREEDY_EVAL tag=it38_b0_plus8 alloc=[80, 64, 64, 40, 24, 32, 32, 32] bytes=368 recall=90.474600
-
-PQ_GREEDY_EVAL tag=it38_b1_plus8 alloc=[72, 72, 64, 40, 24, 32, 32, 32] bytes=368 recall=90.454600
-
-PQ_GREEDY_EVAL tag=it38_b2_plus8 alloc=[72, 64, 72, 40, 24, 32, 32, 32] bytes=368 recall=90.366600
-
-PQ_GREEDY_EVAL tag=it38_b3_plus8 alloc=[72, 64, 64, 48, 24, 32, 32, 32] bytes=368 recall=90.438100
-
-PQ_GREEDY_EVAL tag=it38_b4_plus8 alloc=[72, 64, 64, 40, 32, 32, 32, 32] bytes=368 recall=90.419800
-
-PQ_GREEDY_EVAL tag=it38_b5_plus8 alloc=[72, 64, 64, 40, 24, 40, 32, 32] bytes=368 recall=90.442500
-
-PQ_GREEDY_EVAL tag=it38_b6_plus8 alloc=[72, 64, 64, 40, 24, 32, 40, 32] bytes=368 recall=90.449600
-
-PQ_GREEDY_EVAL tag=it38_b7_plus8 alloc=[72, 64, 64, 40, 24, 32, 32, 40] bytes=368 recall=90.414900
-
-PQ_GREEDY_EVAL tag=it39_b0_plus8 alloc=[88, 64, 64, 40, 24, 32, 32, 32] bytes=376 recall=90.636000
-
-PQ_GREEDY_EVAL tag=it39_b1_plus8 alloc=[80, 72, 64, 40, 24, 32, 32, 32] bytes=376 recall=90.614800
-
-PQ_GREEDY_EVAL tag=it39_b2_plus8 alloc=[80, 64, 72, 40, 24, 32, 32, 32] bytes=376 recall=90.589400
-
-PQ_GREEDY_EVAL tag=it39_b3_plus8 alloc=[80, 64, 64, 48, 24, 32, 32, 32] bytes=376 recall=90.624100
-
-PQ_GREEDY_EVAL tag=it39_b4_plus8 alloc=[80, 64, 64, 40, 32, 32, 32, 32] bytes=376 recall=90.660600
-
-PQ_GREEDY_EVAL tag=it39_b5_plus8 alloc=[80, 64, 64, 40, 24, 40, 32, 32] bytes=376 recall=90.595400
-
-PQ_GREEDY_EVAL tag=it39_b6_plus8 alloc=[80, 64, 64, 40, 24, 32, 40, 32] bytes=376 recall=90.597800
-
-PQ_GREEDY_EVAL tag=it39_b7_plus8 alloc=[80, 64, 64, 40, 24, 32, 32, 40] bytes=376 recall=90.613300
-
-PQ_GREEDY_EVAL tag=it40_b0_plus8 alloc=[88, 64, 64, 40, 32, 32, 32, 32] bytes=384 recall=90.770000
-
-PQ_GREEDY_EVAL tag=it40_b1_plus8 alloc=[80, 72, 64, 40, 32, 32, 32, 32] bytes=384 recall=90.773900
-
-PQ_GREEDY_EVAL tag=it40_b2_plus8 alloc=[80, 64, 72, 40, 32, 32, 32, 32] bytes=384 recall=90.781700
-
-PQ_GREEDY_EVAL tag=it40_b3_plus8 alloc=[80, 64, 64, 48, 32, 32, 32, 32] bytes=384 recall=90.813500
-
-PQ_GREEDY_EVAL tag=it40_b4_plus8 alloc=[80, 64, 64, 40, 40, 32, 32, 32] bytes=384 recall=90.749200
-
-PQ_GREEDY_EVAL tag=it40_b5_plus8 alloc=[80, 64, 64, 40, 32, 40, 32, 32] bytes=384 recall=90.766600
-
-PQ_GREEDY_EVAL tag=it40_b6_plus8 alloc=[80, 64, 64, 40, 32, 32, 40, 32] bytes=384 recall=90.737700
-
-PQ_GREEDY_EVAL tag=it40_b7_plus8 alloc=[80, 64, 64, 40, 32, 32, 32, 40] bytes=384 recall=90.739900
-
-
-##### Uniform
-PQ sweep completed!
-Results directory: /tmp/pq_sweep_1780692993
-
-
-Summary of recall results:
-Bytes,Recall
-64,51.3949
-96,63.7776
-128,72.0662
-160,77.6642
-192,81.486
-224,84.0399
-256,86.0162
-288,87.1963
-320,88.21
-352,89.1479
-384,89.9645
-
-
-### SQ
-#### Open AI text large 3
-
-##### Uniform
+#### Uniform
 SQ sweep completed!
 Results directory: /tmp/sq_sweep_1780697798
 
@@ -10108,7 +10801,7 @@ Bytes,Recall
 352,81.8126
 384,82.7683
 
-##### Variable
+#### Variable
 
 SQ_GREEDY_EVAL tag=init alloc=[8, 8, 8, 8, 8, 8, 8, 8] bytes=64 recall=52.994000
 
@@ -10752,8 +11445,12 @@ SQ_GREEDY_EVAL tag=it40_b6_plus8 alloc=[112, 96, 96, 40, 8, 8, 16, 8] bytes=384 
 
 SQ_GREEDY_EVAL tag=it40_b7_plus8 alloc=[112, 96, 96, 40, 8, 8, 8, 16] bytes=384 recall=85.392500
 
-#### Cohere v4
-##### Uniform
+
+
+
+### Quora cohere_v4
+
+#### Uniform
 SQ sweep completed!
 Results directory: /tmp/sq_sweep_1780698844
 
@@ -10770,7 +11467,7 @@ Bytes,Recall
 320,81.8003
 352,83.3479
 384,84.7346
-##### Variable
+#### Variable
 
 SQ_GREEDY_EVAL tag=init alloc=[8, 8, 8, 8, 8, 8, 8, 8] bytes=64 recall=50.339200
 
@@ -11413,3 +12110,690 @@ SQ_GREEDY_EVAL tag=it40_b5_plus8 alloc=[64, 48, 48, 48, 48, 56, 32, 40] bytes=38
 SQ_GREEDY_EVAL tag=it40_b6_plus8 alloc=[64, 48, 48, 48, 48, 48, 40, 40] bytes=384 recall=84.695100
 
 SQ_GREEDY_EVAL tag=it40_b7_plus8 alloc=[64, 48, 48, 48, 48, 48, 32, 48] bytes=384 recall=84.571000
+
+---
+### Fiqa openai text large 3
+#### Uniform
+SQ sweep completed!
+Results directory: /tmp/sq_sweep_1780768169
+
+Summary of SQ recall results:
+Bytes,Recall
+64,46.7577
+96,54.3549
+128,60.6867
+160,64.3488
+192,67.8488
+224,70.338
+256,73.1358
+288,74.3364
+320,76.2176
+352,77.2222
+384,78.9367
+#### Variable
+SQ_GREEDY_EVAL tag=init alloc=[8, 8, 8, 8, 8, 8, 8, 8] bytes=64 recall=46.757700
+SQ_GREEDY_EVAL tag=it1_b0_plus8 alloc=[16, 8, 8, 8, 8, 8, 8, 8] bytes=72 recall=50.012300
+SQ_GREEDY_EVAL tag=it1_b1_plus8 alloc=[8, 16, 8, 8, 8, 8, 8, 8] bytes=72 recall=49.521600
+SQ_GREEDY_EVAL tag=it1_b2_plus8 alloc=[8, 8, 16, 8, 8, 8, 8, 8] bytes=72 recall=49.446000
+SQ_GREEDY_EVAL tag=it1_b3_plus8 alloc=[8, 8, 8, 16, 8, 8, 8, 8] bytes=72 recall=49.555600
+SQ_GREEDY_EVAL tag=it1_b4_plus8 alloc=[8, 8, 8, 8, 16, 8, 8, 8] bytes=72 recall=48.992300
+SQ_GREEDY_EVAL tag=it1_b5_plus8 alloc=[8, 8, 8, 8, 8, 16, 8, 8] bytes=72 recall=48.921300
+SQ_GREEDY_EVAL tag=it1_b6_plus8 alloc=[8, 8, 8, 8, 8, 8, 16, 8] bytes=72 recall=49.196000
+SQ_GREEDY_EVAL tag=it1_b7_plus8 alloc=[8, 8, 8, 8, 8, 8, 8, 16] bytes=72 recall=48.870400
+SQ_GREEDY_EVAL tag=it2_b0_plus8 alloc=[24, 8, 8, 8, 8, 8, 8, 8] bytes=80 recall=52.061700
+SQ_GREEDY_EVAL tag=it2_b1_plus8 alloc=[16, 16, 8, 8, 8, 8, 8, 8] bytes=80 recall=52.472200
+SQ_GREEDY_EVAL tag=it2_b2_plus8 alloc=[16, 8, 16, 8, 8, 8, 8, 8] bytes=80 recall=52.126500
+SQ_GREEDY_EVAL tag=it2_b3_plus8 alloc=[16, 8, 8, 16, 8, 8, 8, 8] bytes=80 recall=52.305600
+SQ_GREEDY_EVAL tag=it2_b4_plus8 alloc=[16, 8, 8, 8, 16, 8, 8, 8] bytes=80 recall=51.930600
+SQ_GREEDY_EVAL tag=it2_b5_plus8 alloc=[16, 8, 8, 8, 8, 16, 8, 8] bytes=80 recall=51.716000
+SQ_GREEDY_EVAL tag=it2_b6_plus8 alloc=[16, 8, 8, 8, 8, 8, 16, 8] bytes=80 recall=52.027800
+SQ_GREEDY_EVAL tag=it2_b7_plus8 alloc=[16, 8, 8, 8, 8, 8, 8, 16] bytes=80 recall=51.640400
+SQ_GREEDY_EVAL tag=it3_b0_plus8 alloc=[24, 16, 8, 8, 8, 8, 8, 8] bytes=88 recall=54.288600
+SQ_GREEDY_EVAL tag=it3_b1_plus8 alloc=[16, 24, 8, 8, 8, 8, 8, 8] bytes=88 recall=54.946000
+SQ_GREEDY_EVAL tag=it3_b2_plus8 alloc=[16, 16, 16, 8, 8, 8, 8, 8] bytes=88 recall=54.467600
+SQ_GREEDY_EVAL tag=it3_b3_plus8 alloc=[16, 16, 8, 16, 8, 8, 8, 8] bytes=88 recall=54.430600
+SQ_GREEDY_EVAL tag=it3_b4_plus8 alloc=[16, 16, 8, 8, 16, 8, 8, 8] bytes=88 recall=54.057100
+SQ_GREEDY_EVAL tag=it3_b5_plus8 alloc=[16, 16, 8, 8, 8, 16, 8, 8] bytes=88 recall=53.938300
+SQ_GREEDY_EVAL tag=it3_b6_plus8 alloc=[16, 16, 8, 8, 8, 8, 16, 8] bytes=88 recall=54.118800
+SQ_GREEDY_EVAL tag=it3_b7_plus8 alloc=[16, 16, 8, 8, 8, 8, 8, 16] bytes=88 recall=54.032400
+SQ_GREEDY_EVAL tag=it4_b0_plus8 alloc=[24, 24, 8, 8, 8, 8, 8, 8] bytes=96 recall=56.566400
+SQ_GREEDY_EVAL tag=it4_b1_plus8 alloc=[16, 32, 8, 8, 8, 8, 8, 8] bytes=96 recall=57.205200
+SQ_GREEDY_EVAL tag=it4_b2_plus8 alloc=[16, 24, 16, 8, 8, 8, 8, 8] bytes=96 recall=56.578700
+SQ_GREEDY_EVAL tag=it4_b3_plus8 alloc=[16, 24, 8, 16, 8, 8, 8, 8] bytes=96 recall=56.685200
+SQ_GREEDY_EVAL tag=it4_b4_plus8 alloc=[16, 24, 8, 8, 16, 8, 8, 8] bytes=96 recall=56.375000
+SQ_GREEDY_EVAL tag=it4_b5_plus8 alloc=[16, 24, 8, 8, 8, 16, 8, 8] bytes=96 recall=56.166700
+SQ_GREEDY_EVAL tag=it4_b6_plus8 alloc=[16, 24, 8, 8, 8, 8, 16, 8] bytes=96 recall=56.409000
+SQ_GREEDY_EVAL tag=it4_b7_plus8 alloc=[16, 24, 8, 8, 8, 8, 8, 16] bytes=96 recall=56.197500
+SQ_GREEDY_EVAL tag=it5_b0_plus8 alloc=[24, 32, 8, 8, 8, 8, 8, 8] bytes=104 recall=58.657400
+SQ_GREEDY_EVAL tag=it5_b1_plus8 alloc=[16, 40, 8, 8, 8, 8, 8, 8] bytes=104 recall=58.817900
+SQ_GREEDY_EVAL tag=it5_b2_plus8 alloc=[16, 32, 16, 8, 8, 8, 8, 8] bytes=104 recall=58.728400
+SQ_GREEDY_EVAL tag=it5_b3_plus8 alloc=[16, 32, 8, 16, 8, 8, 8, 8] bytes=104 recall=58.716000
+SQ_GREEDY_EVAL tag=it5_b4_plus8 alloc=[16, 32, 8, 8, 16, 8, 8, 8] bytes=104 recall=58.415100
+SQ_GREEDY_EVAL tag=it5_b5_plus8 alloc=[16, 32, 8, 8, 8, 16, 8, 8] bytes=104 recall=58.402800
+SQ_GREEDY_EVAL tag=it5_b6_plus8 alloc=[16, 32, 8, 8, 8, 8, 16, 8] bytes=104 recall=58.475300
+SQ_GREEDY_EVAL tag=it5_b7_plus8 alloc=[16, 32, 8, 8, 8, 8, 8, 16] bytes=104 recall=58.296300
+SQ_GREEDY_EVAL tag=it6_b0_plus8 alloc=[24, 40, 8, 8, 8, 8, 8, 8] bytes=112 recall=60.006200
+SQ_GREEDY_EVAL tag=it6_b1_plus8 alloc=[16, 48, 8, 8, 8, 8, 8, 8] bytes=112 recall=60.365700
+SQ_GREEDY_EVAL tag=it6_b2_plus8 alloc=[16, 40, 16, 8, 8, 8, 8, 8] bytes=112 recall=60.316400
+SQ_GREEDY_EVAL tag=it6_b3_plus8 alloc=[16, 40, 8, 16, 8, 8, 8, 8] bytes=112 recall=60.112700
+SQ_GREEDY_EVAL tag=it6_b4_plus8 alloc=[16, 40, 8, 8, 16, 8, 8, 8] bytes=112 recall=59.956800
+SQ_GREEDY_EVAL tag=it6_b5_plus8 alloc=[16, 40, 8, 8, 8, 16, 8, 8] bytes=112 recall=59.887300
+SQ_GREEDY_EVAL tag=it6_b6_plus8 alloc=[16, 40, 8, 8, 8, 8, 16, 8] bytes=112 recall=59.955200
+SQ_GREEDY_EVAL tag=it6_b7_plus8 alloc=[16, 40, 8, 8, 8, 8, 8, 16] bytes=112 recall=59.822500
+SQ_GREEDY_EVAL tag=it7_b0_plus8 alloc=[24, 48, 8, 8, 8, 8, 8, 8] bytes=120 recall=61.407400
+SQ_GREEDY_EVAL tag=it7_b1_plus8 alloc=[16, 56, 8, 8, 8, 8, 8, 8] bytes=120 recall=62.182100
+SQ_GREEDY_EVAL tag=it7_b2_plus8 alloc=[16, 48, 16, 8, 8, 8, 8, 8] bytes=120 recall=61.617300
+SQ_GREEDY_EVAL tag=it7_b3_plus8 alloc=[16, 48, 8, 16, 8, 8, 8, 8] bytes=120 recall=61.560200
+SQ_GREEDY_EVAL tag=it7_b4_plus8 alloc=[16, 48, 8, 8, 16, 8, 8, 8] bytes=120 recall=61.285500
+SQ_GREEDY_EVAL tag=it7_b5_plus8 alloc=[16, 48, 8, 8, 8, 16, 8, 8] bytes=120 recall=61.233000
+SQ_GREEDY_EVAL tag=it7_b6_plus8 alloc=[16, 48, 8, 8, 8, 8, 16, 8] bytes=120 recall=61.342600
+SQ_GREEDY_EVAL tag=it7_b7_plus8 alloc=[16, 48, 8, 8, 8, 8, 8, 16] bytes=120 recall=61.194400
+SQ_GREEDY_EVAL tag=it8_b0_plus8 alloc=[24, 56, 8, 8, 8, 8, 8, 8] bytes=128 recall=63.112700
+SQ_GREEDY_EVAL tag=it8_b1_plus8 alloc=[16, 64, 8, 8, 8, 8, 8, 8] bytes=128 recall=63.239200
+SQ_GREEDY_EVAL tag=it8_b2_plus8 alloc=[16, 56, 16, 8, 8, 8, 8, 8] bytes=128 recall=63.452200
+SQ_GREEDY_EVAL tag=it8_b3_plus8 alloc=[16, 56, 8, 16, 8, 8, 8, 8] bytes=128 recall=63.348800
+SQ_GREEDY_EVAL tag=it8_b4_plus8 alloc=[16, 56, 8, 8, 16, 8, 8, 8] bytes=128 recall=63.083300
+SQ_GREEDY_EVAL tag=it8_b5_plus8 alloc=[16, 56, 8, 8, 8, 16, 8, 8] bytes=128 recall=62.983000
+SQ_GREEDY_EVAL tag=it8_b6_plus8 alloc=[16, 56, 8, 8, 8, 8, 16, 8] bytes=128 recall=63.166700
+SQ_GREEDY_EVAL tag=it8_b7_plus8 alloc=[16, 56, 8, 8, 8, 8, 8, 16] bytes=128 recall=62.987700
+SQ_GREEDY_EVAL tag=it9_b0_plus8 alloc=[24, 56, 16, 8, 8, 8, 8, 8] bytes=136 recall=64.373500
+SQ_GREEDY_EVAL tag=it9_b1_plus8 alloc=[16, 64, 16, 8, 8, 8, 8, 8] bytes=136 recall=64.265400
+SQ_GREEDY_EVAL tag=it9_b2_plus8 alloc=[16, 56, 24, 8, 8, 8, 8, 8] bytes=136 recall=64.666700
+SQ_GREEDY_EVAL tag=it9_b3_plus8 alloc=[16, 56, 16, 16, 8, 8, 8, 8] bytes=136 recall=64.534000
+SQ_GREEDY_EVAL tag=it9_b4_plus8 alloc=[16, 56, 16, 8, 16, 8, 8, 8] bytes=136 recall=64.279300
+SQ_GREEDY_EVAL tag=it9_b5_plus8 alloc=[16, 56, 16, 8, 8, 16, 8, 8] bytes=136 recall=64.220700
+SQ_GREEDY_EVAL tag=it9_b6_plus8 alloc=[16, 56, 16, 8, 8, 8, 16, 8] bytes=136 recall=64.273100
+SQ_GREEDY_EVAL tag=it9_b7_plus8 alloc=[16, 56, 16, 8, 8, 8, 8, 16] bytes=136 recall=64.069400
+SQ_GREEDY_EVAL tag=it10_b0_plus8 alloc=[24, 56, 24, 8, 8, 8, 8, 8] bytes=144 recall=65.344100
+SQ_GREEDY_EVAL tag=it10_b1_plus8 alloc=[16, 64, 24, 8, 8, 8, 8, 8] bytes=144 recall=65.453700
+SQ_GREEDY_EVAL tag=it10_b2_plus8 alloc=[16, 56, 32, 8, 8, 8, 8, 8] bytes=144 recall=65.711400
+SQ_GREEDY_EVAL tag=it10_b3_plus8 alloc=[16, 56, 24, 16, 8, 8, 8, 8] bytes=144 recall=65.490700
+SQ_GREEDY_EVAL tag=it10_b4_plus8 alloc=[16, 56, 24, 8, 16, 8, 8, 8] bytes=144 recall=65.299400
+SQ_GREEDY_EVAL tag=it10_b5_plus8 alloc=[16, 56, 24, 8, 8, 16, 8, 8] bytes=144 recall=65.330200
+SQ_GREEDY_EVAL tag=it10_b6_plus8 alloc=[16, 56, 24, 8, 8, 8, 16, 8] bytes=144 recall=65.415100
+SQ_GREEDY_EVAL tag=it10_b7_plus8 alloc=[16, 56, 24, 8, 8, 8, 8, 16] bytes=144 recall=65.217600
+SQ_GREEDY_EVAL tag=it11_b0_plus8 alloc=[24, 56, 32, 8, 8, 8, 8, 8] bytes=152 recall=66.446000
+SQ_GREEDY_EVAL tag=it11_b1_plus8 alloc=[16, 64, 32, 8, 8, 8, 8, 8] bytes=152 recall=66.399700
+SQ_GREEDY_EVAL tag=it11_b2_plus8 alloc=[16, 56, 40, 8, 8, 8, 8, 8] bytes=152 recall=66.623500
+SQ_GREEDY_EVAL tag=it11_b3_plus8 alloc=[16, 56, 32, 16, 8, 8, 8, 8] bytes=152 recall=66.638900
+SQ_GREEDY_EVAL tag=it11_b4_plus8 alloc=[16, 56, 32, 8, 16, 8, 8, 8] bytes=152 recall=66.464500
+SQ_GREEDY_EVAL tag=it11_b5_plus8 alloc=[16, 56, 32, 8, 8, 16, 8, 8] bytes=152 recall=66.392000
+SQ_GREEDY_EVAL tag=it11_b6_plus8 alloc=[16, 56, 32, 8, 8, 8, 16, 8] bytes=152 recall=66.500000
+SQ_GREEDY_EVAL tag=it11_b7_plus8 alloc=[16, 56, 32, 8, 8, 8, 8, 16] bytes=152 recall=66.334900
+SQ_GREEDY_EVAL tag=it12_b0_plus8 alloc=[24, 56, 32, 16, 8, 8, 8, 8] bytes=160 recall=67.421300
+SQ_GREEDY_EVAL tag=it12_b1_plus8 alloc=[16, 64, 32, 16, 8, 8, 8, 8] bytes=160 recall=67.324100
+SQ_GREEDY_EVAL tag=it12_b2_plus8 alloc=[16, 56, 40, 16, 8, 8, 8, 8] bytes=160 recall=67.442900
+SQ_GREEDY_EVAL tag=it12_b3_plus8 alloc=[16, 56, 32, 24, 8, 8, 8, 8] bytes=160 recall=67.328700
+SQ_GREEDY_EVAL tag=it12_b4_plus8 alloc=[16, 56, 32, 16, 16, 8, 8, 8] bytes=160 recall=67.259300
+SQ_GREEDY_EVAL tag=it12_b5_plus8 alloc=[16, 56, 32, 16, 8, 16, 8, 8] bytes=160 recall=67.248500
+SQ_GREEDY_EVAL tag=it12_b6_plus8 alloc=[16, 56, 32, 16, 8, 8, 16, 8] bytes=160 recall=67.304000
+SQ_GREEDY_EVAL tag=it12_b7_plus8 alloc=[16, 56, 32, 16, 8, 8, 8, 16] bytes=160 recall=67.219100
+SQ_GREEDY_EVAL tag=it13_b0_plus8 alloc=[24, 56, 40, 16, 8, 8, 8, 8] bytes=168 recall=68.138900
+SQ_GREEDY_EVAL tag=it13_b1_plus8 alloc=[16, 64, 40, 16, 8, 8, 8, 8] bytes=168 recall=68.123500
+SQ_GREEDY_EVAL tag=it13_b2_plus8 alloc=[16, 56, 48, 16, 8, 8, 8, 8] bytes=168 recall=68.354900
+SQ_GREEDY_EVAL tag=it13_b3_plus8 alloc=[16, 56, 40, 24, 8, 8, 8, 8] bytes=168 recall=67.992300
+SQ_GREEDY_EVAL tag=it13_b4_plus8 alloc=[16, 56, 40, 16, 16, 8, 8, 8] bytes=168 recall=68.046300
+SQ_GREEDY_EVAL tag=it13_b5_plus8 alloc=[16, 56, 40, 16, 8, 16, 8, 8] bytes=168 recall=67.998500
+SQ_GREEDY_EVAL tag=it13_b6_plus8 alloc=[16, 56, 40, 16, 8, 8, 16, 8] bytes=168 recall=68.118800
+SQ_GREEDY_EVAL tag=it13_b7_plus8 alloc=[16, 56, 40, 16, 8, 8, 8, 16] bytes=168 recall=67.975300
+SQ_GREEDY_EVAL tag=it14_b0_plus8 alloc=[24, 56, 48, 16, 8, 8, 8, 8] bytes=176 recall=69.052500
+SQ_GREEDY_EVAL tag=it14_b1_plus8 alloc=[16, 64, 48, 16, 8, 8, 8, 8] bytes=176 recall=69.004600
+SQ_GREEDY_EVAL tag=it14_b2_plus8 alloc=[16, 56, 56, 16, 8, 8, 8, 8] bytes=176 recall=69.307100
+SQ_GREEDY_EVAL tag=it14_b3_plus8 alloc=[16, 56, 48, 24, 8, 8, 8, 8] bytes=176 recall=68.932100
+SQ_GREEDY_EVAL tag=it14_b4_plus8 alloc=[16, 56, 48, 16, 16, 8, 8, 8] bytes=176 recall=68.856500
+SQ_GREEDY_EVAL tag=it14_b5_plus8 alloc=[16, 56, 48, 16, 8, 16, 8, 8] bytes=176 recall=68.922800
+SQ_GREEDY_EVAL tag=it14_b6_plus8 alloc=[16, 56, 48, 16, 8, 8, 16, 8] bytes=176 recall=69.006200
+SQ_GREEDY_EVAL tag=it14_b7_plus8 alloc=[16, 56, 48, 16, 8, 8, 8, 16] bytes=176 recall=68.851900
+SQ_GREEDY_EVAL tag=it15_b0_plus8 alloc=[24, 56, 56, 16, 8, 8, 8, 8] bytes=184 recall=69.861100
+SQ_GREEDY_EVAL tag=it15_b1_plus8 alloc=[16, 64, 56, 16, 8, 8, 8, 8] bytes=184 recall=69.788600
+SQ_GREEDY_EVAL tag=it15_b2_plus8 alloc=[16, 56, 64, 16, 8, 8, 8, 8] bytes=184 recall=70.104900
+SQ_GREEDY_EVAL tag=it15_b3_plus8 alloc=[16, 56, 56, 24, 8, 8, 8, 8] bytes=184 recall=69.817900
+SQ_GREEDY_EVAL tag=it15_b4_plus8 alloc=[16, 56, 56, 16, 16, 8, 8, 8] bytes=184 recall=69.805600
+SQ_GREEDY_EVAL tag=it15_b5_plus8 alloc=[16, 56, 56, 16, 8, 16, 8, 8] bytes=184 recall=69.770100
+SQ_GREEDY_EVAL tag=it15_b6_plus8 alloc=[16, 56, 56, 16, 8, 8, 16, 8] bytes=184 recall=69.873500
+SQ_GREEDY_EVAL tag=it15_b7_plus8 alloc=[16, 56, 56, 16, 8, 8, 8, 16] bytes=184 recall=69.742300
+SQ_GREEDY_EVAL tag=it16_b0_plus8 alloc=[24, 56, 64, 16, 8, 8, 8, 8] bytes=192 recall=70.733000
+SQ_GREEDY_EVAL tag=it16_b1_plus8 alloc=[16, 64, 64, 16, 8, 8, 8, 8] bytes=192 recall=70.597200
+SQ_GREEDY_EVAL tag=it16_b2_plus8 alloc=[16, 56, 72, 16, 8, 8, 8, 8] bytes=192 recall=70.850300
+SQ_GREEDY_EVAL tag=it16_b3_plus8 alloc=[16, 56, 64, 24, 8, 8, 8, 8] bytes=192 recall=70.668200
+SQ_GREEDY_EVAL tag=it16_b4_plus8 alloc=[16, 56, 64, 16, 16, 8, 8, 8] bytes=192 recall=70.655900
+SQ_GREEDY_EVAL tag=it16_b5_plus8 alloc=[16, 56, 64, 16, 8, 16, 8, 8] bytes=192 recall=70.629600
+SQ_GREEDY_EVAL tag=it16_b6_plus8 alloc=[16, 56, 64, 16, 8, 8, 16, 8] bytes=192 recall=70.652800
+SQ_GREEDY_EVAL tag=it16_b7_plus8 alloc=[16, 56, 64, 16, 8, 8, 8, 16] bytes=192 recall=70.529300
+SQ_GREEDY_EVAL tag=it17_b0_plus8 alloc=[24, 56, 72, 16, 8, 8, 8, 8] bytes=200 recall=71.384300
+SQ_GREEDY_EVAL tag=it17_b1_plus8 alloc=[16, 64, 72, 16, 8, 8, 8, 8] bytes=200 recall=71.339500
+SQ_GREEDY_EVAL tag=it17_b2_plus8 alloc=[16, 56, 80, 16, 8, 8, 8, 8] bytes=200 recall=71.412000
+SQ_GREEDY_EVAL tag=it17_b3_plus8 alloc=[16, 56, 72, 24, 8, 8, 8, 8] bytes=200 recall=71.182100
+SQ_GREEDY_EVAL tag=it17_b4_plus8 alloc=[16, 56, 72, 16, 16, 8, 8, 8] bytes=200 recall=71.236100
+SQ_GREEDY_EVAL tag=it17_b5_plus8 alloc=[16, 56, 72, 16, 8, 16, 8, 8] bytes=200 recall=71.268500
+SQ_GREEDY_EVAL tag=it17_b6_plus8 alloc=[16, 56, 72, 16, 8, 8, 16, 8] bytes=200 recall=71.341000
+SQ_GREEDY_EVAL tag=it17_b7_plus8 alloc=[16, 56, 72, 16, 8, 8, 8, 16] bytes=200 recall=71.304000
+SQ_GREEDY_EVAL tag=it18_b0_plus8 alloc=[24, 56, 80, 16, 8, 8, 8, 8] bytes=208 recall=71.842600
+SQ_GREEDY_EVAL tag=it18_b1_plus8 alloc=[16, 64, 80, 16, 8, 8, 8, 8] bytes=208 recall=72.032400
+SQ_GREEDY_EVAL tag=it18_b2_plus8 alloc=[16, 56, 88, 16, 8, 8, 8, 8] bytes=208 recall=72.095700
+SQ_GREEDY_EVAL tag=it18_b3_plus8 alloc=[16, 56, 80, 24, 8, 8, 8, 8] bytes=208 recall=71.827200
+SQ_GREEDY_EVAL tag=it18_b4_plus8 alloc=[16, 56, 80, 16, 16, 8, 8, 8] bytes=208 recall=71.819400
+SQ_GREEDY_EVAL tag=it18_b5_plus8 alloc=[16, 56, 80, 16, 8, 16, 8, 8] bytes=208 recall=71.796300
+SQ_GREEDY_EVAL tag=it18_b6_plus8 alloc=[16, 56, 80, 16, 8, 8, 16, 8] bytes=208 recall=71.905900
+SQ_GREEDY_EVAL tag=it18_b7_plus8 alloc=[16, 56, 80, 16, 8, 8, 8, 16] bytes=208 recall=71.767000
+SQ_GREEDY_EVAL tag=it19_b0_plus8 alloc=[24, 56, 88, 16, 8, 8, 8, 8] bytes=216 recall=72.557100
+SQ_GREEDY_EVAL tag=it19_b1_plus8 alloc=[16, 64, 88, 16, 8, 8, 8, 8] bytes=216 recall=72.632700
+SQ_GREEDY_EVAL tag=it19_b2_plus8 alloc=[16, 56, 96, 16, 8, 8, 8, 8] bytes=216 recall=72.625000
+SQ_GREEDY_EVAL tag=it19_b3_plus8 alloc=[16, 56, 88, 24, 8, 8, 8, 8] bytes=216 recall=72.449100
+SQ_GREEDY_EVAL tag=it19_b4_plus8 alloc=[16, 56, 88, 16, 16, 8, 8, 8] bytes=216 recall=72.466000
+SQ_GREEDY_EVAL tag=it19_b5_plus8 alloc=[16, 56, 88, 16, 8, 16, 8, 8] bytes=216 recall=72.498500
+SQ_GREEDY_EVAL tag=it19_b6_plus8 alloc=[16, 56, 88, 16, 8, 8, 16, 8] bytes=216 recall=72.588000
+SQ_GREEDY_EVAL tag=it19_b7_plus8 alloc=[16, 56, 88, 16, 8, 8, 8, 16] bytes=216 recall=72.421300
+SQ_GREEDY_EVAL tag=it20_b0_plus8 alloc=[24, 64, 88, 16, 8, 8, 8, 8] bytes=224 recall=73.071000
+SQ_GREEDY_EVAL tag=it20_b1_plus8 alloc=[16, 72, 88, 16, 8, 8, 8, 8] bytes=224 recall=73.274700
+SQ_GREEDY_EVAL tag=it20_b2_plus8 alloc=[16, 64, 96, 16, 8, 8, 8, 8] bytes=224 recall=73.242300
+SQ_GREEDY_EVAL tag=it20_b3_plus8 alloc=[16, 64, 88, 24, 8, 8, 8, 8] bytes=224 recall=73.046300
+SQ_GREEDY_EVAL tag=it20_b4_plus8 alloc=[16, 64, 88, 16, 16, 8, 8, 8] bytes=224 recall=73.047800
+SQ_GREEDY_EVAL tag=it20_b5_plus8 alloc=[16, 64, 88, 16, 8, 16, 8, 8] bytes=224 recall=73.072500
+SQ_GREEDY_EVAL tag=it20_b6_plus8 alloc=[16, 64, 88, 16, 8, 8, 16, 8] bytes=224 recall=73.060200
+SQ_GREEDY_EVAL tag=it20_b7_plus8 alloc=[16, 64, 88, 16, 8, 8, 8, 16] bytes=224 recall=72.947500
+SQ_GREEDY_EVAL tag=it21_b0_plus8 alloc=[24, 72, 88, 16, 8, 8, 8, 8] bytes=232 recall=73.625000
+SQ_GREEDY_EVAL tag=it21_b1_plus8 alloc=[16, 80, 88, 16, 8, 8, 8, 8] bytes=232 recall=73.984600
+SQ_GREEDY_EVAL tag=it21_b2_plus8 alloc=[16, 72, 96, 16, 8, 8, 8, 8] bytes=232 recall=73.686700
+SQ_GREEDY_EVAL tag=it21_b3_plus8 alloc=[16, 72, 88, 24, 8, 8, 8, 8] bytes=232 recall=73.649700
+SQ_GREEDY_EVAL tag=it21_b4_plus8 alloc=[16, 72, 88, 16, 16, 8, 8, 8] bytes=232 recall=73.631200
+SQ_GREEDY_EVAL tag=it21_b5_plus8 alloc=[16, 72, 88, 16, 8, 16, 8, 8] bytes=232 recall=73.660500
+SQ_GREEDY_EVAL tag=it21_b6_plus8 alloc=[16, 72, 88, 16, 8, 8, 16, 8] bytes=232 recall=73.668200
+SQ_GREEDY_EVAL tag=it21_b7_plus8 alloc=[16, 72, 88, 16, 8, 8, 8, 16] bytes=232 recall=73.591000
+SQ_GREEDY_EVAL tag=it22_b0_plus8 alloc=[24, 80, 88, 16, 8, 8, 8, 8] bytes=240 recall=74.395100
+SQ_GREEDY_EVAL tag=it22_b1_plus8 alloc=[16, 88, 88, 16, 8, 8, 8, 8] bytes=240 recall=74.662000
+SQ_GREEDY_EVAL tag=it22_b2_plus8 alloc=[16, 80, 96, 16, 8, 8, 8, 8] bytes=240 recall=74.575600
+SQ_GREEDY_EVAL tag=it22_b3_plus8 alloc=[16, 80, 88, 24, 8, 8, 8, 8] bytes=240 recall=74.368800
+SQ_GREEDY_EVAL tag=it22_b4_plus8 alloc=[16, 80, 88, 16, 16, 8, 8, 8] bytes=240 recall=74.308600
+SQ_GREEDY_EVAL tag=it22_b5_plus8 alloc=[16, 80, 88, 16, 8, 16, 8, 8] bytes=240 recall=74.299400
+SQ_GREEDY_EVAL tag=it22_b6_plus8 alloc=[16, 80, 88, 16, 8, 8, 16, 8] bytes=240 recall=74.455200
+SQ_GREEDY_EVAL tag=it22_b7_plus8 alloc=[16, 80, 88, 16, 8, 8, 8, 16] bytes=240 recall=74.317900
+SQ_GREEDY_EVAL tag=it23_b0_plus8 alloc=[24, 88, 88, 16, 8, 8, 8, 8] bytes=248 recall=75.049400
+SQ_GREEDY_EVAL tag=it23_b1_plus8 alloc=[16, 96, 88, 16, 8, 8, 8, 8] bytes=248 recall=75.138900
+SQ_GREEDY_EVAL tag=it23_b2_plus8 alloc=[16, 88, 96, 16, 8, 8, 8, 8] bytes=248 recall=75.131200
+SQ_GREEDY_EVAL tag=it23_b3_plus8 alloc=[16, 88, 88, 24, 8, 8, 8, 8] bytes=248 recall=74.989200
+SQ_GREEDY_EVAL tag=it23_b4_plus8 alloc=[16, 88, 88, 16, 16, 8, 8, 8] bytes=248 recall=74.975300
+SQ_GREEDY_EVAL tag=it23_b5_plus8 alloc=[16, 88, 88, 16, 8, 16, 8, 8] bytes=248 recall=74.976900
+SQ_GREEDY_EVAL tag=it23_b6_plus8 alloc=[16, 88, 88, 16, 8, 8, 16, 8] bytes=248 recall=75.043200
+SQ_GREEDY_EVAL tag=it23_b7_plus8 alloc=[16, 88, 88, 16, 8, 8, 8, 16] bytes=248 recall=74.963000
+SQ_GREEDY_EVAL tag=it24_b0_plus8 alloc=[24, 96, 88, 16, 8, 8, 8, 8] bytes=256 recall=75.537000
+SQ_GREEDY_EVAL tag=it24_b1_plus8 alloc=[16, 104, 88, 16, 8, 8, 8, 8] bytes=256 recall=75.359600
+SQ_GREEDY_EVAL tag=it24_b2_plus8 alloc=[16, 96, 96, 16, 8, 8, 8, 8] bytes=256 recall=75.594100
+SQ_GREEDY_EVAL tag=it24_b3_plus8 alloc=[16, 96, 88, 24, 8, 8, 8, 8] bytes=256 recall=75.416700
+SQ_GREEDY_EVAL tag=it24_b4_plus8 alloc=[16, 96, 88, 16, 16, 8, 8, 8] bytes=256 recall=75.459900
+SQ_GREEDY_EVAL tag=it24_b5_plus8 alloc=[16, 96, 88, 16, 8, 16, 8, 8] bytes=256 recall=75.555600
+SQ_GREEDY_EVAL tag=it24_b6_plus8 alloc=[16, 96, 88, 16, 8, 8, 16, 8] bytes=256 recall=75.544800
+SQ_GREEDY_EVAL tag=it24_b7_plus8 alloc=[16, 96, 88, 16, 8, 8, 8, 16] bytes=256 recall=75.430600
+SQ_GREEDY_EVAL tag=it25_b0_plus8 alloc=[24, 96, 96, 16, 8, 8, 8, 8] bytes=264 recall=75.978400
+SQ_GREEDY_EVAL tag=it25_b1_plus8 alloc=[16, 104, 96, 16, 8, 8, 8, 8] bytes=264 recall=75.876500
+SQ_GREEDY_EVAL tag=it25_b2_plus8 alloc=[16, 96, 104, 16, 8, 8, 8, 8] bytes=264 recall=75.794800
+SQ_GREEDY_EVAL tag=it25_b3_plus8 alloc=[16, 96, 96, 24, 8, 8, 8, 8] bytes=264 recall=75.910500
+SQ_GREEDY_EVAL tag=it25_b4_plus8 alloc=[16, 96, 96, 16, 16, 8, 8, 8] bytes=264 recall=75.888900
+SQ_GREEDY_EVAL tag=it25_b5_plus8 alloc=[16, 96, 96, 16, 8, 16, 8, 8] bytes=264 recall=75.987700
+SQ_GREEDY_EVAL tag=it25_b6_plus8 alloc=[16, 96, 96, 16, 8, 8, 16, 8] bytes=264 recall=75.984600
+SQ_GREEDY_EVAL tag=it25_b7_plus8 alloc=[16, 96, 96, 16, 8, 8, 8, 16] bytes=264 recall=75.867300
+SQ_GREEDY_EVAL tag=it26_b0_plus8 alloc=[24, 96, 96, 16, 8, 16, 8, 8] bytes=272 recall=76.267000
+SQ_GREEDY_EVAL tag=it26_b1_plus8 alloc=[16, 104, 96, 16, 8, 16, 8, 8] bytes=272 recall=76.149700
+SQ_GREEDY_EVAL tag=it26_b2_plus8 alloc=[16, 96, 104, 16, 8, 16, 8, 8] bytes=272 recall=76.125000
+SQ_GREEDY_EVAL tag=it26_b3_plus8 alloc=[16, 96, 96, 24, 8, 16, 8, 8] bytes=272 recall=76.174400
+SQ_GREEDY_EVAL tag=it26_b4_plus8 alloc=[16, 96, 96, 16, 16, 16, 8, 8] bytes=272 recall=76.231500
+SQ_GREEDY_EVAL tag=it26_b5_plus8 alloc=[16, 96, 96, 16, 8, 24, 8, 8] bytes=272 recall=76.285500
+SQ_GREEDY_EVAL tag=it26_b6_plus8 alloc=[16, 96, 96, 16, 8, 16, 16, 8] bytes=272 recall=76.277800
+SQ_GREEDY_EVAL tag=it26_b7_plus8 alloc=[16, 96, 96, 16, 8, 16, 8, 16] bytes=272 recall=76.234600
+SQ_GREEDY_EVAL tag=it27_b0_plus8 alloc=[24, 96, 96, 16, 8, 24, 8, 8] bytes=280 recall=76.529300
+SQ_GREEDY_EVAL tag=it27_b1_plus8 alloc=[16, 104, 96, 16, 8, 24, 8, 8] bytes=280 recall=76.523100
+SQ_GREEDY_EVAL tag=it27_b2_plus8 alloc=[16, 96, 104, 16, 8, 24, 8, 8] bytes=280 recall=76.399700
+SQ_GREEDY_EVAL tag=it27_b3_plus8 alloc=[16, 96, 96, 24, 8, 24, 8, 8] bytes=280 recall=76.459900
+SQ_GREEDY_EVAL tag=it27_b4_plus8 alloc=[16, 96, 96, 16, 16, 24, 8, 8] bytes=280 recall=76.577200
+SQ_GREEDY_EVAL tag=it27_b5_plus8 alloc=[16, 96, 96, 16, 8, 32, 8, 8] bytes=280 recall=76.478400
+SQ_GREEDY_EVAL tag=it27_b6_plus8 alloc=[16, 96, 96, 16, 8, 24, 16, 8] bytes=280 recall=76.595700
+SQ_GREEDY_EVAL tag=it27_b7_plus8 alloc=[16, 96, 96, 16, 8, 24, 8, 16] bytes=280 recall=76.503100
+SQ_GREEDY_EVAL tag=it28_b0_plus8 alloc=[24, 96, 96, 16, 8, 24, 16, 8] bytes=288 recall=76.868800
+SQ_GREEDY_EVAL tag=it28_b1_plus8 alloc=[16, 104, 96, 16, 8, 24, 16, 8] bytes=288 recall=76.828700
+SQ_GREEDY_EVAL tag=it28_b2_plus8 alloc=[16, 96, 104, 16, 8, 24, 16, 8] bytes=288 recall=76.817900
+SQ_GREEDY_EVAL tag=it28_b3_plus8 alloc=[16, 96, 96, 24, 8, 24, 16, 8] bytes=288 recall=76.854900
+SQ_GREEDY_EVAL tag=it28_b4_plus8 alloc=[16, 96, 96, 16, 16, 24, 16, 8] bytes=288 recall=76.859600
+SQ_GREEDY_EVAL tag=it28_b5_plus8 alloc=[16, 96, 96, 16, 8, 32, 16, 8] bytes=288 recall=76.784000
+SQ_GREEDY_EVAL tag=it28_b6_plus8 alloc=[16, 96, 96, 16, 8, 24, 24, 8] bytes=288 recall=76.821000
+SQ_GREEDY_EVAL tag=it28_b7_plus8 alloc=[16, 96, 96, 16, 8, 24, 16, 16] bytes=288 recall=76.776200
+SQ_GREEDY_EVAL tag=it29_b0_plus8 alloc=[32, 96, 96, 16, 8, 24, 16, 8] bytes=296 recall=77.816400
+SQ_GREEDY_EVAL tag=it29_b1_plus8 alloc=[24, 104, 96, 16, 8, 24, 16, 8] bytes=296 recall=77.157400
+SQ_GREEDY_EVAL tag=it29_b2_plus8 alloc=[24, 96, 104, 16, 8, 24, 16, 8] bytes=296 recall=77.029300
+SQ_GREEDY_EVAL tag=it29_b3_plus8 alloc=[24, 96, 96, 24, 8, 24, 16, 8] bytes=296 recall=77.126500
+SQ_GREEDY_EVAL tag=it29_b4_plus8 alloc=[24, 96, 96, 16, 16, 24, 16, 8] bytes=296 recall=77.152800
+SQ_GREEDY_EVAL tag=it29_b5_plus8 alloc=[24, 96, 96, 16, 8, 32, 16, 8] bytes=296 recall=77.067900
+SQ_GREEDY_EVAL tag=it29_b6_plus8 alloc=[24, 96, 96, 16, 8, 24, 24, 8] bytes=296 recall=77.172800
+SQ_GREEDY_EVAL tag=it29_b7_plus8 alloc=[24, 96, 96, 16, 8, 24, 16, 16] bytes=296 recall=77.145100
+SQ_GREEDY_EVAL tag=it30_b0_plus8 alloc=[40, 96, 96, 16, 8, 24, 16, 8] bytes=304 recall=78.080200
+SQ_GREEDY_EVAL tag=it30_b1_plus8 alloc=[32, 104, 96, 16, 8, 24, 16, 8] bytes=304 recall=77.969100
+SQ_GREEDY_EVAL tag=it30_b2_plus8 alloc=[32, 96, 104, 16, 8, 24, 16, 8] bytes=304 recall=77.942900
+SQ_GREEDY_EVAL tag=it30_b3_plus8 alloc=[32, 96, 96, 24, 8, 24, 16, 8] bytes=304 recall=78.046300
+SQ_GREEDY_EVAL tag=it30_b4_plus8 alloc=[32, 96, 96, 16, 16, 24, 16, 8] bytes=304 recall=78.071000
+SQ_GREEDY_EVAL tag=it30_b5_plus8 alloc=[32, 96, 96, 16, 8, 32, 16, 8] bytes=304 recall=77.878100
+SQ_GREEDY_EVAL tag=it30_b6_plus8 alloc=[32, 96, 96, 16, 8, 24, 24, 8] bytes=304 recall=78.043200
+SQ_GREEDY_EVAL tag=it30_b7_plus8 alloc=[32, 96, 96, 16, 8, 24, 16, 16] bytes=304 recall=78.001500
+SQ_GREEDY_EVAL tag=it31_b0_plus8 alloc=[48, 96, 96, 16, 8, 24, 16, 8] bytes=312 recall=78.450600
+SQ_GREEDY_EVAL tag=it31_b1_plus8 alloc=[40, 104, 96, 16, 8, 24, 16, 8] bytes=312 recall=78.236100
+SQ_GREEDY_EVAL tag=it31_b2_plus8 alloc=[40, 96, 104, 16, 8, 24, 16, 8] bytes=312 recall=78.168200
+SQ_GREEDY_EVAL tag=it31_b3_plus8 alloc=[40, 96, 96, 24, 8, 24, 16, 8] bytes=312 recall=78.217600
+SQ_GREEDY_EVAL tag=it31_b4_plus8 alloc=[40, 96, 96, 16, 16, 24, 16, 8] bytes=312 recall=78.219100
+SQ_GREEDY_EVAL tag=it31_b5_plus8 alloc=[40, 96, 96, 16, 8, 32, 16, 8] bytes=312 recall=78.186700
+SQ_GREEDY_EVAL tag=it31_b6_plus8 alloc=[40, 96, 96, 16, 8, 24, 24, 8] bytes=312 recall=78.316400
+SQ_GREEDY_EVAL tag=it31_b7_plus8 alloc=[40, 96, 96, 16, 8, 24, 16, 16] bytes=312 recall=78.260800
+SQ_GREEDY_EVAL tag=it32_b0_plus8 alloc=[56, 96, 96, 16, 8, 24, 16, 8] bytes=320 recall=79.038600
+SQ_GREEDY_EVAL tag=it32_b1_plus8 alloc=[48, 104, 96, 16, 8, 24, 16, 8] bytes=320 recall=78.663600
+SQ_GREEDY_EVAL tag=it32_b2_plus8 alloc=[48, 96, 104, 16, 8, 24, 16, 8] bytes=320 recall=78.513900
+SQ_GREEDY_EVAL tag=it32_b3_plus8 alloc=[48, 96, 96, 24, 8, 24, 16, 8] bytes=320 recall=78.663600
+SQ_GREEDY_EVAL tag=it32_b4_plus8 alloc=[48, 96, 96, 16, 16, 24, 16, 8] bytes=320 recall=78.696000
+SQ_GREEDY_EVAL tag=it32_b5_plus8 alloc=[48, 96, 96, 16, 8, 32, 16, 8] bytes=320 recall=78.612700
+SQ_GREEDY_EVAL tag=it32_b6_plus8 alloc=[48, 96, 96, 16, 8, 24, 24, 8] bytes=320 recall=78.621900
+SQ_GREEDY_EVAL tag=it32_b7_plus8 alloc=[48, 96, 96, 16, 8, 24, 16, 16] bytes=320 recall=78.635800
+SQ_GREEDY_EVAL tag=it33_b0_plus8 alloc=[64, 96, 96, 16, 8, 24, 16, 8] bytes=328 recall=79.677500
+SQ_GREEDY_EVAL tag=it33_b1_plus8 alloc=[56, 104, 96, 16, 8, 24, 16, 8] bytes=328 recall=79.273100
+SQ_GREEDY_EVAL tag=it33_b2_plus8 alloc=[56, 96, 104, 16, 8, 24, 16, 8] bytes=328 recall=79.145100
+SQ_GREEDY_EVAL tag=it33_b3_plus8 alloc=[56, 96, 96, 24, 8, 24, 16, 8] bytes=328 recall=79.287000
+SQ_GREEDY_EVAL tag=it33_b4_plus8 alloc=[56, 96, 96, 16, 16, 24, 16, 8] bytes=328 recall=79.250000
+SQ_GREEDY_EVAL tag=it33_b5_plus8 alloc=[56, 96, 96, 16, 8, 32, 16, 8] bytes=328 recall=79.183600
+SQ_GREEDY_EVAL tag=it33_b6_plus8 alloc=[56, 96, 96, 16, 8, 24, 24, 8] bytes=328 recall=79.234600
+SQ_GREEDY_EVAL tag=it33_b7_plus8 alloc=[56, 96, 96, 16, 8, 24, 16, 16] bytes=328 recall=79.285500
+SQ_GREEDY_EVAL tag=it34_b0_plus8 alloc=[72, 96, 96, 16, 8, 24, 16, 8] bytes=336 recall=79.978400
+SQ_GREEDY_EVAL tag=it34_b1_plus8 alloc=[64, 104, 96, 16, 8, 24, 16, 8] bytes=336 recall=79.770100
+SQ_GREEDY_EVAL tag=it34_b2_plus8 alloc=[64, 96, 104, 16, 8, 24, 16, 8] bytes=336 recall=79.790100
+SQ_GREEDY_EVAL tag=it34_b3_plus8 alloc=[64, 96, 96, 24, 8, 24, 16, 8] bytes=336 recall=79.913600
+SQ_GREEDY_EVAL tag=it34_b4_plus8 alloc=[64, 96, 96, 16, 16, 24, 16, 8] bytes=336 recall=79.856500
+SQ_GREEDY_EVAL tag=it34_b5_plus8 alloc=[64, 96, 96, 16, 8, 32, 16, 8] bytes=336 recall=79.696000
+SQ_GREEDY_EVAL tag=it34_b6_plus8 alloc=[64, 96, 96, 16, 8, 24, 24, 8] bytes=336 recall=79.853400
+SQ_GREEDY_EVAL tag=it34_b7_plus8 alloc=[64, 96, 96, 16, 8, 24, 16, 16] bytes=336 recall=79.864200
+SQ_GREEDY_EVAL tag=it35_b0_plus8 alloc=[80, 96, 96, 16, 8, 24, 16, 8] bytes=344 recall=80.404300
+SQ_GREEDY_EVAL tag=it35_b1_plus8 alloc=[72, 104, 96, 16, 8, 24, 16, 8] bytes=344 recall=80.175900
+SQ_GREEDY_EVAL tag=it35_b2_plus8 alloc=[72, 96, 104, 16, 8, 24, 16, 8] bytes=344 recall=80.080200
+SQ_GREEDY_EVAL tag=it35_b3_plus8 alloc=[72, 96, 96, 24, 8, 24, 16, 8] bytes=344 recall=80.129600
+SQ_GREEDY_EVAL tag=it35_b4_plus8 alloc=[72, 96, 96, 16, 16, 24, 16, 8] bytes=344 recall=80.186700
+SQ_GREEDY_EVAL tag=it35_b5_plus8 alloc=[72, 96, 96, 16, 8, 32, 16, 8] bytes=344 recall=80.078700
+SQ_GREEDY_EVAL tag=it35_b6_plus8 alloc=[72, 96, 96, 16, 8, 24, 24, 8] bytes=344 recall=80.138900
+SQ_GREEDY_EVAL tag=it35_b7_plus8 alloc=[72, 96, 96, 16, 8, 24, 16, 16] bytes=344 recall=80.205200
+SQ_GREEDY_EVAL tag=it36_b0_plus8 alloc=[88, 96, 96, 16, 8, 24, 16, 8] bytes=352 recall=80.881200
+SQ_GREEDY_EVAL tag=it36_b1_plus8 alloc=[80, 104, 96, 16, 8, 24, 16, 8] bytes=352 recall=80.567900
+SQ_GREEDY_EVAL tag=it36_b2_plus8 alloc=[80, 96, 104, 16, 8, 24, 16, 8] bytes=352 recall=80.518500
+SQ_GREEDY_EVAL tag=it36_b3_plus8 alloc=[80, 96, 96, 24, 8, 24, 16, 8] bytes=352 recall=80.527800
+SQ_GREEDY_EVAL tag=it36_b4_plus8 alloc=[80, 96, 96, 16, 16, 24, 16, 8] bytes=352 recall=80.594100
+SQ_GREEDY_EVAL tag=it36_b5_plus8 alloc=[80, 96, 96, 16, 8, 32, 16, 8] bytes=352 recall=80.584900
+SQ_GREEDY_EVAL tag=it36_b6_plus8 alloc=[80, 96, 96, 16, 8, 24, 24, 8] bytes=352 recall=80.575600
+SQ_GREEDY_EVAL tag=it36_b7_plus8 alloc=[80, 96, 96, 16, 8, 24, 16, 16] bytes=352 recall=80.609600
+SQ_GREEDY_EVAL tag=it37_b0_plus8 alloc=[96, 96, 96, 16, 8, 24, 16, 8] bytes=360 recall=81.351900
+SQ_GREEDY_EVAL tag=it37_b1_plus8 alloc=[88, 104, 96, 16, 8, 24, 16, 8] bytes=360 recall=81.024700
+SQ_GREEDY_EVAL tag=it37_b2_plus8 alloc=[88, 96, 104, 16, 8, 24, 16, 8] bytes=360 recall=80.938300
+SQ_GREEDY_EVAL tag=it37_b3_plus8 alloc=[88, 96, 96, 24, 8, 24, 16, 8] bytes=360 recall=81.054000
+SQ_GREEDY_EVAL tag=it37_b4_plus8 alloc=[88, 96, 96, 16, 16, 24, 16, 8] bytes=360 recall=81.054000
+SQ_GREEDY_EVAL tag=it37_b5_plus8 alloc=[88, 96, 96, 16, 8, 32, 16, 8] bytes=360 recall=81.010800
+SQ_GREEDY_EVAL tag=it37_b6_plus8 alloc=[88, 96, 96, 16, 8, 24, 24, 8] bytes=360 recall=81.006200
+SQ_GREEDY_EVAL tag=it37_b7_plus8 alloc=[88, 96, 96, 16, 8, 24, 16, 16] bytes=360 recall=81.026200
+SQ_GREEDY_EVAL tag=it38_b0_plus8 alloc=[104, 96, 96, 16, 8, 24, 16, 8] bytes=368 recall=81.589500
+SQ_GREEDY_EVAL tag=it38_b1_plus8 alloc=[96, 104, 96, 16, 8, 24, 16, 8] bytes=368 recall=81.566400
+SQ_GREEDY_EVAL tag=it38_b2_plus8 alloc=[96, 96, 104, 16, 8, 24, 16, 8] bytes=368 recall=81.433600
+SQ_GREEDY_EVAL tag=it38_b3_plus8 alloc=[96, 96, 96, 24, 8, 24, 16, 8] bytes=368 recall=81.479900
+SQ_GREEDY_EVAL tag=it38_b4_plus8 alloc=[96, 96, 96, 16, 16, 24, 16, 8] bytes=368 recall=81.560200
+SQ_GREEDY_EVAL tag=it38_b5_plus8 alloc=[96, 96, 96, 16, 8, 32, 16, 8] bytes=368 recall=81.504600
+SQ_GREEDY_EVAL tag=it38_b6_plus8 alloc=[96, 96, 96, 16, 8, 24, 24, 8] bytes=368 recall=81.476900
+SQ_GREEDY_EVAL tag=it38_b7_plus8 alloc=[96, 96, 96, 16, 8, 24, 16, 16] bytes=368 recall=81.490700
+SQ_GREEDY_EVAL tag=it39_b0_plus8 alloc=[112, 96, 96, 16, 8, 24, 16, 8] bytes=376 recall=81.813300
+SQ_GREEDY_EVAL tag=it39_b1_plus8 alloc=[104, 104, 96, 16, 8, 24, 16, 8] bytes=376 recall=81.720700
+SQ_GREEDY_EVAL tag=it39_b2_plus8 alloc=[104, 96, 104, 16, 8, 24, 16, 8] bytes=376 recall=81.655900
+SQ_GREEDY_EVAL tag=it39_b3_plus8 alloc=[104, 96, 96, 24, 8, 24, 16, 8] bytes=376 recall=81.679000
+SQ_GREEDY_EVAL tag=it39_b4_plus8 alloc=[104, 96, 96, 16, 16, 24, 16, 8] bytes=376 recall=81.765400
+SQ_GREEDY_EVAL tag=it39_b5_plus8 alloc=[104, 96, 96, 16, 8, 32, 16, 8] bytes=376 recall=81.702200
+SQ_GREEDY_EVAL tag=it39_b6_plus8 alloc=[104, 96, 96, 16, 8, 24, 24, 8] bytes=376 recall=81.646600
+SQ_GREEDY_EVAL tag=it39_b7_plus8 alloc=[104, 96, 96, 16, 8, 24, 16, 16] bytes=376 recall=81.743800
+SQ_GREEDY_EVAL tag=it40_b0_plus8 alloc=[120, 96, 96, 16, 8, 24, 16, 8] bytes=384 recall=82.023100
+SQ_GREEDY_EVAL tag=it40_b1_plus8 alloc=[112, 104, 96, 16, 8, 24, 16, 8] bytes=384 recall=82.013900
+SQ_GREEDY_EVAL tag=it40_b2_plus8 alloc=[112, 96, 104, 16, 8, 24, 16, 8] bytes=384 recall=81.878100
+SQ_GREEDY_EVAL tag=it40_b3_plus8 alloc=[112, 96, 96, 24, 8, 24, 16, 8] bytes=384 recall=81.913600
+SQ_GREEDY_EVAL tag=it40_b4_plus8 alloc=[112, 96, 96, 16, 16, 24, 16, 8] bytes=384 recall=81.995400
+SQ_GREEDY_EVAL tag=it40_b5_plus8 alloc=[112, 96, 96, 16, 8, 32, 16, 8] bytes=384 recall=81.921300
+SQ_GREEDY_EVAL tag=it40_b6_plus8 alloc=[112, 96, 96, 16, 8, 24, 24, 8] bytes=384 recall=81.929000
+SQ_GREEDY_EVAL tag=it40_b7_plus8 alloc=[112, 96, 96, 16, 8, 24, 16, 16] bytes=384 recall=81.993800
+
+
+### Fiqa cohere v4
+#### Uniform
+SQ sweep completed!
+Results directory: /tmp/sq_sweep_1780768208
+
+Summary of SQ recall results:
+Bytes,Recall
+64,40.3781
+96,48.7438
+128,57.0864
+160,61.1327
+192,65.7654
+224,69.5756
+256,72.6111
+288,75.1929
+320,77.142
+352,79.4228
+384,81.4398
+
+#### Variable
+SQ_GREEDY_EVAL tag=init alloc=[8, 8, 8, 8, 8, 8, 8, 8] bytes=64 recall=40.378100
+SQ_GREEDY_EVAL tag=it1_b0_plus8 alloc=[16, 8, 8, 8, 8, 8, 8, 8] bytes=72 recall=43.716000
+SQ_GREEDY_EVAL tag=it1_b1_plus8 alloc=[8, 16, 8, 8, 8, 8, 8, 8] bytes=72 recall=43.368800
+SQ_GREEDY_EVAL tag=it1_b2_plus8 alloc=[8, 8, 16, 8, 8, 8, 8, 8] bytes=72 recall=43.256200
+SQ_GREEDY_EVAL tag=it1_b3_plus8 alloc=[8, 8, 8, 16, 8, 8, 8, 8] bytes=72 recall=43.259300
+SQ_GREEDY_EVAL tag=it1_b4_plus8 alloc=[8, 8, 8, 8, 16, 8, 8, 8] bytes=72 recall=43.592600
+SQ_GREEDY_EVAL tag=it1_b5_plus8 alloc=[8, 8, 8, 8, 8, 16, 8, 8] bytes=72 recall=42.861100
+SQ_GREEDY_EVAL tag=it1_b6_plus8 alloc=[8, 8, 8, 8, 8, 8, 16, 8] bytes=72 recall=42.790100
+SQ_GREEDY_EVAL tag=it1_b7_plus8 alloc=[8, 8, 8, 8, 8, 8, 8, 16] bytes=72 recall=42.847200
+SQ_GREEDY_EVAL tag=it2_b0_plus8 alloc=[24, 8, 8, 8, 8, 8, 8, 8] bytes=80 recall=46.003100
+SQ_GREEDY_EVAL tag=it2_b1_plus8 alloc=[16, 16, 8, 8, 8, 8, 8, 8] bytes=80 recall=46.182100
+SQ_GREEDY_EVAL tag=it2_b2_plus8 alloc=[16, 8, 16, 8, 8, 8, 8, 8] bytes=80 recall=46.498500
+SQ_GREEDY_EVAL tag=it2_b3_plus8 alloc=[16, 8, 8, 16, 8, 8, 8, 8] bytes=80 recall=46.134300
+SQ_GREEDY_EVAL tag=it2_b4_plus8 alloc=[16, 8, 8, 8, 16, 8, 8, 8] bytes=80 recall=46.484600
+SQ_GREEDY_EVAL tag=it2_b5_plus8 alloc=[16, 8, 8, 8, 8, 16, 8, 8] bytes=80 recall=45.867300
+SQ_GREEDY_EVAL tag=it2_b6_plus8 alloc=[16, 8, 8, 8, 8, 8, 16, 8] bytes=80 recall=45.853400
+SQ_GREEDY_EVAL tag=it2_b7_plus8 alloc=[16, 8, 8, 8, 8, 8, 8, 16] bytes=80 recall=45.878100
+SQ_GREEDY_EVAL tag=it3_b0_plus8 alloc=[24, 8, 16, 8, 8, 8, 8, 8] bytes=88 recall=48.388900
+SQ_GREEDY_EVAL tag=it3_b1_plus8 alloc=[16, 16, 16, 8, 8, 8, 8, 8] bytes=88 recall=48.750000
+SQ_GREEDY_EVAL tag=it3_b2_plus8 alloc=[16, 8, 24, 8, 8, 8, 8, 8] bytes=88 recall=48.371900
+SQ_GREEDY_EVAL tag=it3_b3_plus8 alloc=[16, 8, 16, 16, 8, 8, 8, 8] bytes=88 recall=48.648100
+SQ_GREEDY_EVAL tag=it3_b4_plus8 alloc=[16, 8, 16, 8, 16, 8, 8, 8] bytes=88 recall=48.913600
+SQ_GREEDY_EVAL tag=it3_b5_plus8 alloc=[16, 8, 16, 8, 8, 16, 8, 8] bytes=88 recall=48.393500
+SQ_GREEDY_EVAL tag=it3_b6_plus8 alloc=[16, 8, 16, 8, 8, 8, 16, 8] bytes=88 recall=48.433600
+SQ_GREEDY_EVAL tag=it3_b7_plus8 alloc=[16, 8, 16, 8, 8, 8, 8, 16] bytes=88 recall=48.223800
+SQ_GREEDY_EVAL tag=it4_b0_plus8 alloc=[24, 8, 16, 8, 16, 8, 8, 8] bytes=96 recall=50.600300
+SQ_GREEDY_EVAL tag=it4_b1_plus8 alloc=[16, 16, 16, 8, 16, 8, 8, 8] bytes=96 recall=51.126500
+SQ_GREEDY_EVAL tag=it4_b2_plus8 alloc=[16, 8, 24, 8, 16, 8, 8, 8] bytes=96 recall=50.705200
+SQ_GREEDY_EVAL tag=it4_b3_plus8 alloc=[16, 8, 16, 16, 16, 8, 8, 8] bytes=96 recall=50.984600
+SQ_GREEDY_EVAL tag=it4_b4_plus8 alloc=[16, 8, 16, 8, 24, 8, 8, 8] bytes=96 recall=50.794800
+SQ_GREEDY_EVAL tag=it4_b5_plus8 alloc=[16, 8, 16, 8, 16, 16, 8, 8] bytes=96 recall=50.660500
+SQ_GREEDY_EVAL tag=it4_b6_plus8 alloc=[16, 8, 16, 8, 16, 8, 16, 8] bytes=96 recall=50.691400
+SQ_GREEDY_EVAL tag=it4_b7_plus8 alloc=[16, 8, 16, 8, 16, 8, 8, 16] bytes=96 recall=50.642000
+SQ_GREEDY_EVAL tag=it5_b0_plus8 alloc=[24, 16, 16, 8, 16, 8, 8, 8] bytes=104 recall=52.705200
+SQ_GREEDY_EVAL tag=it5_b1_plus8 alloc=[16, 24, 16, 8, 16, 8, 8, 8] bytes=104 recall=53.067900
+SQ_GREEDY_EVAL tag=it5_b2_plus8 alloc=[16, 16, 24, 8, 16, 8, 8, 8] bytes=104 recall=52.557100
+SQ_GREEDY_EVAL tag=it5_b3_plus8 alloc=[16, 16, 16, 16, 16, 8, 8, 8] bytes=104 recall=52.842600
+SQ_GREEDY_EVAL tag=it5_b4_plus8 alloc=[16, 16, 16, 8, 24, 8, 8, 8] bytes=104 recall=52.620400
+SQ_GREEDY_EVAL tag=it5_b5_plus8 alloc=[16, 16, 16, 8, 16, 16, 8, 8] bytes=104 recall=52.625000
+SQ_GREEDY_EVAL tag=it5_b6_plus8 alloc=[16, 16, 16, 8, 16, 8, 16, 8] bytes=104 recall=52.716000
+SQ_GREEDY_EVAL tag=it5_b7_plus8 alloc=[16, 16, 16, 8, 16, 8, 8, 16] bytes=104 recall=52.612700
+SQ_GREEDY_EVAL tag=it6_b0_plus8 alloc=[24, 24, 16, 8, 16, 8, 8, 8] bytes=112 recall=54.476900
+SQ_GREEDY_EVAL tag=it6_b1_plus8 alloc=[16, 32, 16, 8, 16, 8, 8, 8] bytes=112 recall=54.800900
+SQ_GREEDY_EVAL tag=it6_b2_plus8 alloc=[16, 24, 24, 8, 16, 8, 8, 8] bytes=112 recall=54.828700
+SQ_GREEDY_EVAL tag=it6_b3_plus8 alloc=[16, 24, 16, 16, 16, 8, 8, 8] bytes=112 recall=54.638900
+SQ_GREEDY_EVAL tag=it6_b4_plus8 alloc=[16, 24, 16, 8, 24, 8, 8, 8] bytes=112 recall=54.811700
+SQ_GREEDY_EVAL tag=it6_b5_plus8 alloc=[16, 24, 16, 8, 16, 16, 8, 8] bytes=112 recall=54.496900
+SQ_GREEDY_EVAL tag=it6_b6_plus8 alloc=[16, 24, 16, 8, 16, 8, 16, 8] bytes=112 recall=54.555600
+SQ_GREEDY_EVAL tag=it6_b7_plus8 alloc=[16, 24, 16, 8, 16, 8, 8, 16] bytes=112 recall=54.470700
+SQ_GREEDY_EVAL tag=it7_b0_plus8 alloc=[24, 24, 24, 8, 16, 8, 8, 8] bytes=120 recall=55.964500
+SQ_GREEDY_EVAL tag=it7_b1_plus8 alloc=[16, 32, 24, 8, 16, 8, 8, 8] bytes=120 recall=56.371900
+SQ_GREEDY_EVAL tag=it7_b2_plus8 alloc=[16, 24, 32, 8, 16, 8, 8, 8] bytes=120 recall=56.629600
+SQ_GREEDY_EVAL tag=it7_b3_plus8 alloc=[16, 24, 24, 16, 16, 8, 8, 8] bytes=120 recall=56.347200
+SQ_GREEDY_EVAL tag=it7_b4_plus8 alloc=[16, 24, 24, 8, 24, 8, 8, 8] bytes=120 recall=56.307100
+SQ_GREEDY_EVAL tag=it7_b5_plus8 alloc=[16, 24, 24, 8, 16, 16, 8, 8] bytes=120 recall=56.023100
+SQ_GREEDY_EVAL tag=it7_b6_plus8 alloc=[16, 24, 24, 8, 16, 8, 16, 8] bytes=120 recall=56.125000
+SQ_GREEDY_EVAL tag=it7_b7_plus8 alloc=[16, 24, 24, 8, 16, 8, 8, 16] bytes=120 recall=56.138900
+SQ_GREEDY_EVAL tag=it8_b0_plus8 alloc=[24, 24, 32, 8, 16, 8, 8, 8] bytes=128 recall=57.583300
+SQ_GREEDY_EVAL tag=it8_b1_plus8 alloc=[16, 32, 32, 8, 16, 8, 8, 8] bytes=128 recall=58.121900
+SQ_GREEDY_EVAL tag=it8_b2_plus8 alloc=[16, 24, 40, 8, 16, 8, 8, 8] bytes=128 recall=58.248500
+SQ_GREEDY_EVAL tag=it8_b3_plus8 alloc=[16, 24, 32, 16, 16, 8, 8, 8] bytes=128 recall=58.089500
+SQ_GREEDY_EVAL tag=it8_b4_plus8 alloc=[16, 24, 32, 8, 24, 8, 8, 8] bytes=128 recall=57.993800
+SQ_GREEDY_EVAL tag=it8_b5_plus8 alloc=[16, 24, 32, 8, 16, 16, 8, 8] bytes=128 recall=57.873500
+SQ_GREEDY_EVAL tag=it8_b6_plus8 alloc=[16, 24, 32, 8, 16, 8, 16, 8] bytes=128 recall=57.763900
+SQ_GREEDY_EVAL tag=it8_b7_plus8 alloc=[16, 24, 32, 8, 16, 8, 8, 16] bytes=128 recall=57.915100
+SQ_GREEDY_EVAL tag=it9_b0_plus8 alloc=[24, 24, 40, 8, 16, 8, 8, 8] bytes=136 recall=59.034000
+SQ_GREEDY_EVAL tag=it9_b1_plus8 alloc=[16, 32, 40, 8, 16, 8, 8, 8] bytes=136 recall=59.625000
+SQ_GREEDY_EVAL tag=it9_b2_plus8 alloc=[16, 24, 48, 8, 16, 8, 8, 8] bytes=136 recall=59.592600
+SQ_GREEDY_EVAL tag=it9_b3_plus8 alloc=[16, 24, 40, 16, 16, 8, 8, 8] bytes=136 recall=59.680600
+SQ_GREEDY_EVAL tag=it9_b4_plus8 alloc=[16, 24, 40, 8, 24, 8, 8, 8] bytes=136 recall=59.583300
+SQ_GREEDY_EVAL tag=it9_b5_plus8 alloc=[16, 24, 40, 8, 16, 16, 8, 8] bytes=136 recall=59.379600
+SQ_GREEDY_EVAL tag=it9_b6_plus8 alloc=[16, 24, 40, 8, 16, 8, 16, 8] bytes=136 recall=59.280900
+SQ_GREEDY_EVAL tag=it9_b7_plus8 alloc=[16, 24, 40, 8, 16, 8, 8, 16] bytes=136 recall=59.481500
+SQ_GREEDY_EVAL tag=it10_b0_plus8 alloc=[24, 24, 40, 16, 16, 8, 8, 8] bytes=144 recall=60.336400
+SQ_GREEDY_EVAL tag=it10_b1_plus8 alloc=[16, 32, 40, 16, 16, 8, 8, 8] bytes=144 recall=60.879600
+SQ_GREEDY_EVAL tag=it10_b2_plus8 alloc=[16, 24, 48, 16, 16, 8, 8, 8] bytes=144 recall=60.885800
+SQ_GREEDY_EVAL tag=it10_b3_plus8 alloc=[16, 24, 40, 24, 16, 8, 8, 8] bytes=144 recall=60.651200
+SQ_GREEDY_EVAL tag=it10_b4_plus8 alloc=[16, 24, 40, 16, 24, 8, 8, 8] bytes=144 recall=60.932100
+SQ_GREEDY_EVAL tag=it10_b5_plus8 alloc=[16, 24, 40, 16, 16, 16, 8, 8] bytes=144 recall=60.577200
+SQ_GREEDY_EVAL tag=it10_b6_plus8 alloc=[16, 24, 40, 16, 16, 8, 16, 8] bytes=144 recall=60.645100
+SQ_GREEDY_EVAL tag=it10_b7_plus8 alloc=[16, 24, 40, 16, 16, 8, 8, 16] bytes=144 recall=60.682100
+SQ_GREEDY_EVAL tag=it11_b0_plus8 alloc=[24, 24, 40, 16, 24, 8, 8, 8] bytes=152 recall=61.618800
+SQ_GREEDY_EVAL tag=it11_b1_plus8 alloc=[16, 32, 40, 16, 24, 8, 8, 8] bytes=152 recall=62.060200
+SQ_GREEDY_EVAL tag=it11_b2_plus8 alloc=[16, 24, 48, 16, 24, 8, 8, 8] bytes=152 recall=61.992300
+SQ_GREEDY_EVAL tag=it11_b3_plus8 alloc=[16, 24, 40, 24, 24, 8, 8, 8] bytes=152 recall=61.992300
+SQ_GREEDY_EVAL tag=it11_b4_plus8 alloc=[16, 24, 40, 16, 32, 8, 8, 8] bytes=152 recall=62.166700
+SQ_GREEDY_EVAL tag=it11_b5_plus8 alloc=[16, 24, 40, 16, 24, 16, 8, 8] bytes=152 recall=61.966000
+SQ_GREEDY_EVAL tag=it11_b6_plus8 alloc=[16, 24, 40, 16, 24, 8, 16, 8] bytes=152 recall=61.918200
+SQ_GREEDY_EVAL tag=it11_b7_plus8 alloc=[16, 24, 40, 16, 24, 8, 8, 16] bytes=152 recall=62.029300
+SQ_GREEDY_EVAL tag=it12_b0_plus8 alloc=[24, 24, 40, 16, 32, 8, 8, 8] bytes=160 recall=62.770100
+SQ_GREEDY_EVAL tag=it12_b1_plus8 alloc=[16, 32, 40, 16, 32, 8, 8, 8] bytes=160 recall=63.253100
+SQ_GREEDY_EVAL tag=it12_b2_plus8 alloc=[16, 24, 48, 16, 32, 8, 8, 8] bytes=160 recall=63.197500
+SQ_GREEDY_EVAL tag=it12_b3_plus8 alloc=[16, 24, 40, 24, 32, 8, 8, 8] bytes=160 recall=63.071000
+SQ_GREEDY_EVAL tag=it12_b4_plus8 alloc=[16, 24, 40, 16, 40, 8, 8, 8] bytes=160 recall=63.220700
+SQ_GREEDY_EVAL tag=it12_b5_plus8 alloc=[16, 24, 40, 16, 32, 16, 8, 8] bytes=160 recall=63.213000
+SQ_GREEDY_EVAL tag=it12_b6_plus8 alloc=[16, 24, 40, 16, 32, 8, 16, 8] bytes=160 recall=62.949100
+SQ_GREEDY_EVAL tag=it12_b7_plus8 alloc=[16, 24, 40, 16, 32, 8, 8, 16] bytes=160 recall=63.072500
+SQ_GREEDY_EVAL tag=it13_b0_plus8 alloc=[24, 32, 40, 16, 32, 8, 8, 8] bytes=168 recall=63.904300
+SQ_GREEDY_EVAL tag=it13_b1_plus8 alloc=[16, 40, 40, 16, 32, 8, 8, 8] bytes=168 recall=64.450600
+SQ_GREEDY_EVAL tag=it13_b2_plus8 alloc=[16, 32, 48, 16, 32, 8, 8, 8] bytes=168 recall=64.196000
+SQ_GREEDY_EVAL tag=it13_b3_plus8 alloc=[16, 32, 40, 24, 32, 8, 8, 8] bytes=168 recall=64.236100
+SQ_GREEDY_EVAL tag=it13_b4_plus8 alloc=[16, 32, 40, 16, 40, 8, 8, 8] bytes=168 recall=64.304000
+SQ_GREEDY_EVAL tag=it13_b5_plus8 alloc=[16, 32, 40, 16, 32, 16, 8, 8] bytes=168 recall=64.071000
+SQ_GREEDY_EVAL tag=it13_b6_plus8 alloc=[16, 32, 40, 16, 32, 8, 16, 8] bytes=168 recall=64.137300
+SQ_GREEDY_EVAL tag=it13_b7_plus8 alloc=[16, 32, 40, 16, 32, 8, 8, 16] bytes=168 recall=64.174400
+SQ_GREEDY_EVAL tag=it14_b0_plus8 alloc=[24, 40, 40, 16, 32, 8, 8, 8] bytes=176 recall=65.035500
+SQ_GREEDY_EVAL tag=it14_b1_plus8 alloc=[16, 48, 40, 16, 32, 8, 8, 8] bytes=176 recall=65.757700
+SQ_GREEDY_EVAL tag=it14_b2_plus8 alloc=[16, 40, 48, 16, 32, 8, 8, 8] bytes=176 recall=65.446000
+SQ_GREEDY_EVAL tag=it14_b3_plus8 alloc=[16, 40, 40, 24, 32, 8, 8, 8] bytes=176 recall=65.327200
+SQ_GREEDY_EVAL tag=it14_b4_plus8 alloc=[16, 40, 40, 16, 40, 8, 8, 8] bytes=176 recall=65.484600
+SQ_GREEDY_EVAL tag=it14_b5_plus8 alloc=[16, 40, 40, 16, 32, 16, 8, 8] bytes=176 recall=65.248500
+SQ_GREEDY_EVAL tag=it14_b6_plus8 alloc=[16, 40, 40, 16, 32, 8, 16, 8] bytes=176 recall=65.324100
+SQ_GREEDY_EVAL tag=it14_b7_plus8 alloc=[16, 40, 40, 16, 32, 8, 8, 16] bytes=176 recall=65.347200
+SQ_GREEDY_EVAL tag=it15_b0_plus8 alloc=[24, 48, 40, 16, 32, 8, 8, 8] bytes=184 recall=66.385800
+SQ_GREEDY_EVAL tag=it15_b1_plus8 alloc=[16, 56, 40, 16, 32, 8, 8, 8] bytes=184 recall=66.012300
+SQ_GREEDY_EVAL tag=it15_b2_plus8 alloc=[16, 48, 48, 16, 32, 8, 8, 8] bytes=184 recall=66.572500
+SQ_GREEDY_EVAL tag=it15_b3_plus8 alloc=[16, 48, 40, 24, 32, 8, 8, 8] bytes=184 recall=66.580200
+SQ_GREEDY_EVAL tag=it15_b4_plus8 alloc=[16, 48, 40, 16, 40, 8, 8, 8] bytes=184 recall=66.577200
+SQ_GREEDY_EVAL tag=it15_b5_plus8 alloc=[16, 48, 40, 16, 32, 16, 8, 8] bytes=184 recall=66.567900
+SQ_GREEDY_EVAL tag=it15_b6_plus8 alloc=[16, 48, 40, 16, 32, 8, 16, 8] bytes=184 recall=66.530900
+SQ_GREEDY_EVAL tag=it15_b7_plus8 alloc=[16, 48, 40, 16, 32, 8, 8, 16] bytes=184 recall=66.592600
+SQ_GREEDY_EVAL tag=it16_b0_plus8 alloc=[24, 48, 40, 16, 32, 8, 8, 16] bytes=192 recall=67.194400
+SQ_GREEDY_EVAL tag=it16_b1_plus8 alloc=[16, 56, 40, 16, 32, 8, 8, 16] bytes=192 recall=66.898100
+SQ_GREEDY_EVAL tag=it16_b2_plus8 alloc=[16, 48, 48, 16, 32, 8, 8, 16] bytes=192 recall=67.476900
+SQ_GREEDY_EVAL tag=it16_b3_plus8 alloc=[16, 48, 40, 24, 32, 8, 8, 16] bytes=192 recall=67.381200
+SQ_GREEDY_EVAL tag=it16_b4_plus8 alloc=[16, 48, 40, 16, 40, 8, 8, 16] bytes=192 recall=67.424400
+SQ_GREEDY_EVAL tag=it16_b5_plus8 alloc=[16, 48, 40, 16, 32, 16, 8, 16] bytes=192 recall=67.375000
+SQ_GREEDY_EVAL tag=it16_b6_plus8 alloc=[16, 48, 40, 16, 32, 8, 16, 16] bytes=192 recall=67.388900
+SQ_GREEDY_EVAL tag=it16_b7_plus8 alloc=[16, 48, 40, 16, 32, 8, 8, 24] bytes=192 recall=67.263900
+SQ_GREEDY_EVAL tag=it17_b0_plus8 alloc=[24, 48, 48, 16, 32, 8, 8, 16] bytes=200 recall=68.052500
+SQ_GREEDY_EVAL tag=it17_b1_plus8 alloc=[16, 56, 48, 16, 32, 8, 8, 16] bytes=200 recall=67.762300
+SQ_GREEDY_EVAL tag=it17_b2_plus8 alloc=[16, 48, 56, 16, 32, 8, 8, 16] bytes=200 recall=67.768500
+SQ_GREEDY_EVAL tag=it17_b3_plus8 alloc=[16, 48, 48, 24, 32, 8, 8, 16] bytes=200 recall=68.358000
+SQ_GREEDY_EVAL tag=it17_b4_plus8 alloc=[16, 48, 48, 16, 40, 8, 8, 16] bytes=200 recall=68.287000
+SQ_GREEDY_EVAL tag=it17_b5_plus8 alloc=[16, 48, 48, 16, 32, 16, 8, 16] bytes=200 recall=68.171300
+SQ_GREEDY_EVAL tag=it17_b6_plus8 alloc=[16, 48, 48, 16, 32, 8, 16, 16] bytes=200 recall=68.157400
+SQ_GREEDY_EVAL tag=it17_b7_plus8 alloc=[16, 48, 48, 16, 32, 8, 8, 24] bytes=200 recall=68.074100
+SQ_GREEDY_EVAL tag=it18_b0_plus8 alloc=[24, 48, 48, 24, 32, 8, 8, 16] bytes=208 recall=68.932100
+SQ_GREEDY_EVAL tag=it18_b1_plus8 alloc=[16, 56, 48, 24, 32, 8, 8, 16] bytes=208 recall=68.665100
+SQ_GREEDY_EVAL tag=it18_b2_plus8 alloc=[16, 48, 56, 24, 32, 8, 8, 16] bytes=208 recall=68.708300
+SQ_GREEDY_EVAL tag=it18_b3_plus8 alloc=[16, 48, 48, 32, 32, 8, 8, 16] bytes=208 recall=69.095700
+SQ_GREEDY_EVAL tag=it18_b4_plus8 alloc=[16, 48, 48, 24, 40, 8, 8, 16] bytes=208 recall=69.169800
+SQ_GREEDY_EVAL tag=it18_b5_plus8 alloc=[16, 48, 48, 24, 32, 16, 8, 16] bytes=208 recall=68.990700
+SQ_GREEDY_EVAL tag=it18_b6_plus8 alloc=[16, 48, 48, 24, 32, 8, 16, 16] bytes=208 recall=68.922800
+SQ_GREEDY_EVAL tag=it18_b7_plus8 alloc=[16, 48, 48, 24, 32, 8, 8, 24] bytes=208 recall=68.939800
+SQ_GREEDY_EVAL tag=it19_b0_plus8 alloc=[24, 48, 48, 24, 40, 8, 8, 16] bytes=216 recall=69.648100
+SQ_GREEDY_EVAL tag=it19_b1_plus8 alloc=[16, 56, 48, 24, 40, 8, 8, 16] bytes=216 recall=69.476900
+SQ_GREEDY_EVAL tag=it19_b2_plus8 alloc=[16, 48, 56, 24, 40, 8, 8, 16] bytes=216 recall=69.572500
+SQ_GREEDY_EVAL tag=it19_b3_plus8 alloc=[16, 48, 48, 32, 40, 8, 8, 16] bytes=216 recall=69.884300
+SQ_GREEDY_EVAL tag=it19_b4_plus8 alloc=[16, 48, 48, 24, 48, 8, 8, 16] bytes=216 recall=70.015400
+SQ_GREEDY_EVAL tag=it19_b5_plus8 alloc=[16, 48, 48, 24, 40, 16, 8, 16] bytes=216 recall=69.878100
+SQ_GREEDY_EVAL tag=it19_b6_plus8 alloc=[16, 48, 48, 24, 40, 8, 16, 16] bytes=216 recall=69.779300
+SQ_GREEDY_EVAL tag=it19_b7_plus8 alloc=[16, 48, 48, 24, 40, 8, 8, 24] bytes=216 recall=69.726900
+SQ_GREEDY_EVAL tag=it20_b0_plus8 alloc=[24, 48, 48, 24, 48, 8, 8, 16] bytes=224 recall=70.484600
+SQ_GREEDY_EVAL tag=it20_b1_plus8 alloc=[16, 56, 48, 24, 48, 8, 8, 16] bytes=224 recall=70.268500
+SQ_GREEDY_EVAL tag=it20_b2_plus8 alloc=[16, 48, 56, 24, 48, 8, 8, 16] bytes=224 recall=70.404300
+SQ_GREEDY_EVAL tag=it20_b3_plus8 alloc=[16, 48, 48, 32, 48, 8, 8, 16] bytes=224 recall=70.785500
+SQ_GREEDY_EVAL tag=it20_b4_plus8 alloc=[16, 48, 48, 24, 56, 8, 8, 16] bytes=224 recall=70.412000
+SQ_GREEDY_EVAL tag=it20_b5_plus8 alloc=[16, 48, 48, 24, 48, 16, 8, 16] bytes=224 recall=70.655900
+SQ_GREEDY_EVAL tag=it20_b6_plus8 alloc=[16, 48, 48, 24, 48, 8, 16, 16] bytes=224 recall=70.654300
+SQ_GREEDY_EVAL tag=it20_b7_plus8 alloc=[16, 48, 48, 24, 48, 8, 8, 24] bytes=224 recall=70.581800
+SQ_GREEDY_EVAL tag=it21_b0_plus8 alloc=[24, 48, 48, 32, 48, 8, 8, 16] bytes=232 recall=71.075600
+SQ_GREEDY_EVAL tag=it21_b1_plus8 alloc=[16, 56, 48, 32, 48, 8, 8, 16] bytes=232 recall=71.034000
+SQ_GREEDY_EVAL tag=it21_b2_plus8 alloc=[16, 48, 56, 32, 48, 8, 8, 16] bytes=232 recall=71.137300
+SQ_GREEDY_EVAL tag=it21_b3_plus8 alloc=[16, 48, 48, 40, 48, 8, 8, 16] bytes=232 recall=71.620400
+SQ_GREEDY_EVAL tag=it21_b4_plus8 alloc=[16, 48, 48, 32, 56, 8, 8, 16] bytes=232 recall=71.035500
+SQ_GREEDY_EVAL tag=it21_b5_plus8 alloc=[16, 48, 48, 32, 48, 16, 8, 16] bytes=232 recall=71.299400
+SQ_GREEDY_EVAL tag=it21_b6_plus8 alloc=[16, 48, 48, 32, 48, 8, 16, 16] bytes=232 recall=71.376500
+SQ_GREEDY_EVAL tag=it21_b7_plus8 alloc=[16, 48, 48, 32, 48, 8, 8, 24] bytes=232 recall=71.251500
+SQ_GREEDY_EVAL tag=it22_b0_plus8 alloc=[24, 48, 48, 40, 48, 8, 8, 16] bytes=240 recall=72.074100
+SQ_GREEDY_EVAL tag=it22_b1_plus8 alloc=[16, 56, 48, 40, 48, 8, 8, 16] bytes=240 recall=71.876500
+SQ_GREEDY_EVAL tag=it22_b2_plus8 alloc=[16, 48, 56, 40, 48, 8, 8, 16] bytes=240 recall=72.003100
+SQ_GREEDY_EVAL tag=it22_b3_plus8 alloc=[16, 48, 48, 48, 48, 8, 8, 16] bytes=240 recall=72.368800
+SQ_GREEDY_EVAL tag=it22_b4_plus8 alloc=[16, 48, 48, 40, 56, 8, 8, 16] bytes=240 recall=72.030900
+SQ_GREEDY_EVAL tag=it22_b5_plus8 alloc=[16, 48, 48, 40, 48, 16, 8, 16] bytes=240 recall=72.166700
+SQ_GREEDY_EVAL tag=it22_b6_plus8 alloc=[16, 48, 48, 40, 48, 8, 16, 16] bytes=240 recall=72.177500
+SQ_GREEDY_EVAL tag=it22_b7_plus8 alloc=[16, 48, 48, 40, 48, 8, 8, 24] bytes=240 recall=72.240700
+SQ_GREEDY_EVAL tag=it23_b0_plus8 alloc=[24, 48, 48, 48, 48, 8, 8, 16] bytes=248 recall=72.805600
+SQ_GREEDY_EVAL tag=it23_b1_plus8 alloc=[16, 56, 48, 48, 48, 8, 8, 16] bytes=248 recall=72.617300
+SQ_GREEDY_EVAL tag=it23_b2_plus8 alloc=[16, 48, 56, 48, 48, 8, 8, 16] bytes=248 recall=72.663600
+SQ_GREEDY_EVAL tag=it23_b3_plus8 alloc=[16, 48, 48, 56, 48, 8, 8, 16] bytes=248 recall=72.665100
+SQ_GREEDY_EVAL tag=it23_b4_plus8 alloc=[16, 48, 48, 48, 56, 8, 8, 16] bytes=248 recall=72.612700
+SQ_GREEDY_EVAL tag=it23_b5_plus8 alloc=[16, 48, 48, 48, 48, 16, 8, 16] bytes=248 recall=72.845700
+SQ_GREEDY_EVAL tag=it23_b6_plus8 alloc=[16, 48, 48, 48, 48, 8, 16, 16] bytes=248 recall=72.871900
+SQ_GREEDY_EVAL tag=it23_b7_plus8 alloc=[16, 48, 48, 48, 48, 8, 8, 24] bytes=248 recall=72.794800
+SQ_GREEDY_EVAL tag=it24_b0_plus8 alloc=[24, 48, 48, 48, 48, 8, 16, 16] bytes=256 recall=73.231500
+SQ_GREEDY_EVAL tag=it24_b1_plus8 alloc=[16, 56, 48, 48, 48, 8, 16, 16] bytes=256 recall=73.125000
+SQ_GREEDY_EVAL tag=it24_b2_plus8 alloc=[16, 48, 56, 48, 48, 8, 16, 16] bytes=256 recall=73.217600
+SQ_GREEDY_EVAL tag=it24_b3_plus8 alloc=[16, 48, 48, 56, 48, 8, 16, 16] bytes=256 recall=73.175900
+SQ_GREEDY_EVAL tag=it24_b4_plus8 alloc=[16, 48, 48, 48, 56, 8, 16, 16] bytes=256 recall=73.166700
+SQ_GREEDY_EVAL tag=it24_b5_plus8 alloc=[16, 48, 48, 48, 48, 16, 16, 16] bytes=256 recall=73.438300
+SQ_GREEDY_EVAL tag=it24_b6_plus8 alloc=[16, 48, 48, 48, 48, 8, 24, 16] bytes=256 recall=73.560200
+SQ_GREEDY_EVAL tag=it24_b7_plus8 alloc=[16, 48, 48, 48, 48, 8, 16, 24] bytes=256 recall=73.311700
+SQ_GREEDY_EVAL tag=it25_b0_plus8 alloc=[24, 48, 48, 48, 48, 8, 24, 16] bytes=264 recall=74.038600
+SQ_GREEDY_EVAL tag=it25_b1_plus8 alloc=[16, 56, 48, 48, 48, 8, 24, 16] bytes=264 recall=73.802500
+SQ_GREEDY_EVAL tag=it25_b2_plus8 alloc=[16, 48, 56, 48, 48, 8, 24, 16] bytes=264 recall=73.862700
+SQ_GREEDY_EVAL tag=it25_b3_plus8 alloc=[16, 48, 48, 56, 48, 8, 24, 16] bytes=264 recall=73.757700
+SQ_GREEDY_EVAL tag=it25_b4_plus8 alloc=[16, 48, 48, 48, 56, 8, 24, 16] bytes=264 recall=73.873500
+SQ_GREEDY_EVAL tag=it25_b5_plus8 alloc=[16, 48, 48, 48, 48, 16, 24, 16] bytes=264 recall=73.986100
+SQ_GREEDY_EVAL tag=it25_b6_plus8 alloc=[16, 48, 48, 48, 48, 8, 32, 16] bytes=264 recall=73.910500
+SQ_GREEDY_EVAL tag=it25_b7_plus8 alloc=[16, 48, 48, 48, 48, 8, 24, 24] bytes=264 recall=73.875000
+SQ_GREEDY_EVAL tag=it26_b0_plus8 alloc=[32, 48, 48, 48, 48, 8, 24, 16] bytes=272 recall=75.034000
+SQ_GREEDY_EVAL tag=it26_b1_plus8 alloc=[24, 56, 48, 48, 48, 8, 24, 16] bytes=272 recall=74.203700
+SQ_GREEDY_EVAL tag=it26_b2_plus8 alloc=[24, 48, 56, 48, 48, 8, 24, 16] bytes=272 recall=74.293200
+SQ_GREEDY_EVAL tag=it26_b3_plus8 alloc=[24, 48, 48, 56, 48, 8, 24, 16] bytes=272 recall=74.263900
+SQ_GREEDY_EVAL tag=it26_b4_plus8 alloc=[24, 48, 48, 48, 56, 8, 24, 16] bytes=272 recall=74.231500
+SQ_GREEDY_EVAL tag=it26_b5_plus8 alloc=[24, 48, 48, 48, 48, 16, 24, 16] bytes=272 recall=74.524700
+SQ_GREEDY_EVAL tag=it26_b6_plus8 alloc=[24, 48, 48, 48, 48, 8, 32, 16] bytes=272 recall=74.344100
+SQ_GREEDY_EVAL tag=it26_b7_plus8 alloc=[24, 48, 48, 48, 48, 8, 24, 24] bytes=272 recall=74.452200
+SQ_GREEDY_EVAL tag=it27_b0_plus8 alloc=[40, 48, 48, 48, 48, 8, 24, 16] bytes=280 recall=75.652800
+SQ_GREEDY_EVAL tag=it27_b1_plus8 alloc=[32, 56, 48, 48, 48, 8, 24, 16] bytes=280 recall=75.293200
+SQ_GREEDY_EVAL tag=it27_b2_plus8 alloc=[32, 48, 56, 48, 48, 8, 24, 16] bytes=280 recall=75.378100
+SQ_GREEDY_EVAL tag=it27_b3_plus8 alloc=[32, 48, 48, 56, 48, 8, 24, 16] bytes=280 recall=75.334900
+SQ_GREEDY_EVAL tag=it27_b4_plus8 alloc=[32, 48, 48, 48, 56, 8, 24, 16] bytes=280 recall=75.246900
+SQ_GREEDY_EVAL tag=it27_b5_plus8 alloc=[32, 48, 48, 48, 48, 16, 24, 16] bytes=280 recall=75.591000
+SQ_GREEDY_EVAL tag=it27_b6_plus8 alloc=[32, 48, 48, 48, 48, 8, 32, 16] bytes=280 recall=75.470700
+SQ_GREEDY_EVAL tag=it27_b7_plus8 alloc=[32, 48, 48, 48, 48, 8, 24, 24] bytes=280 recall=75.450600
+SQ_GREEDY_EVAL tag=it28_b0_plus8 alloc=[48, 48, 48, 48, 48, 8, 24, 16] bytes=288 recall=76.388900
+SQ_GREEDY_EVAL tag=it28_b1_plus8 alloc=[40, 56, 48, 48, 48, 8, 24, 16] bytes=288 recall=75.848800
+SQ_GREEDY_EVAL tag=it28_b2_plus8 alloc=[40, 48, 56, 48, 48, 8, 24, 16] bytes=288 recall=75.950600
+SQ_GREEDY_EVAL tag=it28_b3_plus8 alloc=[40, 48, 48, 56, 48, 8, 24, 16] bytes=288 recall=75.888900
+SQ_GREEDY_EVAL tag=it28_b4_plus8 alloc=[40, 48, 48, 48, 56, 8, 24, 16] bytes=288 recall=76.018500
+SQ_GREEDY_EVAL tag=it28_b5_plus8 alloc=[40, 48, 48, 48, 48, 16, 24, 16] bytes=288 recall=76.166700
+SQ_GREEDY_EVAL tag=it28_b6_plus8 alloc=[40, 48, 48, 48, 48, 8, 32, 16] bytes=288 recall=75.939800
+SQ_GREEDY_EVAL tag=it28_b7_plus8 alloc=[40, 48, 48, 48, 48, 8, 24, 24] bytes=288 recall=76.121900
+SQ_GREEDY_EVAL tag=it29_b0_plus8 alloc=[56, 48, 48, 48, 48, 8, 24, 16] bytes=296 recall=76.875000
+SQ_GREEDY_EVAL tag=it29_b1_plus8 alloc=[48, 56, 48, 48, 48, 8, 24, 16] bytes=296 recall=76.597200
+SQ_GREEDY_EVAL tag=it29_b2_plus8 alloc=[48, 48, 56, 48, 48, 8, 24, 16] bytes=296 recall=76.572500
+SQ_GREEDY_EVAL tag=it29_b3_plus8 alloc=[48, 48, 48, 56, 48, 8, 24, 16] bytes=296 recall=76.535500
+SQ_GREEDY_EVAL tag=it29_b4_plus8 alloc=[48, 48, 48, 48, 56, 8, 24, 16] bytes=296 recall=76.541700
+SQ_GREEDY_EVAL tag=it29_b5_plus8 alloc=[48, 48, 48, 48, 48, 16, 24, 16] bytes=296 recall=76.814800
+SQ_GREEDY_EVAL tag=it29_b6_plus8 alloc=[48, 48, 48, 48, 48, 8, 32, 16] bytes=296 recall=76.793200
+SQ_GREEDY_EVAL tag=it29_b7_plus8 alloc=[48, 48, 48, 48, 48, 8, 24, 24] bytes=296 recall=76.754600
+SQ_GREEDY_EVAL tag=it30_b0_plus8 alloc=[64, 48, 48, 48, 48, 8, 24, 16] bytes=304 recall=77.231500
+SQ_GREEDY_EVAL tag=it30_b1_plus8 alloc=[56, 56, 48, 48, 48, 8, 24, 16] bytes=304 recall=77.132700
+SQ_GREEDY_EVAL tag=it30_b2_plus8 alloc=[56, 48, 56, 48, 48, 8, 24, 16] bytes=304 recall=77.103400
+SQ_GREEDY_EVAL tag=it30_b3_plus8 alloc=[56, 48, 48, 56, 48, 8, 24, 16] bytes=304 recall=77.055600
+SQ_GREEDY_EVAL tag=it30_b4_plus8 alloc=[56, 48, 48, 48, 56, 8, 24, 16] bytes=304 recall=77.149700
+SQ_GREEDY_EVAL tag=it30_b5_plus8 alloc=[56, 48, 48, 48, 48, 16, 24, 16] bytes=304 recall=77.246900
+SQ_GREEDY_EVAL tag=it30_b6_plus8 alloc=[56, 48, 48, 48, 48, 8, 32, 16] bytes=304 recall=77.250000
+SQ_GREEDY_EVAL tag=it30_b7_plus8 alloc=[56, 48, 48, 48, 48, 8, 24, 24] bytes=304 recall=77.297800
+SQ_GREEDY_EVAL tag=it31_b0_plus8 alloc=[64, 48, 48, 48, 48, 8, 24, 24] bytes=312 recall=77.597200
+SQ_GREEDY_EVAL tag=it31_b1_plus8 alloc=[56, 56, 48, 48, 48, 8, 24, 24] bytes=312 recall=77.614200
+SQ_GREEDY_EVAL tag=it31_b2_plus8 alloc=[56, 48, 56, 48, 48, 8, 24, 24] bytes=312 recall=77.518500
+SQ_GREEDY_EVAL tag=it31_b3_plus8 alloc=[56, 48, 48, 56, 48, 8, 24, 24] bytes=312 recall=77.452200
+SQ_GREEDY_EVAL tag=it31_b4_plus8 alloc=[56, 48, 48, 48, 56, 8, 24, 24] bytes=312 recall=77.580200
+SQ_GREEDY_EVAL tag=it31_b5_plus8 alloc=[56, 48, 48, 48, 48, 16, 24, 24] bytes=312 recall=77.713000
+SQ_GREEDY_EVAL tag=it31_b6_plus8 alloc=[56, 48, 48, 48, 48, 8, 32, 24] bytes=312 recall=77.615700
+SQ_GREEDY_EVAL tag=it31_b7_plus8 alloc=[56, 48, 48, 48, 48, 8, 24, 32] bytes=312 recall=77.759300
+SQ_GREEDY_EVAL tag=it32_b0_plus8 alloc=[64, 48, 48, 48, 48, 8, 24, 32] bytes=320 recall=78.080200
+SQ_GREEDY_EVAL tag=it32_b1_plus8 alloc=[56, 56, 48, 48, 48, 8, 24, 32] bytes=320 recall=77.936700
+SQ_GREEDY_EVAL tag=it32_b2_plus8 alloc=[56, 48, 56, 48, 48, 8, 24, 32] bytes=320 recall=78.009300
+SQ_GREEDY_EVAL tag=it32_b3_plus8 alloc=[56, 48, 48, 56, 48, 8, 24, 32] bytes=320 recall=77.975300
+SQ_GREEDY_EVAL tag=it32_b4_plus8 alloc=[56, 48, 48, 48, 56, 8, 24, 32] bytes=320 recall=78.089500
+SQ_GREEDY_EVAL tag=it32_b5_plus8 alloc=[56, 48, 48, 48, 48, 16, 24, 32] bytes=320 recall=78.148100
+SQ_GREEDY_EVAL tag=it32_b6_plus8 alloc=[56, 48, 48, 48, 48, 8, 32, 32] bytes=320 recall=78.123500
+SQ_GREEDY_EVAL tag=it32_b7_plus8 alloc=[56, 48, 48, 48, 48, 8, 24, 40] bytes=320 recall=78.160500
+SQ_GREEDY_EVAL tag=it33_b0_plus8 alloc=[64, 48, 48, 48, 48, 8, 24, 40] bytes=328 recall=78.398100
+SQ_GREEDY_EVAL tag=it33_b1_plus8 alloc=[56, 56, 48, 48, 48, 8, 24, 40] bytes=328 recall=78.333300
+SQ_GREEDY_EVAL tag=it33_b2_plus8 alloc=[56, 48, 56, 48, 48, 8, 24, 40] bytes=328 recall=78.433600
+SQ_GREEDY_EVAL tag=it33_b3_plus8 alloc=[56, 48, 48, 56, 48, 8, 24, 40] bytes=328 recall=78.345700
+SQ_GREEDY_EVAL tag=it33_b4_plus8 alloc=[56, 48, 48, 48, 56, 8, 24, 40] bytes=328 recall=78.438300
+SQ_GREEDY_EVAL tag=it33_b5_plus8 alloc=[56, 48, 48, 48, 48, 16, 24, 40] bytes=328 recall=78.569400
+SQ_GREEDY_EVAL tag=it33_b6_plus8 alloc=[56, 48, 48, 48, 48, 8, 32, 40] bytes=328 recall=78.563300
+SQ_GREEDY_EVAL tag=it33_b7_plus8 alloc=[56, 48, 48, 48, 48, 8, 24, 48] bytes=328 recall=78.509300
+SQ_GREEDY_EVAL tag=it34_b0_plus8 alloc=[64, 48, 48, 48, 48, 16, 24, 40] bytes=336 recall=78.885800
+SQ_GREEDY_EVAL tag=it34_b1_plus8 alloc=[56, 56, 48, 48, 48, 16, 24, 40] bytes=336 recall=78.805600
+SQ_GREEDY_EVAL tag=it34_b2_plus8 alloc=[56, 48, 56, 48, 48, 16, 24, 40] bytes=336 recall=78.870400
+SQ_GREEDY_EVAL tag=it34_b3_plus8 alloc=[56, 48, 48, 56, 48, 16, 24, 40] bytes=336 recall=78.827200
+SQ_GREEDY_EVAL tag=it34_b4_plus8 alloc=[56, 48, 48, 48, 56, 16, 24, 40] bytes=336 recall=78.838000
+SQ_GREEDY_EVAL tag=it34_b5_plus8 alloc=[56, 48, 48, 48, 48, 24, 24, 40] bytes=336 recall=78.919800
+SQ_GREEDY_EVAL tag=it34_b6_plus8 alloc=[56, 48, 48, 48, 48, 16, 32, 40] bytes=336 recall=78.932100
+SQ_GREEDY_EVAL tag=it34_b7_plus8 alloc=[56, 48, 48, 48, 48, 16, 24, 48] bytes=336 recall=78.964500
+SQ_GREEDY_EVAL tag=it35_b0_plus8 alloc=[64, 48, 48, 48, 48, 16, 24, 48] bytes=344 recall=79.290100
+SQ_GREEDY_EVAL tag=it35_b1_plus8 alloc=[56, 56, 48, 48, 48, 16, 24, 48] bytes=344 recall=79.191400
+SQ_GREEDY_EVAL tag=it35_b2_plus8 alloc=[56, 48, 56, 48, 48, 16, 24, 48] bytes=344 recall=79.222200
+SQ_GREEDY_EVAL tag=it35_b3_plus8 alloc=[56, 48, 48, 56, 48, 16, 24, 48] bytes=344 recall=79.189800
+SQ_GREEDY_EVAL tag=it35_b4_plus8 alloc=[56, 48, 48, 48, 56, 16, 24, 48] bytes=344 recall=79.209900
+SQ_GREEDY_EVAL tag=it35_b5_plus8 alloc=[56, 48, 48, 48, 48, 24, 24, 48] bytes=344 recall=79.441400
+SQ_GREEDY_EVAL tag=it35_b6_plus8 alloc=[56, 48, 48, 48, 48, 16, 32, 48] bytes=344 recall=79.392000
+SQ_GREEDY_EVAL tag=it35_b7_plus8 alloc=[56, 48, 48, 48, 48, 16, 24, 56] bytes=344 recall=79.115700
+SQ_GREEDY_EVAL tag=it36_b0_plus8 alloc=[64, 48, 48, 48, 48, 24, 24, 48] bytes=352 recall=79.723800
+SQ_GREEDY_EVAL tag=it36_b1_plus8 alloc=[56, 56, 48, 48, 48, 24, 24, 48] bytes=352 recall=79.614200
+SQ_GREEDY_EVAL tag=it36_b2_plus8 alloc=[56, 48, 56, 48, 48, 24, 24, 48] bytes=352 recall=79.700600
+SQ_GREEDY_EVAL tag=it36_b3_plus8 alloc=[56, 48, 48, 56, 48, 24, 24, 48] bytes=352 recall=79.649700
+SQ_GREEDY_EVAL tag=it36_b4_plus8 alloc=[56, 48, 48, 48, 56, 24, 24, 48] bytes=352 recall=79.629600
+SQ_GREEDY_EVAL tag=it36_b5_plus8 alloc=[56, 48, 48, 48, 48, 32, 24, 48] bytes=352 recall=79.767000
+SQ_GREEDY_EVAL tag=it36_b6_plus8 alloc=[56, 48, 48, 48, 48, 24, 32, 48] bytes=352 recall=79.756200
+SQ_GREEDY_EVAL tag=it36_b7_plus8 alloc=[56, 48, 48, 48, 48, 24, 24, 56] bytes=352 recall=79.547800
+SQ_GREEDY_EVAL tag=it37_b0_plus8 alloc=[64, 48, 48, 48, 48, 32, 24, 48] bytes=360 recall=80.128100
+SQ_GREEDY_EVAL tag=it37_b1_plus8 alloc=[56, 56, 48, 48, 48, 32, 24, 48] bytes=360 recall=80.026200
+SQ_GREEDY_EVAL tag=it37_b2_plus8 alloc=[56, 48, 56, 48, 48, 32, 24, 48] bytes=360 recall=80.075600
+SQ_GREEDY_EVAL tag=it37_b3_plus8 alloc=[56, 48, 48, 56, 48, 32, 24, 48] bytes=360 recall=80.044800
+SQ_GREEDY_EVAL tag=it37_b4_plus8 alloc=[56, 48, 48, 48, 56, 32, 24, 48] bytes=360 recall=80.050900
+SQ_GREEDY_EVAL tag=it37_b5_plus8 alloc=[56, 48, 48, 48, 48, 40, 24, 48] bytes=360 recall=80.248500
+SQ_GREEDY_EVAL tag=it37_b6_plus8 alloc=[56, 48, 48, 48, 48, 32, 32, 48] bytes=360 recall=80.216000
+SQ_GREEDY_EVAL tag=it37_b7_plus8 alloc=[56, 48, 48, 48, 48, 32, 24, 56] bytes=360 recall=79.925900
+SQ_GREEDY_EVAL tag=it38_b0_plus8 alloc=[64, 48, 48, 48, 48, 40, 24, 48] bytes=368 recall=80.618800
+SQ_GREEDY_EVAL tag=it38_b1_plus8 alloc=[56, 56, 48, 48, 48, 40, 24, 48] bytes=368 recall=80.464500
+SQ_GREEDY_EVAL tag=it38_b2_plus8 alloc=[56, 48, 56, 48, 48, 40, 24, 48] bytes=368 recall=80.487700
+SQ_GREEDY_EVAL tag=it38_b3_plus8 alloc=[56, 48, 48, 56, 48, 40, 24, 48] bytes=368 recall=80.392000
+SQ_GREEDY_EVAL tag=it38_b4_plus8 alloc=[56, 48, 48, 48, 56, 40, 24, 48] bytes=368 recall=80.450600
+SQ_GREEDY_EVAL tag=it38_b5_plus8 alloc=[56, 48, 48, 48, 48, 48, 24, 48] bytes=368 recall=80.569400
+SQ_GREEDY_EVAL tag=it38_b6_plus8 alloc=[56, 48, 48, 48, 48, 40, 32, 48] bytes=368 recall=80.645100
+SQ_GREEDY_EVAL tag=it38_b7_plus8 alloc=[56, 48, 48, 48, 48, 40, 24, 56] bytes=368 recall=80.387300
+SQ_GREEDY_EVAL tag=it39_b0_plus8 alloc=[64, 48, 48, 48, 48, 40, 32, 48] bytes=376 recall=80.888900
+SQ_GREEDY_EVAL tag=it39_b1_plus8 alloc=[56, 56, 48, 48, 48, 40, 32, 48] bytes=376 recall=80.878100
+SQ_GREEDY_EVAL tag=it39_b2_plus8 alloc=[56, 48, 56, 48, 48, 40, 32, 48] bytes=376 recall=80.794800
+SQ_GREEDY_EVAL tag=it39_b3_plus8 alloc=[56, 48, 48, 56, 48, 40, 32, 48] bytes=376 recall=80.862700
+SQ_GREEDY_EVAL tag=it39_b4_plus8 alloc=[56, 48, 48, 48, 56, 40, 32, 48] bytes=376 recall=80.768500
+SQ_GREEDY_EVAL tag=it39_b5_plus8 alloc=[56, 48, 48, 48, 48, 48, 32, 48] bytes=376 recall=80.966000
+SQ_GREEDY_EVAL tag=it39_b6_plus8 alloc=[56, 48, 48, 48, 48, 40, 40, 48] bytes=376 recall=80.992300
+SQ_GREEDY_EVAL tag=it39_b7_plus8 alloc=[56, 48, 48, 48, 48, 40, 32, 56] bytes=376 recall=80.763900
+SQ_GREEDY_EVAL tag=it40_b0_plus8 alloc=[64, 48, 48, 48, 48, 40, 40, 48] bytes=384 recall=81.262300
+SQ_GREEDY_EVAL tag=it40_b1_plus8 alloc=[56, 56, 48, 48, 48, 40, 40, 48] bytes=384 recall=81.302500
+SQ_GREEDY_EVAL tag=it40_b2_plus8 alloc=[56, 48, 56, 48, 48, 40, 40, 48] bytes=384 recall=81.186700
+SQ_GREEDY_EVAL tag=it40_b3_plus8 alloc=[56, 48, 48, 56, 48, 40, 40, 48] bytes=384 recall=81.186700
+SQ_GREEDY_EVAL tag=it40_b4_plus8 alloc=[56, 48, 48, 48, 56, 40, 40, 48] bytes=384 recall=81.237700
+SQ_GREEDY_EVAL tag=it40_b5_plus8 alloc=[56, 48, 48, 48, 48, 48, 40, 48] bytes=384 recall=81.351900
+SQ_GREEDY_EVAL tag=it40_b6_plus8 alloc=[56, 48, 48, 48, 48, 40, 48, 48] bytes=384 recall=81.546300
+SQ_GREEDY_EVAL tag=it40_b7_plus8 alloc=[56, 48, 48, 48, 48, 40, 40, 56] bytes=384 recall=81.165100
+
+
