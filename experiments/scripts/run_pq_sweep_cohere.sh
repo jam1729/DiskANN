@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-DATASET=fiqa
+DATASET=scifact
 EMBEDDING_MODEL="cohere_v4"
 BASE_FILE_NAME=base.bin
 QUERY_FILE_NAME=query.bin

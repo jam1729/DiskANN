@@ -44,6 +44,8 @@ class Config:
     keep_all: bool = False
     pq_prefix_base: str = 'opq_cfg'
     verbose: bool = True
+    opq_cache_dir: Path | None = None
+    clear_opq_cache: bool = False
 
 @dataclasses.dataclass
 class IterRecord:
@@ -278,7 +280,7 @@ def stitch_opq_binaries(
         print(f"Stitched pivots file to {out_pivots_file} (total size={total_size}B)", flush=True)
 
 def train_and_quantize_block_opq(cfg: Config, allocation: List[int], tag: str) -> Tuple[Path, List[Path]]:
-    """Slices vectors, runs standard C++ OPQ independently per bucket, and stitches results."""
+    """Slices vectors, runs standard C++ OPQ independently per bucket (with cache), and stitches results."""
     # 1. Generate temp directories and output paths
     step_dir = cfg.work_dir / f"step_{tag}"
     step_dir.mkdir(parents=True, exist_ok=True)
@@ -293,31 +295,69 @@ def train_and_quantize_block_opq(cfg: Config, allocation: List[int], tag: str) -
     # 3. Train OPQ independently per bucket
     bucket_prefixes = []
     artifacts = []
+    
+    cache_dir = cfg.opq_cache_dir
+    if cache_dir:
+        cache_dir.mkdir(parents=True, exist_ok=True)
+
     for i, (b_base, b_query, b_size, M_k) in enumerate(zip(base_slices, query_slices, cfg.bucket_sizes, allocation)):
         b_prefix = step_dir / f"opq_b{i}"
         bucket_prefixes.append(b_prefix)
         
-        # Invoke standard generate_pq tool with OPQ parameter set to 1
-        gen_tool = cfg.tools_dir / "generate_pq"
-        cmd = [
-            str(gen_tool),
-            "float",
-            str(b_base),
-            str(b_prefix),
-            str(M_k),
-            str(cfg.sampling_rate),
-            "1"  # OPQ=1
-        ]
-        run_cmd(cmd, verbose=cfg.verbose)
+        # Define the cache file paths
+        cache_pivots = cache_dir / f"bucket_{i}_chunk_{M_k}_s{cfg.sampling_rate}_pq_pivots.bin" if cache_dir else None
+        cache_rotmat = cache_dir / f"bucket_{i}_chunk_{M_k}_s{cfg.sampling_rate}_pq_pivots.bin_rotation_matrix.bin" if cache_dir else None
+        cache_compressed = cache_dir / f"bucket_{i}_chunk_{M_k}_s{cfg.sampling_rate}_pq_compressed.bin" if cache_dir else None
+        
+        # Target paths in step_dir
+        tgt_pivots = Path(str(b_prefix) + "_pq_pivots.bin")
+        tgt_rotmat = Path(str(b_prefix) + "_pq_pivots.bin_rotation_matrix.bin")
+        tgt_compressed = Path(str(b_prefix) + "_pq_compressed.bin")
+        tgt_inflated = Path(str(b_prefix) + "_pq_compressed.bin_inflated.bin")
+        
+        use_cache = False
+        if cache_dir and cache_pivots.exists() and cache_rotmat.exists() and cache_compressed.exists():
+            use_cache = True
+            
+        if use_cache:
+            if cfg.verbose:
+                print(f"[CACHE HIT] Copying cached OPQ for bucket {i} with {M_k} chunks (sampling rate {cfg.sampling_rate})", flush=True)
+            shutil.copy2(cache_pivots, tgt_pivots)
+            shutil.copy2(cache_rotmat, tgt_rotmat)
+            shutil.copy2(cache_compressed, tgt_compressed)
+        else:
+            if cfg.verbose:
+                if cache_dir:
+                    print(f"[CACHE MISS] Training OPQ for bucket {i} with {M_k} chunks...", flush=True)
+                else:
+                    print(f"Training OPQ for bucket {i} with {M_k} chunks (no cache)...", flush=True)
+            # Invoke standard generate_pq tool with OPQ parameter set to 1
+            gen_tool = cfg.tools_dir / "generate_pq"
+            cmd = [
+                str(gen_tool),
+                "float",
+                str(b_base),
+                str(b_prefix),
+                str(M_k),
+                str(cfg.sampling_rate),
+                "1"  # OPQ=1
+            ]
+            run_cmd(cmd, verbose=cfg.verbose)
+            
+            # Save to cache if enabled
+            if cache_dir:
+                shutil.copy2(tgt_pivots, cache_pivots)
+                shutil.copy2(tgt_rotmat, cache_rotmat)
+                shutil.copy2(tgt_compressed, cache_compressed)
 
         # Track intermediate bucket files
         artifacts.extend([
             b_base,
             b_query,
-            Path(str(b_prefix) + "_pq_pivots.bin"),
-            Path(str(b_prefix) + "_pq_pivots.bin_rotation_matrix.bin"),
-            Path(str(b_prefix) + "_pq_compressed.bin"),
-            Path(str(b_prefix) + "_pq_compressed.bin_inflated.bin")
+            tgt_pivots,
+            tgt_rotmat,
+            tgt_compressed,
+            tgt_inflated
         ])
 
     # 4. Stitch everything together
@@ -375,6 +415,16 @@ def inflate_stitched_opq(compressed_path: Path, pivots_path: Path, rotmat_path: 
         pts_codewords = codes[:, c]
         chunk_centroids = full_pivots[pts_codewords, c_start:c_end]
         reconstructed[:, c_start:c_end] = chunk_centroids
+
+    # 3.5 Rotate back to original space using the transpose of the rotation matrix (R_tr.T = R)
+    if rotmat_path and rotmat_path.exists():
+        if verbose:
+            print(f"Applying back-rotation using {rotmat_path.name}...", flush=True)
+        R_tr, _, _ = load_bin_numpy_float(rotmat_path)
+        reconstructed = reconstructed @ R_tr.T
+    else:
+        raise FileNotFoundError(f"Rotation matrix not found at: {rotmat_path}. Required for OPQ back-rotation.")
+    
 
     # 4. Add centroid back (since DiskANN adds translation back during query inflation)
     reconstructed += centroid
@@ -481,31 +531,50 @@ def run_global_opq_baseline(cfg: Config) -> Tuple[float, Path]:
     pivots = Path(str(out_prefix) + "_pq_pivots.bin")
     rotmat = Path(str(out_prefix) + "_pq_pivots.bin_rotation_matrix.bin")
     inflated = Path(str(compressed) + "_inflated.bin")
-    if not inflated.exists():
-        if pivots.exists() and rotmat.exists() and compressed.exists():
-            inflate_stitched_opq(compressed, pivots, rotmat, inflated, cfg.dim, verbose=cfg.verbose)
-        else:
-            raise FileNotFoundError(f"Track 1 files missing.")
+    if pivots.exists() and rotmat.exists() and compressed.exists():
+        print("inflating global opq..", flush=True)
+        if inflated.exists():
+            try:
+                inflated.unlink()
+            except Exception:
+                pass
+        inflate_stitched_opq(compressed, pivots, rotmat, inflated, cfg.dim, verbose=cfg.verbose)
+    else:
+        raise FileNotFoundError(f"Track 1 files missing.")
 
     quant_gt = compute_quantized_gt(cfg, inflated, "global")
     recall = compute_recall(cfg, quant_gt)
     print(f"Track 1: Global (Whole) OPQ Recall@{cfg.k} = {recall:.6f}\n", flush=True)
     return recall, out_prefix
 
-def run_block_uniform_opq_baseline(cfg: Config) -> Tuple[float, Path]:
-    """Track 2: Runs block-diagonal OPQ with uniform chunk distribution across buckets."""
-    print("\n--- Running Track 2: Block-Diagonal Uniform OPQ Baseline ---", flush=True)
+def run_block_uniform_opq_baseline(cfg: Config) -> Dict[int, float]:
+    """Track 2: Runs block-diagonal OPQ with uniform chunk distribution across buckets for all budgets."""
+    print("\n--- Running Track 2: Block-Diagonal Uniform OPQ Sweep ---", flush=True)
     
-    # Evenly distribute max_total_bytes among buckets
-    base_alloc = cfg.max_total_bytes // cfg.num_buckets
-    rem = cfg.max_total_bytes % cfg.num_buckets
-    allocation = [base_alloc + (1 if i < rem else 0) for i in range(cfg.num_buckets)]
+    uniform_recalls = {}
+    byte_values = [64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384]
     
-    print(f"Uniform allocation layout: {allocation}", flush=True)
-    
-    recall, rec = evaluate_block_opq_allocation(cfg, allocation, "uniform_opq")
-    print(f"Track 2: Block-Diagonal Uniform OPQ Recall@{cfg.k} = {recall:.6f}\n", flush=True)
-    return recall, Path(rec.prefix)
+    for target_bytes in byte_values:
+        if target_bytes > cfg.max_total_bytes:
+            continue
+            
+        print(f"\n--- Uniform OPQ Baseline: {target_bytes} Bytes ---", flush=True)
+        # Evenly distribute target_bytes among buckets
+        base_alloc = target_bytes // cfg.num_buckets
+        rem = target_bytes % cfg.num_buckets
+        allocation = [base_alloc + (1 if i < rem else 0) for i in range(cfg.num_buckets)]
+        
+        print(f"Uniform allocation layout: {allocation}", flush=True)
+        
+        recall, rec = evaluate_block_opq_allocation(cfg, allocation, f"uniform_opq_{target_bytes}")
+        uniform_recalls[target_bytes] = recall
+        print(f"Bytes={target_bytes} (Uniform OPQ) - Recall@{cfg.k}: {recall:.6f}", flush=True)
+        
+        # Cleanup intermediate files for this uniform run to save space
+        if not cfg.keep_all:
+            cleanup_artifacts([rec], preserve_allocation=[], verbose=cfg.verbose)
+            
+    return uniform_recalls
 
 def run_variable_block_opq_sweep(cfg: Config) -> Dict[str, Any]:
     """Track 3: Runs greedy search over block-diagonal OPQ allocations."""
@@ -605,12 +674,16 @@ def parse_args(argv: List[str]) -> Config:
     p.add_argument('--sampling_rate', type=float, default=0.1)
     p.add_argument('--initial_chunks', type=int, default=8)
     p.add_argument('--increment', type=int, default=8)
-    p.add_argument('--max_iters', type=int, default=30)
-    p.add_argument('--max_per_bucket', type=int, default=128)
+    p.add_argument('--max_iters', type=int, default=50)
+    p.add_argument('--max_per_bucket', type=int, default=384)
     p.add_argument('--max_total_bytes', type=int, default=384)
     p.add_argument('--keep_all', action='store_true')
     p.add_argument('--pq_prefix_base', default='opq_cfg')
+    p.add_argument('--opq_cache_dir', default=None, help='Directory to cache intermediate bucket OPQ files.')
+    p.add_argument('--clear_opq_cache', action='store_true', help='Clear the cache directory before starting.')
     args = p.parse_args(argv)
+    
+    cache_dir = Path(args.opq_cache_dir) if args.opq_cache_dir else Path(args.base_file).parent / "opq_cache"
     
     return Config(
         base_file=Path(args.base_file),
@@ -627,7 +700,9 @@ def parse_args(argv: List[str]) -> Config:
         max_per_bucket=args.max_per_bucket,
         max_total_bytes=args.max_total_bytes,
         keep_all=args.keep_all,
-        pq_prefix_base=args.pq_prefix_base
+        pq_prefix_base=args.pq_prefix_base,
+        opq_cache_dir=cache_dir,
+        clear_opq_cache=args.clear_opq_cache
     )
 
 def infer_buckets(cfg: Config):
@@ -643,12 +718,157 @@ def infer_buckets(cfg: Config):
     if cfg.verbose:
         print(f"Dimension inferred: {cfg.dim}. Buckets layout: {cfg.bucket_sizes}", flush=True)
 
+def aggregate_and_save_opq(cfg: Config, rec_track1: float, uniform_recalls: Dict[int, float], result_track3: Dict[str, Any]):
+    print("\n==================================================")
+    print("Aggregating OPQ Results & Generating Outputs...")
+    print("==================================================")
+    sys.stdout.flush()
+    
+    history = result_track3.get("history", [])
+    
+    # Organize greedy history by total bytes
+    greedy_by_bytes = {}
+    for entry in history:
+        b_val = entry["bytes_per_vec"]
+        rec = entry["recall"]
+        alloc = entry["allocation"]
+        # Keep the one with the highest recall for each total byte size
+        if b_val not in greedy_by_bytes or rec > greedy_by_bytes[b_val]["recall"]:
+            greedy_by_bytes[b_val] = {
+                "recall": rec,
+                "allocation": alloc
+            }
+            
+    summary_results = []
+    byte_values = [64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384]
+    
+    for bytes_val in byte_values:
+        if bytes_val > cfg.max_total_bytes:
+            continue
+            
+        uni_rec = uniform_recalls.get(bytes_val, 0.0)
+        
+        # Look up variable/greedy recall for the same byte size
+        var_rec = 0.0
+        var_alloc = []
+        
+        if bytes_val in greedy_by_bytes:
+            var_rec = greedy_by_bytes[bytes_val]["recall"]
+            var_alloc = greedy_by_bytes[bytes_val]["allocation"]
+        else:
+            # Fallback scan for closest evaluated size <= bytes_val
+            best_fallback_bytes = -1
+            for k in sorted(greedy_by_bytes.keys()):
+                if k <= bytes_val:
+                    best_fallback_bytes = k
+            if best_fallback_bytes != -1:
+                var_rec = greedy_by_bytes[best_fallback_bytes]["recall"]
+                var_alloc = greedy_by_bytes[best_fallback_bytes]["allocation"]
+                
+        # Uniform allocation is target_bytes // num_buckets for each bucket
+        uni_alloc = [bytes_val // cfg.num_buckets] * cfg.num_buckets
+        
+        # Improvement relative to uniform baseline
+        rel_imp = 0.0
+        if uni_rec > 0:
+            rel_imp = ((var_rec - uni_rec) / uni_rec) * 100.0
+            
+        summary_results.append({
+            "bytes": bytes_val,
+            "uniform_alloc": uni_alloc,
+            "variable_alloc": var_alloc,
+            "uniform_recall": uni_rec,
+            "variable_recall": var_rec,
+            "improvement": rel_imp
+        })
+        
+    summary = {
+        "dataset": cfg.pq_prefix_base,
+        "scheme": "OPQ",
+        "max_total_bytes": cfg.max_total_bytes,
+        "global_opq_recall_at_max": rec_track1,
+        "results": summary_results
+    }
+    
+    summary_json_path = cfg.work_dir / "opq_results.json"
+    with open(summary_json_path, "w") as f:
+        json.dump(summary, f, indent=2)
+    print(f"Saved results summary to: {summary_json_path}")
+    
+    # Generate LaTeX Table
+    latex_table = make_latex_table_opq(cfg.pq_prefix_base, "OPQ", summary_results, rec_track1)
+    
+    summary_tex_path = cfg.work_dir / "opq_results_table.tex"
+    with open(summary_tex_path, "w") as f:
+        f.write(latex_table)
+    print(f"Saved LaTeX table to: {summary_tex_path}")
+    
+    print("\n--------------------------------------------------")
+    print("GENERATED LATEX TABLE:")
+    print("--------------------------------------------------")
+    print(latex_table)
+    print("--------------------------------------------------\n")
+    sys.stdout.flush()
+
+def make_latex_table_opq(dataset, scheme, results, rec_track1):
+    latex = []
+    latex.append(r"\begin{table*}[htbp]")
+    latex.append(r"    \centering")
+    latex.append(f"    \\caption{{Comparison of Uniform vs. Variable (Greedy) Bit Allocation for Block-Diagonal {scheme} on {dataset}.}}")
+    latex.append(f"    \\label{{tab:{dataset}_{scheme.lower()}_alloc}}")
+    latex.append(r"    \resizebox{\textwidth}{!}{")
+    latex.append(r"    \begin{tabular}{cccccc}")
+    latex.append(r"        \toprule")
+    latex.append(r"        & \multicolumn{2}{c}{\textbf{Allocation Strategy (Bytes per Block)}} & \multicolumn{3}{c}{\textbf{Recall (\%)}} \\")
+    latex.append(r"        \cmidrule(lr){2-3} \cmidrule(lr){4-6}")
+    latex.append(r"        \textbf{Total Bytes} & \textbf{Uniform Baseline} & \textbf{Variable (Greedy)} & \textbf{Uniform} & \textbf{Variable} & \textbf{Improvement} \\")
+    latex.append(r"        \midrule")
+    
+    # Calculate maximum relative improvement to bold it
+    max_imp = -100.0
+    for r in results:
+        if r["uniform_recall"] > 0:
+            imp = ((r["variable_recall"] - r["uniform_recall"]) / r["uniform_recall"]) * 100.0
+            if imp > max_imp:
+                max_imp = imp
+                
+    for r in results:
+        bytes_val = r["bytes"]
+        uni_alloc = str(r["uniform_alloc"])
+        var_alloc = str(r["variable_alloc"])
+        uni_rec = f"{r['uniform_recall'] * 100:.2f}"
+        var_rec = f"{r['variable_recall'] * 100:.2f}"
+        
+        if r["uniform_recall"] > 0:
+            imp_val = ((r["variable_recall"] - r["uniform_recall"]) / r["uniform_recall"]) * 100.0
+            imp_str = f"+{imp_val:.2f}\\%" if imp_val >= 0 else f"{imp_val:.2f}\\%"
+            if abs(imp_val - max_imp) < 1e-5:
+                imp_str = f"\\textbf{{{imp_str}}}"
+        else:
+            imp_str = "0.00\\%"
+            
+        latex.append(f"        {bytes_val:<4} & {uni_alloc:<30} & {var_alloc:<34} & {uni_rec:<5} & {var_rec:<5} & {imp_str} \\\\")
+        
+    latex.append(r"        \midrule")
+    latex.append(f"        \\multicolumn{{6}}{{l}}{{\\textbf{{Global OPQ Baseline Recall at {results[-1]['bytes']} Bytes:}} {rec_track1 * 100:.2f}\\%}} \\\\")
+    latex.append(r"        \bottomrule")
+    latex.append(r"    \end{tabular}")
+    latex.append(r"    }")
+    latex.append(r"\end{table*}")
+    return "\n".join(latex)
+
 def main(argv: List[str]) -> int:
     cfg = parse_args(argv)
     
     # Create work directory
     cfg.work_dir.mkdir(parents=True, exist_ok=True)
     
+    # Clear cache if requested
+    if cfg.clear_opq_cache and cfg.opq_cache_dir and cfg.opq_cache_dir.exists():
+        if cfg.verbose:
+            print(f"[CACHE] Clearing OPQ cache at: {cfg.opq_cache_dir}", flush=True)
+        shutil.rmtree(cfg.opq_cache_dir, ignore_errors=True)
+        
     try:
         infer_buckets(cfg)
     except Exception as e:
@@ -657,28 +877,28 @@ def main(argv: List[str]) -> int:
         
     try:
         # 1. Run Track 1: Global (Whole) OPQ Baseline
-        rec_track1, _ = run_global_opq_baseline(cfg)
+        rec_track1, global_out_prefix = run_global_opq_baseline(cfg)
         
-        # 2. Run Track 2: Block-Diagonal Uniform OPQ Baseline
-        rec_track2, _ = run_block_uniform_opq_baseline(cfg)
+        # 2. Run Track 2: Block-Diagonal Uniform OPQ Sweep
+        uniform_recalls = run_block_uniform_opq_baseline(cfg)
         
         # 3. Run Track 3: Variable Block-Diagonal OPQ Sweep
         result_track3 = run_variable_block_opq_sweep(cfg)
         
-        print("\n================== OPQ EXPERIMENT SUMMARY ==================", flush=True)
-        print(f"Track 1: Global (Whole) OPQ Baseline Recall:    {rec_track1:.6f}")
-        print(f"Track 2: Block-Diagonal Uniform OPQ Recall:     {rec_track2:.6f}")
-        print(f"Track 3: Variable Block-Diagonal OPQ Recall:    {result_track3['final_recall']:.6f}")
-        print(f"Track 3: Final Allocation Layout:               {result_track3['final_allocation']}")
-        print("============================================================\n", flush=True)
+        # 4. Aggregate results, write JSON and print LaTeX Table
+        aggregate_and_save_opq(cfg, rec_track1, uniform_recalls, result_track3)
         
-        # Write JSON result log
-        with open(cfg.work_dir / "opq_results.json", 'w') as f:
-            json.dump({
-                "global_opq_recall": rec_track1,
-                "block_uniform_opq_recall": rec_track2,
-                "variable_block_opq_result": result_track3
-            }, f, indent=2)
+        # 5. Clean up Track 1 inflated and gt files to save space
+        if not cfg.keep_all:
+            global_compressed = Path(str(global_out_prefix) + "_pq_compressed.bin")
+            global_inflated = Path(str(global_compressed) + "_inflated.bin")
+            global_gt = cfg.work_dir / "quantized_gt_global.bin"
+            for fpath in [global_inflated, global_gt]:
+                if fpath.exists():
+                    try:
+                        fpath.unlink()
+                    except Exception:
+                        pass
             
     except CommandError as e:
         print(f"Execution command error: {e}", flush=True)

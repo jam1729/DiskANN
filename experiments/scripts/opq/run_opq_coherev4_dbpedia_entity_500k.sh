@@ -4,8 +4,8 @@
 set -euo pipefail
 set -x
 
-DATASET=scidocs
-EMBEDDING_MODEL="openai_text_large_3"
+DATASET=dbpedia_entity_500k
+EMBEDDING_MODEL="cohere_v4"
 BASE_FILE_NAME=base.bin
 QUERY_FILE_NAME=query.bin
 
