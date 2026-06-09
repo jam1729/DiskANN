@@ -11,7 +11,7 @@
 #include "tsl/robin_map.h"
 
 // block size for reading/processing large files and matrices in blocks
-#define BLOCK_SIZE 5000000
+#define BLOCK_SIZE 100000
 #define SAVE_INFLATED_PQ true
 
 namespace diskann
@@ -652,26 +652,23 @@ int generate_pq_pivots_with_offsets(const float *const passed_train_data, size_t
                         cur_chunk_size * sizeof(float));
         }
 
-        kmeans::kmeanspp_selecting_pivots(cur_data.get(), num_train, cur_chunk_size, cur_pivot_data.get(),
-                                          num_centers);
+        kmeans::kmeanspp_selecting_pivots(cur_data.get(), num_train, cur_chunk_size, cur_pivot_data.get(), num_centers);
         kmeans::run_lloyds(cur_data.get(), num_train, cur_chunk_size, cur_pivot_data.get(), num_centers,
                            max_k_means_reps, NULL, closest_center.get());
         for (uint64_t j = 0; j < num_centers; j++)
         {
-            std::memcpy(full_pivot_data.get() + j * dim + chunk_offsets[i],
-                        cur_pivot_data.get() + j * cur_chunk_size, cur_chunk_size * sizeof(float));
+            std::memcpy(full_pivot_data.get() + j * dim + chunk_offsets[i], cur_pivot_data.get() + j * cur_chunk_size,
+                        cur_chunk_size * sizeof(float));
         }
     }
 
     // Persist pivot data, centroid and chunk offsets
     std::vector<size_t> cumul_bytes(4, 0);
     cumul_bytes[0] = METADATA_SIZE;
-    cumul_bytes[1] = cumul_bytes[0] +
-                     diskann::save_bin<float>(pq_pivots_path.c_str(), full_pivot_data.get(), (size_t)num_centers, dim,
-                                              cumul_bytes[0]);
+    cumul_bytes[1] = cumul_bytes[0] + diskann::save_bin<float>(pq_pivots_path.c_str(), full_pivot_data.get(),
+                                                               (size_t)num_centers, dim, cumul_bytes[0]);
     cumul_bytes[2] = cumul_bytes[1] +
-                     diskann::save_bin<float>(pq_pivots_path.c_str(), centroid.get(), (size_t)dim, 1,
-                                              cumul_bytes[1]);
+                     diskann::save_bin<float>(pq_pivots_path.c_str(), centroid.get(), (size_t)dim, 1, cumul_bytes[1]);
     cumul_bytes[3] = cumul_bytes[2] + diskann::save_bin<uint32_t>(pq_pivots_path.c_str(), chunk_offsets.data(),
                                                                   chunk_offsets.size(), 1, cumul_bytes[2]);
     diskann::save_bin<size_t>(pq_pivots_path.c_str(), cumul_bytes.data(), cumul_bytes.size(), 1, 0);
