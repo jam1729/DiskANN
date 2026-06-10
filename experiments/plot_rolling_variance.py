@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 """
 Generate and plot the rolling average variance across dimensions 
-for both Cohere v4 and OpenAI text-embedding-3-large models on MSMARCO and DBpedia.
-Highlights the 8 Contiguous Buckets.
+for Cohere v4 and OpenAI text-embedding-3-large models on MSMARCO, DBpedia, and Quora.
 """
 import matplotlib.pyplot as plt
 import numpy as np
@@ -57,18 +56,17 @@ def main():
     
     datasets = {
         "dbpedia_entity_500k": "DBpedia Entity (500k)",
-        "msmarco_500k": "MSMARCO (500k)"
+        "msmarco_500k": "MSMARCO (500k)",
+        "quora_500k": "Quora (500k)"
     }
     
     models = {
         "cohere_v4": {
-            "name": "Cohere v4 (1536 DIMS, 8 Buckets = 192 dims/bucket)",
-            "num_buckets": 8,
+            "name": "Cohere v4 (1536 DIMS)",
             "dim": 1536
         },
         "openai_text_large_3": {
-            "name": "OpenAI Text-Embedding-3-Large (3072 DIMS, 8 Buckets = 384 dims/bucket)",
-            "num_buckets": 8,
+            "name": "OpenAI Text-Embedding-3-Large (3072 DIMS)",
             "dim": 3072
         }
     }
@@ -85,13 +83,13 @@ def main():
     # Harmonious Palette
     colors = {
         "dbpedia_entity_500k": "#0284c7",  # Tailwind Sky-600
-        "msmarco_500k": "#f97316"          # Tailwind Orange-500
+        "msmarco_500k": "#f97316",         # Tailwind Orange-500
+        "quora_500k": "#10b981"            # Tailwind Emerald-500
     }
     
     for ax_idx, (model_id, model_cfg) in enumerate(models.items()):
         ax = axes[ax_idx]
         dim_limit = model_cfg["dim"]
-        bucket_size = dim_limit // model_cfg["num_buckets"]
         
         # 1. Plot the rolling average line for each dataset first
         for ds_id, ds_label in datasets.items():
@@ -106,37 +104,19 @@ def main():
             except Exception as e:
                 print(f"Error processing {ds_id} for {model_id}: {e}")
                 
-        # Get y-limits after plotting to place text labels precisely at the top
-        ymin, ymax = ax.get_ylim()
-        label_y = ymin + 0.96 * (ymax - ymin)
-        
-        # 2. Draw bucket boundaries and shade alternate buckets subtly
-        for b in range(model_cfg["num_buckets"]):
-            start = b * bucket_size
-            end = (b + 1) * bucket_size
-            if b % 2 == 1:
-                # Use a soft Slate-100 color for high-quality professional shading
-                ax.axvspan(start, end, facecolor='#f8fafc', alpha=0.8, zorder=0)
-            
-            # Draw subtle vertical lines at bucket boundaries
-            if b > 0:
-                ax.axvline(start, color='#cbd5e1', linestyle=':', linewidth=1.5, zorder=1)
-                # Position label beautifully at the top
-                ax.text(start, label_y, f"dim {start}", color='#64748b', 
-                        fontsize=8, rotation=90, verticalalignment='top', horizontalalignment='center', alpha=0.9, zorder=2)
-        
         # Subplot Titles and Styling
-        ax.set_title(model_cfg["name"], fontsize=14, fontweight='bold', pad=15, color='#1e293b')
-        ax.set_xlabel("Dimension Index", fontsize=12, fontweight='bold', labelpad=8)
-        ax.set_ylabel(f"Rolling Mean Variance (Window={window})", fontsize=12, fontweight='bold', labelpad=8)
+        ax.set_title(model_cfg["name"], fontsize=30, pad=15, fontweight="bold", color='#1e293b')
+        ax.set_xlabel("Dimension Index", fontsize=30, labelpad=8)
+        if ax_idx == 0:
+            ax.set_ylabel(f"Rolling Mean Variance (Window={window})", fontsize=30, labelpad=8)
         ax.set_xlim(0, dim_limit)
         ax.grid(True, which='both', linestyle=':', alpha=0.3, zorder=1)
-        ax.legend(fontsize=11, loc='upper right', frameon=True, facecolor='white', framealpha=0.9)
+        ax.legend(fontsize=25, loc='upper right', frameon=True, facecolor='white', framealpha=0.9)
 
     plt.tight_layout()
     
     # Save the output with window prefix
-    output_path = Path(f"/home/jam1729/DiskANN/experiments/{window}_variance_rolling_average_plot.png")
+    output_path = Path(f"/home/jam1729/DiskANN/experiments/{window}_variance_rolling_average_plot.pdf")
     plt.savefig(output_path, dpi=300, bbox_inches='tight')
     print(f"\nSuccessfully generated and saved plot to: {output_path}")
 
