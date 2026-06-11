@@ -98,8 +98,9 @@ def main():
                 dim, vars_raw = load_full_variance(base_file)
                 rolling_vars = compute_rolling_mean(vars_raw, window=window)
                 
-                # Plot the rolling average line
-                ax.plot(np.arange(dim), rolling_vars, label=ds_label, 
+                # Plot the rolling average line skipping the first 30 dimensions
+                skip_dims = 32
+                ax.plot(np.arange(skip_dims, dim), rolling_vars[skip_dims:], label=ds_label, 
                         color=colors[ds_id], linewidth=2.2, zorder=3)
             except Exception as e:
                 print(f"Error processing {ds_id} for {model_id}: {e}")
@@ -109,9 +110,11 @@ def main():
         ax.set_xlabel("Dimension Index", fontsize=30, labelpad=8)
         if ax_idx == 0:
             ax.set_ylabel(f"Rolling Mean Variance (Window={window})", fontsize=30, labelpad=8)
-        ax.set_xlim(0, dim_limit)
+        ax.tick_params(axis='both', which='major', labelsize=24)
+        ax.set_xlim(32, dim_limit)
         ax.grid(True, which='both', linestyle=':', alpha=0.3, zorder=1)
-        ax.legend(fontsize=25, loc='upper right', frameon=True, facecolor='white', framealpha=0.9)
+        if ax_idx == 1:
+            ax.legend(fontsize=25, loc='upper right', frameon=True, facecolor='white', framealpha=0.9)
 
     plt.tight_layout()
     
