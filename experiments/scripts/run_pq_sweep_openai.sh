@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-DATASET=scifact
+DATASET=scidocs
 EMBEDDING_MODEL="openai_text_large_3"
 BASE_FILE_NAME=base.bin
 QUERY_FILE_NAME=query.bin

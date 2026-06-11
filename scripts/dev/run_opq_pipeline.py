@@ -626,19 +626,16 @@ def run_variable_block_opq_sweep(cfg: Config) -> Dict[str, Any]:
             candidates.sort(key=lambda x: (-x[0], sum(x[1]), x[1]))
             best_cand_recall, best_cand_alloc, best_cand_rec = candidates[0]
     
-            if best_cand_recall > best_recall + 1e-9:
-                best_recall = best_cand_recall
-                current_alloc = best_cand_alloc
-                best_cand_rec.improved = True
-                history.append(best_cand_rec)
+            is_improvement = best_cand_recall > best_recall + 1e-9
+            best_recall = best_cand_recall
+            current_alloc = best_cand_alloc
+            best_cand_rec.improved = is_improvement
+            history.append(best_cand_rec)
+            
+            if is_improvement:
                 print(f"Iteration {it}: improved recall -> {best_recall:.6f} with alloc {current_alloc}", flush=True)
             else:
-                best_cand_rec.improved = False
-                history.append(best_cand_rec)
-                print(f"Iteration {it}: no improvement (best candidate recall={best_cand_recall:.6f}); stopping.", flush=True)
-                if not cfg.keep_all:
-                    cleanup_artifacts(prev_iteration_records, preserve_allocation=current_alloc, verbose=cfg.verbose)
-                break
+                print(f"Iteration {it}: no improvement (best candidate recall={best_cand_recall:.6f}); continuing search.", flush=True)
     
             if not cfg.keep_all:
                 cleanup_artifacts(prev_iteration_records, preserve_allocation=current_alloc, verbose=cfg.verbose)

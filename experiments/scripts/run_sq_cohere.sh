@@ -2,11 +2,11 @@
 set -euo pipefail
 set -x
 
-DATASET=scifact
+DATASET=scidocs
 EMBEDDING_MODEL="cohere_v4"
 BASE_FILE_NAME=base.bin
 QUERY_FILE_NAME=query.bin
-RUN_NAME=${RUN_NAME:-sq_buckets_8_init_8_inc_8_max_384_sampl_01_bytes_384_stride}
+RUN_NAME=${RUN_NAME:-sq_buckets_8_init_4_inc_4_max_192_sampl_01_bytes_192_stride}
 ALLOCATION_STRATEGY=${ALLOCATION_STRATEGY:-stride}
 
 EMBEDDINGS_DIR=/home/jam1729/data/embeddings
@@ -27,10 +27,10 @@ mkdir -p "${RUN_DIR}"
   --k 100 \
   --sampling_rate 0.1 \
   --num_buckets 8 \
-  --initial_chunks 8 \
-  --increment 8 \
-  --max_per_bucket 384 \
-  --max_total_bytes 384 \
+  --initial_chunks 4 \
+  --increment 4 \
+  --max_per_bucket 192 \
+  --max_total_bytes 192 \
   --max_iters 50 \
   --seed 42 \
   --allocation_strategy "$ALLOCATION_STRATEGY" \

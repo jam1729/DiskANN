@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-DATASET=scifact
+DATASET=scidocs
 EMBEDDING_MODEL="cohere_v4"
 BASE_FILE_NAME=base.bin
 QUERY_FILE_NAME=query.bin
@@ -14,7 +14,7 @@ QUERY_FILE=${EMBEDDINGS_DIR}/${DATASET}/${EMBEDDING_MODEL}/${QUERY_FILE_NAME}
 GT_FILE=${EMBEDDINGS_DIR}/${DATASET}/${EMBEDDING_MODEL}/gt100.bin
 
 # Array of byte values from the table
-BYTE_VALUES=(64 96 128 160 192 224 256 288 320 352 384)
+BYTE_VALUES=(32 48 64 80 96 112 128 144 160 176 192)
 
 # Create output directory for this sweep
 SWEEP_DIR="/tmp/pq_sweep_$(date +%s)"

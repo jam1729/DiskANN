@@ -276,24 +276,19 @@ def greedy_search(cfg: Config) -> Dict[str, Any]:
             # Choose best recall (tie-breaker: fewer bytes, then lexicographically)
             candidates.sort(key=lambda x: (-x[0], sum(x[1]), x[1]))
             best_cand_recall, best_cand_alloc, best_cand_rec = candidates[0]
-            if best_cand_recall > best_recall + 1e-9:  # improvement threshold
-                best_recall = best_cand_recall
-                current_alloc = best_cand_alloc
-                best_cand_rec.improved = True
-                history.append(best_cand_rec)
-                improved = True
+            
+            is_improvement = best_cand_recall > best_recall + 1e-9
+            best_recall = best_cand_recall
+            current_alloc = best_cand_alloc
+            best_cand_rec.improved = is_improvement
+            history.append(best_cand_rec)
+            
+            if is_improvement:
                 if cfg.verbose:
                     print(f"Iter {it}: improved recall -> {best_recall:.6f} with alloc {current_alloc}")
             else:
-                # Record best (non-improving) candidate for audit, then stop.
-                best_cand_rec.improved = False
-                history.append(best_cand_rec)
                 if cfg.verbose:
-                    print(f"Iter {it}: no improvement (best candidate recall={best_cand_recall:.6f}); stopping.")
-                # Final cleanup of previous iteration candidates if needed
-                if not cfg.keep_all:
-                    _cleanup_iteration(prev_iteration_records, preserve_allocation=current_alloc, verbose=cfg.verbose)
-                break
+                    print(f"Iter {it}: no improvement (best candidate recall={best_cand_recall:.6f}); continuing search.")
             # After completing this iteration and deciding to continue, cleanup artifacts from previous iteration
             if not cfg.keep_all:
                 _cleanup_iteration(prev_iteration_records, preserve_allocation=current_alloc, verbose=cfg.verbose)
