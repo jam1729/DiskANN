@@ -11,7 +11,7 @@
 #include "tsl/robin_map.h"
 
 // block size for reading/processing large files and matrices in blocks
-#define BLOCK_SIZE 100000
+#define BLOCK_SIZE 5000000
 #define SAVE_INFLATED_PQ true
 
 namespace diskann

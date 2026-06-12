@@ -2,11 +2,12 @@
 set -euo pipefail
 set -x
 
-DATASET=msmarco_500k
+DATASET=fiqa
 EMBEDDING_MODEL="cohere_v4"
 BASE_FILE_NAME=base.bin
 QUERY_FILE_NAME=query.bin
-RUN_NAME=${RUN_NAME:-chunks_buckets_8_init_4_inc_4_max_192_sampl_01_bytes_192}
+RUN_NAME=${RUN_NAME:-sq_buckets_8_init_4_inc_4_max_192_sampl_01_bytes_192_stride}
+ALLOCATION_STRATEGY=${ALLOCATION_STRATEGY:-stride}
 
 EMBEDDINGS_DIR=~/data/embeddings
 DISKANN_DIR=~/DiskANN
@@ -14,10 +15,10 @@ DISKANN_DIR=~/DiskANN
 BASE_FILE=${EMBEDDINGS_DIR}/${DATASET}/${EMBEDDING_MODEL}/${BASE_FILE_NAME}
 QUERY_FILE=${EMBEDDINGS_DIR}/${DATASET}/${EMBEDDING_MODEL}/${QUERY_FILE_NAME}
 GT_FILE=${EMBEDDINGS_DIR}/${DATASET}/${EMBEDDING_MODEL}/gt100.bin
-RUN_DIR=~/runs/pq_search_runs/${DATASET}/${EMBEDDING_MODEL}/${RUN_NAME}_$(date +%Y%m%d_%H%M%S)
+RUN_DIR=~/runs/sq_search_runs/${DATASET}/${EMBEDDING_MODEL}/${RUN_NAME}_$(date +%Y%m%d_%H%M%S)
 
 mkdir -p "${RUN_DIR}"
-python $DISKANN_DIR/scripts/dev/greedy_pq_bucket_search.py \
+"${DISKANN_DIR}/.venv/bin/python3" $DISKANN_DIR/scripts/dev/greedy_sq_bucket_search.py \
   --base_file ${BASE_FILE} \
   --query_file ${QUERY_FILE} \
   --raw_gt_file ${GT_FILE} \
@@ -31,6 +32,8 @@ python $DISKANN_DIR/scripts/dev/greedy_pq_bucket_search.py \
   --max_per_bucket 192 \
   --max_total_bytes 192 \
   --max_iters 50 \
+  --seed 42 \
+  --allocation_strategy "$ALLOCATION_STRATEGY" \
   --log_json ${RUN_DIR}/log.json \
   > >(tee "${RUN_DIR}/stdout") \
   2> >(tee "${RUN_DIR}/stderr" >&2)

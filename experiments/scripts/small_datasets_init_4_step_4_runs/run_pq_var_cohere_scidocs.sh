@@ -2,7 +2,7 @@
 set -euo pipefail
 set -x
 
-DATASET=msmarco_500k
+DATASET=scidocs
 EMBEDDING_MODEL="cohere_v4"
 BASE_FILE_NAME=base.bin
 QUERY_FILE_NAME=query.bin
