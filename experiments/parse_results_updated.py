@@ -25,9 +25,9 @@ BASE_DIR = Path('/home/jam1729/runs/results')
 
 def get_budgets(model):
     if model == 'Cohere embed-v4':
-        return [48, 64, 80, 96, 112, 128, 144, 160, 176, 192]
+        return [32, 48, 64, 80, 96, 112, 128, 144, 160, 176, 192]
     else:
-        return [96, 128, 160, 192, 224, 256, 288, 320, 352, 384]
+        return [64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384]
 
 def get_expected_uniform_lines(model):
     if model == 'Cohere embed-v4':

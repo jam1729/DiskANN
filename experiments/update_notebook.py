@@ -2,6 +2,7 @@ import json
 
 cell0_source = """import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.gridspec as gridspec
 import parse_results_updated as parse_results
 
 # --- Global Font Settings ---
@@ -12,34 +13,42 @@ plt.rcParams.update({
     'xtick.labelsize': 14,
     'ytick.labelsize': 14,
     'legend.fontsize': 14,
-    'figure.titlesize': 20
+    'figure.titlesize': 20,
+    'pdf.fonttype': 42
 })
 
-dataset_names = ["MS Marco", "DBPedia", "Quora", "FiQA", "SciDocs", "SciFact"]
+dataset_group1 = ["MS Marco", "DBPedia", "Quora"]
+dataset_group2 = ["FiQA", "SciDocs", "SciFact"]
+dataset_names = dataset_group1 + dataset_group2
 
-def get_line_plot_grid(model):
-    grid = []
-    # Row 0: PQ
-    pq_row = []
-    for ds in dataset_names:
-        pq_row.append((ds, parse_results.get_greedy_data('PQ', ds, model)))
-    grid.append(pq_row)
-    # Row 1: SQ
-    sq_row = []
-    for ds in dataset_names:
-        sq_row.append((ds, parse_results.get_greedy_data('SQ', ds, model)))
-    grid.append(sq_row)
-    return grid
-
-models = [
-    ('OAI text-embed-3-l', 'openai_text_large_3', parse_results.get_budgets('OAI text-embed-3-l')),
-    ('Cohere embed-v4', 'cohere_v4', parse_results.get_budgets('Cohere embed-v4'))
+models_info = [
+    ('OAI text-embed-3-l', 'OAI te3-l', 'openai_text_large_3', parse_results.get_budgets('OAI text-embed-3-l')),
+    ('Cohere embed-v4', 'cohere-e4', 'cohere_v4', parse_results.get_budgets('Cohere embed-v4'))
 ]
 
 def generate_line_plots(pearson=True):
-    for model_label, model_key, budgets in models:
-        grid_layout = get_line_plot_grid(model_label)
-        row_labels = [f"PQ / {model_label}", f"SQ / {model_label}"]
+    fig = plt.figure(figsize=(22, 28))
+    outer_gs = gridspec.GridSpec(4, 1, hspace=0.35)
+    
+    blocks = [
+        (models_info[0], 'PQ'),
+        (models_info[0], 'SQ'),
+        (models_info[1], 'PQ'),
+        (models_info[1], 'SQ'),
+    ]
+    
+    for block_i, (model_data, quantizer) in enumerate(blocks):
+        orig_model, display_model, model_key, budgets = model_data
+        
+        grid_layout = []
+        row = []
+        for ds in dataset_group1:
+            row.append((ds, parse_results.get_greedy_data(quantizer, ds, orig_model)))
+        grid_layout.append(row)
+        row = []
+        for ds in dataset_group2:
+            row.append((ds, parse_results.get_greedy_data(quantizer, ds, orig_model)))
+        grid_layout.append(row)
         
         all_imps = []
         for row in grid_layout:
@@ -48,10 +57,11 @@ def generate_line_plots(pearson=True):
         imp_ymin = min(all_imps) - 1 if all_imps else 0
         imp_ymax = max(all_imps) + 1 if all_imps else 100
         
-        fig, axes = plt.subplots(2, 6, figsize=(36, 11))
+        inner_gs = gridspec.GridSpecFromSubplotSpec(2, 3, subplot_spec=outer_gs[block_i], hspace=0.30, wspace=0.35)
+        
         for r in range(2):
-            for c in range(6):
-                ax = axes[r, c]
+            for c in range(3):
+                ax = fig.add_subplot(inner_gs[r, c])
                 dataset_name, data = grid_layout[r][c]
                 imps = data['imps']
                 allocs = data['allocs']
@@ -75,7 +85,7 @@ def generate_line_plots(pearson=True):
                 
                 ax_twin = ax.twinx()
                 l2 = ax_twin.plot(budgets, cvs, marker='X', color='#d62728', linestyle='--', linewidth=3, markersize=8, label='Norm Skew (CV)')
-                if c == 5:
+                if c == 2:
                     ax_twin.set_ylabel('Norm Skew (CV)', color='#d62728', fontsize=18)
                 else:
                     ax_twin.set_ylabel('')
@@ -86,28 +96,32 @@ def generate_line_plots(pearson=True):
                 if pearson:
                     ax.text(0.97, 0.97, f"r(Recall, Norm Skew)={recall_skew_r:.2f}", transform=ax.transAxes, ha='right', va='top', fontsize=11, bbox=dict(boxstyle='round,pad=0.25', facecolor='white', alpha=0.75, edgecolor='none'))
                 
-                if r == 0:
-                    ax.set_title(dataset_name, pad=15)
+                ax.set_title(dataset_name, pad=15)
+                
                 if c == 0:
-                    ax.annotate(row_labels[r], xy=(0, 0.5), xytext=(-ax.yaxis.labelpad - 80, 0), xycoords=ax.yaxis.label, textcoords='offset points', size=18, ha='right', va='center', rotation=90)
+                    row_label = f"{quantizer} / {display_model}"
+                    ax.annotate(row_label, xy=(-0.35, 0.5), xycoords='axes fraction', size=18, ha='right', va='center', rotation=90)
                 
+                ax.set_xticks(budgets[::2])
                 if r == 1:
-                    ax.set_xlabel('Total Bytes Budget')
-                    ax.set_xticks(budgets[::2])
+                    pass
+                else:
+                    ax.set_xticklabels([])
                 
-                ax.grid(True, linestyle=':', alpha=0.7)
-                
-                if r == 1 and c == 2:
+                # Legend logic: SQ OAI (block 1), row 0, col 1 at bottom left
+                if block_i == 1 and r == 0 and c == 1:
                     lns = l1 + l2
                     labs = [l.get_label() for l in lns]
                     ax.legend(lns, labs, loc='lower left', framealpha=0.9, edgecolor='black')
-                    
-        plt.tight_layout()
-        fig.subplots_adjust(left=0.08, right=0.94, wspace=0.35, hspace=0.25)
-        suffix = "" if pearson else "_no_pearson"
-        filename = f"wide_normalized_skew_matrix_{model_key}{suffix}.pdf"
-        plt.savefig(filename, dpi=300, bbox_inches='tight')
-        print(f"Plot generated successfully as {filename}")
+                
+                ax.grid(True, linestyle=':', alpha=0.7)
+                
+    fig.text(0.5, 0.08, 'Total Bytes Budget', ha='center', va='center', fontsize=22)
+    plt.subplots_adjust(bottom=0.12, left=0.10, right=0.92)
+    suffix = "" if pearson else "_no_pearson"
+    filename = f"wide_normalized_skew_matrix_combined{suffix}.pdf"
+    plt.savefig(filename, dpi=300, bbox_inches='tight')
+    print(f"Plot generated successfully as {filename}")
 
 generate_line_plots(pearson=True)
 """
@@ -118,49 +132,43 @@ cell1_source = """generate_line_plots(pearson=False)
 cell2_source = """import matplotlib.cm as cm
 import matplotlib.colors as mcolors
 
-for model_label, model_key, budgets in models:
-    dataset_names = ["MS Marco", "DBPedia", "Quora", "FiQA", "SciDocs", "SciFact"]
+# First compute the absolute global min/max across ALL models and ALL quantizers
+global_fractions = []
+for orig_model, display_model, model_key, budgets in models_info:
+    for quantizer in ['PQ', 'SQ']:
+        for ds in dataset_names:
+            data = parse_results.get_greedy_data(quantizer, ds, orig_model)
+            for b_idx, b in enumerate(budgets):
+                alloc_arr = np.array(data['allocs'][b_idx], dtype=float)
+                global_fractions.extend(alloc_arr / b)
+
+global_min = min(global_fractions) if global_fractions else 0
+global_max = max(global_fractions) if global_fractions else 1.0
+
+cmap_hm = cm.YlOrRd
+norm_hm = mcolors.Normalize(vmin=global_min, vmax=global_max)
+
+for orig_model, display_model, model_key, budgets in models_info:
     qm_rows = [
-        (f"PQ / {model_label}", 'PQ'),
-        (f"SQ / {model_label}", 'SQ')
+        (f"PQ / {display_model}", 'PQ'),
+        (f"SQ / {display_model}", 'SQ')
     ]
     n_qm = len(qm_rows)
     n_budgets = len(budgets)
     
-    all_allocs = []
     grid_data = []
     for row_label, quantizer in qm_rows:
         row_data = []
         for ds in dataset_names:
-            data = parse_results.get_greedy_data(quantizer, ds, model_label)
+            data = parse_results.get_greedy_data(quantizer, ds, orig_model)
             row_data.append(data)
-            for alloc_list in data['allocs']:
-                all_allocs.extend(alloc_list)
         grid_data.append(row_data)
         
-    global_min = 0 
-    global_max = 1.0
-    if all_allocs:
-        fractions = []
-        for r_idx, (row_label, quantizer) in enumerate(qm_rows):
-            for ds_i, ds in enumerate(dataset_names):
-                for b_idx, b in enumerate(budgets):
-                    alloc_arr = np.array(grid_data[r_idx][ds_i]['allocs'][b_idx], dtype=float)
-                    fractions.extend(alloc_arr / b)
-        global_min = min(fractions)
-        global_max = max(fractions)
-        
-    cmap_hm = cm.YlOrRd
-    norm_hm = mcolors.Normalize(vmin=global_min, vmax=global_max)
-    
     fig_hm2, axes_hm2 = plt.subplots(n_qm, n_budgets, figsize=(32, 10), gridspec_kw={'wspace': 0.06, 'hspace': 0.45})
     
     for qm_i, (qm_label, quantizer) in enumerate(qm_rows):
         for budget_i, b in enumerate(budgets):
-            if n_qm == 1:
-                ax = axes_hm2[budget_i]
-            else:
-                ax = axes_hm2[qm_i, budget_i]
+            ax = axes_hm2[qm_i, budget_i]
                 
             matrix = np.array([
                 grid_data[qm_i][ds_i]['allocs'][budget_i] for ds_i in range(6)
@@ -168,8 +176,12 @@ for model_label, model_key, budgets in models:
             
             ax.imshow(matrix, aspect='auto', cmap=cmap_hm, norm=norm_hm, interpolation='nearest')
             
-            # White line to separate group 1 and group 2
-            ax.axhline(2.5, color='white', linewidth=2.0)
+            # White line creating a small separation between each dataset
+            for y_line in [0.5, 1.5, 3.5, 4.5]:
+                ax.axhline(y_line, color='white', linewidth=1.0)
+            
+            # Slightly thicker white line between first 3 and next 3
+            ax.axhline(2.5, color='white', linewidth=3.0)
             
             if qm_i == 0:
                 ax.set_title(f'{b} B', fontsize=20)
@@ -199,26 +211,34 @@ for model_label, model_key, budgets in models:
     print(f"Plot generated successfully as {filename}")
 """
 
-cell3_source = """dataset_names = ["MS Marco", "DBPedia", "Quora", "FiQA", "SciDocs", "SciFact"]
+cell3_source = """dataset_grid = [dataset_group1, dataset_group2]
 quantizer_markers = {'PQ': 'o', 'SQ': 's'}
 quantizer_linestyles = {'PQ': '-', 'SQ': ':'}
-model_colors = {'OAI text-embed-3-l': '#1f77b4', 'Cohere embed-v4': '#d62728'}
+display_colors = {'OAI te3-l': '#1f77b4', 'cohere-e4': '#d62728'}
 
-for model_label, model_key, budgets in models:
-    fig_uniform, axes_uniform = plt.subplots(1, 6, figsize=(36, 6), sharey=True)
-    for ax, dataset in zip(axes_uniform, dataset_names):
-        for quantizer in ['PQ', 'SQ']:
-            uniform_recalls = parse_results.get_uniform_recalls(quantizer, dataset, model_label)
-            ax.plot(budgets, uniform_recalls, marker=quantizer_markers[quantizer], linestyle=quantizer_linestyles[quantizer], linewidth=2.5, markersize=7, color=model_colors[model_label], label=f'{model_label} / {quantizer}')
-        ax.set_title(dataset, fontsize=30)
-        ax.set_xlabel('Bit Budget', fontsize=24)
-        ax.set_xticks(budgets)
-        ax.tick_params(axis='x', labelsize=18)
-        ax.tick_params(axis='y', labelsize=18)
-        ax.set_xticklabels(budgets, rotation=90, ha='center', va='top')
-        ax.grid(True, linestyle=':', alpha=0.7)
-    axes_uniform[0].set_ylabel('Recall (%)', fontsize=24)
-    axes_uniform[5].legend(loc='best', framealpha=0.9, edgecolor='black')
+for orig_model, display_model, model_key, budgets in models_info:
+    fig_uniform, axes_uniform = plt.subplots(2, 3, figsize=(21, 12), sharey=True)
+    for r in range(2):
+        for c in range(3):
+            ax = axes_uniform[r, c]
+            dataset = dataset_grid[r][c]
+            for quantizer in ['PQ', 'SQ']:
+                uniform_recalls = parse_results.get_uniform_recalls(quantizer, dataset, orig_model)
+                ax.plot(budgets, uniform_recalls, marker=quantizer_markers[quantizer], linestyle=quantizer_linestyles[quantizer], linewidth=2.5, markersize=7, color=display_colors[display_model], label=f'{display_model} / {quantizer}')
+            ax.set_title(dataset, fontsize=30)
+            if r == 1:
+                ax.set_xlabel('Bit Budget', fontsize=24)
+            ax.set_xticks(budgets)
+            ax.tick_params(axis='x', labelsize=18)
+            ax.tick_params(axis='y', labelsize=18)
+            ax.set_xticklabels(budgets, rotation=90, ha='center', va='top')
+            ax.grid(True, linestyle=':', alpha=0.7)
+            
+            if c == 0:
+                ax.set_ylabel('Recall (%)', fontsize=24)
+            if r == 1 and c == 2:
+                ax.legend(loc='best', framealpha=0.9, edgecolor='black')
+                
     plt.tight_layout()
     filename = f'uniform_bit_allocation_recall_{model_key}.pdf'
     plt.savefig(filename, dpi=300, bbox_inches='tight')
@@ -240,7 +260,7 @@ if len(code_cells) >= 4:
     code_cells[2]['source'] = make_cell(cell2_source)
     code_cells[3]['source'] = make_cell(cell3_source)
 
-# Clear outputs so the file isn't huge and outputs will be re-generated cleanly
+# Clear outputs
 for cell in nb['cells']:
     if cell['cell_type'] == 'code':
         cell['outputs'] = []

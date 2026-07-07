@@ -54,19 +54,26 @@ def main():
     
     embeddings_dir = Path("/home/jam1729/data/embeddings")
     
-    datasets = {
-        "dbpedia_entity_500k": "DBpedia Entity (500k)",
-        "msmarco_500k": "MSMARCO (500k)",
-        "quora_500k": "Quora (500k)"
-    }
+    datasets_groups = [
+        {
+            "dbpedia_entity_500k": "DBpedia Entity (500k)",
+            "msmarco_500k": "MSMARCO (500k)",
+            "quora_500k": "Quora (500k)"
+        },
+        {
+            "fiqa": "FiQA",
+            "scidocs": "SciDocs",
+            "scifact": "SciFact"
+        }
+    ]
     
     models = {
         "cohere_v4": {
-            "name": "Cohere v4 (1536 DIMS)",
+            "name": "Cohere embed-v4 (1536 dims)",
             "dim": 1536
         },
         "openai_text_large_3": {
-            "name": "OpenAI Text-Embedding-3-Large (3072 DIMS)",
+            "name": "OpenAI text-embedding-3-large (3072 dims)",
             "dim": 3072
         }
     }
@@ -78,45 +85,51 @@ def main():
     plt.rcParams['xtick.color'] = '#475569'
     plt.rcParams['ytick.color'] = '#475569'
     
-    fig, axes = plt.subplots(1, 2, figsize=(20, 9), dpi=300)
+    fig, axes = plt.subplots(2, 2, figsize=(20, 18), dpi=300, sharex='col', sharey='col')
     
     # Harmonious Palette
     colors = {
         "dbpedia_entity_500k": "#0284c7",  # Tailwind Sky-600
         "msmarco_500k": "#f97316",         # Tailwind Orange-500
-        "quora_500k": "#10b981"            # Tailwind Emerald-500
+        "quora_500k": "#10b981",           # Tailwind Emerald-500
+        "fiqa": "#8b5cf6",                 # Tailwind Violet-500
+        "scidocs": "#ef4444",              # Tailwind Red-500
+        "scifact": "#eab308"               # Tailwind Yellow-500
     }
     
-    for ax_idx, (model_id, model_cfg) in enumerate(models.items()):
-        ax = axes[ax_idx]
-        dim_limit = model_cfg["dim"]
-        
-        # 1. Plot the rolling average line for each dataset first
-        for ds_id, ds_label in datasets.items():
-            base_file = embeddings_dir / ds_id / model_id / "base.bin"
-            try:
-                dim, vars_raw = load_full_variance(base_file)
-                rolling_vars = compute_rolling_mean(vars_raw, window=window)
-                
-                # Plot the rolling average line skipping the first 30 dimensions
-                skip_dims = 32
-                ax.plot(np.arange(skip_dims, dim), rolling_vars[skip_dims:], label=ds_label, 
-                        color=colors[ds_id], linewidth=2.2, zorder=3)
-            except Exception as e:
-                print(f"Error processing {ds_id} for {model_id}: {e}")
-                
-        # Subplot Titles and Styling
-        ax.set_title(model_cfg["name"], fontsize=30, pad=15, fontweight="bold", color='#1e293b')
-        ax.set_xlabel("Dimension Index", fontsize=30, labelpad=8)
-        if ax_idx == 0:
-            ax.set_ylabel(f"Rolling Mean Variance (Window={window})", fontsize=30, labelpad=8)
-        ax.tick_params(axis='both', which='major', labelsize=24)
-        ax.set_xlim(32, dim_limit)
-        ax.grid(True, which='both', linestyle=':', alpha=0.3, zorder=1)
-        if ax_idx == 1:
-            ax.legend(fontsize=25, loc='upper right', frameon=True, facecolor='white', framealpha=0.9)
+    for row_idx, dataset_group in enumerate(datasets_groups):
+        for col_idx, (model_id, model_cfg) in enumerate(models.items()):
+            ax = axes[row_idx, col_idx]
+            dim_limit = model_cfg["dim"]
+            
+            # 1. Plot the rolling average line for each dataset first
+            for ds_id, ds_label in dataset_group.items():
+                base_file = embeddings_dir / ds_id / model_id / "base.bin"
+                try:
+                    dim, vars_raw = load_full_variance(base_file)
+                    rolling_vars = compute_rolling_mean(vars_raw, window=window)
+                    
+                    # Plot the rolling average line skipping the first 30 dimensions
+                    skip_dims = 32
+                    ax.plot(np.arange(skip_dims, dim), rolling_vars[skip_dims:], label=ds_label, 
+                            color=colors[ds_id], linewidth=2.2, zorder=3)
+                except Exception as e:
+                    print(f"Error processing {ds_id} for {model_id}: {e}")
+                    
+            # Subplot Titles and Styling
+            if row_idx == 0:
+                ax.set_title(model_cfg["name"], fontsize=30, pad=15, fontweight="bold", color='#1e293b')
+                ax.tick_params(axis='x', which='both', bottom=False, labelbottom=False)
+            if row_idx == 1:
+                ax.set_xlabel("Dimension Index", fontsize=30, labelpad=8)
+            ax.tick_params(axis='both', which='major', labelsize=24)
+            ax.set_xlim(32, dim_limit)
+            ax.grid(True, which='both', linestyle=':', alpha=0.3, zorder=1)
+            if col_idx == 1:
+                ax.legend(fontsize=25, loc='upper right', frameon=True, facecolor='white', framealpha=0.9)
 
-    plt.tight_layout()
+    fig.supylabel(f"Rolling Mean Variance (Window={window})", fontsize=34, x=0.01)
+    plt.tight_layout(rect=[0.02, 0, 1, 1])
     
     # Save the output with window prefix
     output_path = Path(f"/home/jam1729/DiskANN/experiments/{window}_variance_rolling_average_plot.pdf")

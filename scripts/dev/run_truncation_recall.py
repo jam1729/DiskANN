@@ -30,7 +30,10 @@ MODEL_MAPPING = {
 
 DATASETS = list(DATASET_MAPPING.keys())
 MODELS = list(MODEL_MAPPING.keys())
-BUDGETS = [64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384]
+BUDGETS_MAPPING = {
+    "cohere_v4": [32, 48, 64, 80, 96, 112, 128, 144, 160, 176, 192],
+    "openai_text_large_3": [64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384]
+}
 
 def read_fbin_header(path: Path) -> Tuple[int, int]:
     with open(path, 'rb') as f:
@@ -145,12 +148,19 @@ def main():
     temp_dir = output_dir / "temp_trunc_run"
     temp_dir.mkdir(parents=True, exist_ok=True)
     
+    json_output_path = output_dir / "truncation_recall_results.json"
     results = {}
-    
+    if json_output_path.exists():
+        with open(json_output_path, "r") as f:
+            results = json.load(f)
+            
     try:
         for dataset in DATASETS:
-            results[dataset] = {}
+            if dataset not in results:
+                results[dataset] = {}
             for model in MODELS:
+                if model not in results[dataset]:
+                    results[dataset][model] = {}
                 base_file = embeddings_dir / dataset / model / "base.bin"
                 query_file = embeddings_dir / dataset / model / "query.bin"
                 raw_gt_file = embeddings_dir / dataset / model / "gt100.bin"
@@ -166,9 +176,12 @@ def main():
                 _, total_dim = read_fbin_header(base_file)
                 print(f"Dataset total dimension: {total_dim}", flush=True)
                 
-                results[dataset][model] = {}
-                
-                for budget in BUDGETS:
+                model_budgets = BUDGETS_MAPPING[model]
+                for budget in model_budgets:
+                    if str(budget) in results[dataset][model]:
+                        print(f"Skipping budget {budget}B - already computed ({results[dataset][model][str(budget)]:.2f}%)", flush=True)
+                        continue
+                        
                     target_dim = budget // 4
                     if target_dim > total_dim:
                         print(f"Skipping budget {budget}B (target dimension {target_dim} > total dimension {total_dim})", flush=True)
@@ -210,16 +223,18 @@ def main():
             md_lines.append(f"## {model_name} Model (Recall @ 100)")
             md_lines.append("")
             
+            model_budgets = BUDGETS_MAPPING[model]
+            
             # Header
-            header_cols = ["Dataset"] + [f"{b}B ({b//4}d)" for b in BUDGETS]
+            header_cols = ["Dataset"] + [f"{b}B ({b//4}d)" for b in model_budgets]
             md_lines.append("| " + " | ".join(header_cols) + " |")
-            md_lines.append("| " + " | ".join([":---"] + [":---" for _ in BUDGETS]) + " |")
+            md_lines.append("| " + " | ".join([":---"] + [":---" for _ in model_budgets]) + " |")
             
             # Data rows
             for dataset in DATASETS:
                 dataset_name = DATASET_MAPPING[dataset]
                 row_cols = [dataset_name]
-                for budget in BUDGETS:
+                for budget in model_budgets:
                     rec_val = results.get(dataset, {}).get(model, {}).get(str(budget), None)
                     if rec_val is not None:
                         row_cols.append(f"{rec_val:.2f}%")
