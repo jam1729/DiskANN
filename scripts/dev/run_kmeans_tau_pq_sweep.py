@@ -32,13 +32,15 @@ class Logger(object):
 
 
 def main():
-    p = argparse.ArgumentParser(description="Sweep K-Means Tau PQ Search across byte budgets")
+    p = argparse.ArgumentParser(description="Sweep K-Means Tau PQ Search across byte budgets or tau values")
     p.add_argument("--dataset", default="scidocs")
     p.add_argument("--model", default="openai_text_large_3")
     p.add_argument("--base_dir", default="/home/jam1729/data/embeddings")
     p.add_argument("--tools_dir", default="/home/jam1729/DiskANN/build/apps/utils")
     p.add_argument("--output_dir", default="/home/jam1729/runs/pq_search_runs")
     p.add_argument("--byte_values", nargs="+", type=int, default=BYTE_VALUES_DEFAULT)
+    p.add_argument("--tau_values", nargs="+", type=float, default=None, help="Tau values to sweep over (instead of bytes, for weighted mode)")
+    p.add_argument("--total_bytes", type=int, default=384, help="Total bytes to allocate when sweeping tau")
     p.add_argument("--exact_budget", action="store_true", help="Run in exact budget mode instead of weighted")
     p.add_argument("--sampling_rate", type=float, default=0.1)
     p.add_argument("--kmeans_iters", type=int, default=15)
@@ -62,9 +64,12 @@ def main():
         print(f"Error: tools dir not found: {tools_dir}")
         sys.exit(1)
 
+    sweeping_tau = args.tau_values is not None and len(args.tau_values) > 0
     mode_name = "exact_budget" if args.exact_budget else "weighted"
     timestamp = time.strftime("%Y%m%d_%H%M%S")
-    run_dir = Path(args.output_dir) / args.dataset / args.model / f"kmeans_tau_{mode_name}_{timestamp}"
+    
+    sweep_type = "tau" if sweeping_tau else "bytes"
+    run_dir = Path(args.output_dir) / args.dataset / args.model / f"kmeans_tau_{mode_name}_{sweep_type}_sweep_{timestamp}"
     run_dir.mkdir(parents=True, exist_ok=True)
     
     sys.stdout = Logger(run_dir / "stdout")
@@ -75,15 +80,29 @@ def main():
     results = []
 
     print("==================================================")
-    print(f"Starting K-Means Tau PQ Sweep across budgets: {args.byte_values}")
+    if sweeping_tau:
+        print(f"Starting K-Means Tau PQ Sweep across tau values: {args.tau_values} with total_bytes={args.total_bytes}")
+        sweep_values = args.tau_values
+    else:
+        print(f"Starting K-Means Tau PQ Sweep across budgets: {args.byte_values}")
+        sweep_values = args.byte_values
+
     print(f"Dataset: {args.dataset} ({args.model})")
     print(f"Mode: {mode_name}")
     print(f"Output dir: {run_dir}")
     print("==================================================")
 
-    for b in args.byte_values:
-        work_dir = run_dir / f"bytes_{b}"
-        log_json = work_dir / f"trajectory_bytes_{b}.json"
+    for val in sweep_values:
+        if sweeping_tau:
+            b = args.total_bytes
+            tau = val
+            work_dir = run_dir / f"tau_{tau}_bytes_{b}"
+            log_json = work_dir / f"trajectory_tau_{tau}.json"
+        else:
+            b = val
+            tau = None
+            work_dir = run_dir / f"bytes_{b}"
+            log_json = work_dir / f"trajectory_bytes_{b}.json"
         
         cmd = [
             python_bin,
@@ -102,8 +121,14 @@ def main():
         ]
         if args.exact_budget:
             cmd.append("--exact_budget")
+        if tau is not None:
+            cmd.extend(["--tau", str(tau)])
 
-        print(f"\n---> Running budget B={b} bytes...")
+        if sweeping_tau:
+            print(f"\n---> Running Tau={tau} (B={b} bytes)...")
+        else:
+            print(f"\n---> Running budget B={b} bytes...")
+            
         t0 = time.time()
         proc = subprocess.Popen(cmd, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         for line in proc.stdout:
@@ -112,7 +137,7 @@ def main():
         elapsed = time.time() - t0
 
         if proc.returncode != 0:
-            print(f"[ERROR] Run failed for budget B={b}")
+            print(f"[ERROR] Run failed for val={val}")
             continue
 
         if log_json.exists():
@@ -120,15 +145,15 @@ def main():
                 data = json.load(f)
                 alloc = data.get("final_allocation")
                 recall = data.get("recall_at_k")
-                tau = data.get("tau")
+                res_tau = data.get("tau")
                 results.append({
                     "total_bytes": b,
                     "final_allocation": alloc,
                     "recall": recall,
-                    "tau": tau,
+                    "tau": res_tau,
                     "time_seconds": round(elapsed, 2),
                 })
-                print(f"[SUCCESS] Budget B={b}: Recall@{args.k} = {recall:.6f}, Alloc = {alloc}, Tau = {tau:.4f} ({elapsed:.1f}s)")
+                print(f"[SUCCESS] Budget B={b}: Recall@{args.k} = {recall:.6f}, Alloc = {alloc}, Tau = {res_tau:.4f} ({elapsed:.1f}s)")
 
     summary_file = run_dir / "sweep_summary.json"
     with open(summary_file, "w") as f:
@@ -136,6 +161,7 @@ def main():
             "dataset": args.dataset,
             "model": args.model,
             "mode": mode_name,
+            "sweeping_tau": sweeping_tau,
             "results": results
         }, f, indent=2)
 
